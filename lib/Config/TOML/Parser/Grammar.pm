@@ -1,0 +1,233 @@
+use v6;
+unit grammar Config::TOML::Parser::Grammar;
+
+token ws
+{
+    # When parsing file formats where some whitespace (for example
+    # vertical whitespace) is significant, it is advisable to
+    # override ws:
+    <!ww>    # only match when not within a word
+    \h*      # only match horizontal whitespace
+}
+
+# comment grammar {{{
+
+token comment
+{
+    '#' <comment_text>
+}
+
+token comment_text
+{
+    \N*
+}
+
+# end comment grammar }}}
+# string grammar {{{
+
+token string
+{
+    <string_basic>
+    || <string_basic_multiline>
+    || <string_literal>
+    || <string_literal_multiline>
+}
+
+token string_basic
+{
+    '"' <string_basic_text> '"'
+}
+
+token string_basic_text
+{
+    [ <-[\" \\]> || \\ . ]*
+}
+
+token string_basic_multiline
+{
+    <string_basic_multiline_delimiters>
+    \n*
+    <string_basic_multiline_text>
+    <string_basic_multiline_delimiters>
+}
+
+token string_basic_multiline_text
+{
+    <-string_basic_multiline_delimiters>*
+}
+
+token string_basic_multiline_delimiters
+{
+    '"""'
+}
+
+token string_literal
+{
+    \' <string_literal_text> \'
+}
+
+token string_literal_text
+{
+    # Since there is no escaping, there is no way to write a single
+    # quote inside a literal string enclosed by single quotes. Luckily,
+    # TOML supports a multi-line version of literal strings that solves
+    # this problem.
+    <-[\']>*
+}
+
+token string_literal_multiline
+{
+    <string_literal_multiline_delimiters>
+    \n*
+    <string_literal_multiline_text>
+    <string_literal_multiline_delimiters>
+}
+
+token string_literal_multiline_text
+{
+    <-string_literal_multiline_delimiters>*
+}
+
+token string_literal_multiline_delimiters
+{
+    \'\'\'
+}
+
+# end string grammar }}}
+# number grammar {{{
+
+token number
+{
+    <integer> || <float>
+}
+
+token plus_or_minus
+{
+    '+' || '-'
+}
+
+token digits
+{
+    \d+
+
+    |
+
+    # For large numbers, you may use underscores to enhance
+    # readability. Each underscore must be surrounded by at least
+    # one digit.
+    [ \d+ '_' <.digits> ]
+}
+
+token whole_number
+{
+    0
+
+    ||
+
+    # Leading zeros are not allowed.
+    <[1..9]> [ '_'? <.digits> ]?
+}
+
+token integer
+{
+    <plus_or_minus>? <whole_number>
+}
+
+token exponent_part
+{
+    <[Ee]> <integer_part=.integer>
+}
+
+token float
+{
+    <integer_part=.integer>
+    [
+        '.' <fractional_part=.digits> <exponent_part>?
+        || <exponent_part>
+    ]
+}
+
+# end number grammar }}}
+# boolean grammar {{{
+
+token boolean
+{
+    # Booleans are just the tokens you're used to. Always lowercase.
+    true || false
+}
+
+# end boolean grammar }}}
+# datetime grammar {{{
+
+# Datetimes are RFC 3339 dates: http://tools.ietf.org/html/rfc3339
+
+token date_fullyear
+{
+    \d ** 4
+}
+
+token date_month
+{
+    0 <[1..9]> || 1 <[0..2]>
+}
+
+token date_mday
+{
+    0 <[1..9]> || <[1..2]> \d || 3 <[0..1]>
+}
+
+token time_hour
+{
+    <[0..1]> \d || 2 <[0..3]>
+}
+
+token time_minute
+{
+    <[0..5]> \d
+}
+
+token time_second
+{
+    # The grammar element time-second may have the value "60" at the end
+    # of months in which a leap second occurs.
+    <[0..5]> \d || 60
+}
+
+token time_secfrac
+{
+    '.' \d+
+}
+
+token time_numoffset
+{
+    <plus_or_minus> <time_hour> ':' <time_minute>
+}
+
+token time_offset
+{
+    Z || <time_numoffset>
+}
+
+token partial_time
+{
+    <time_hour> ':' <time_minute> ':' <time_second> <time_secfrac>?
+}
+
+token full_date
+{
+    <date_fullyear> '-' <date_month> '-' <date_mday>
+}
+
+token full_time
+{
+    <partial_time> <time_offset>
+}
+
+token date_time
+{
+    <full_date> T <full_time>
+}
+
+# end datetime grammar }}}
+
+# vim: ft=perl6 fdm=marker fdl=0
