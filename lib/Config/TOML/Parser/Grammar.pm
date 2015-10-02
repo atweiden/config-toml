@@ -255,6 +255,7 @@ token array_elements
     || <array_of_integers>
     || <array_of_booleans>
     || <array_of_arrays>
+    || <array_of_table_inlines>
 }
 
 token array_of_strings
@@ -320,6 +321,17 @@ token array_of_arrays
         [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <array>
+    ]*
+}
+
+token array_of_table_inlines
+{
+    <table_inline>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        \s*
+        <table_inline>
     ]*
 }
 

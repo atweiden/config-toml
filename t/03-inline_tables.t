@@ -141,6 +141,6 @@ subtest
     );
 }
 
-# end commented array grammar tests }}}
+# end commented inline table grammar tests }}}
 
 # vim: ft=perl6 fdm=marker fdl=0
