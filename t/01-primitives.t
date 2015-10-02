@@ -53,6 +53,8 @@ subtest
     my Str $string_basic_multiline = Q:to/EOF/;
     """\
     asdf
+    \"\"\"
+    \"""
     what
     """
     EOF
@@ -71,6 +73,7 @@ subtest
     my Str $string_literal_multiline = Q:to/EOF/;
     '''\
     asdf
+    \'\'\'
     what
     '''
     EOF

@@ -58,7 +58,7 @@ token string_basic_multiline_text
 
 token string_basic_multiline_delimiters
 {
-    '"""'
+    <!after \\> '"""'
 }
 
 token string_literal
