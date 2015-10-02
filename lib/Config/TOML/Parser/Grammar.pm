@@ -262,7 +262,7 @@ token array_of_strings
     <string>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <string>
     ]*
@@ -273,7 +273,7 @@ token array_of_integers
     <integer>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <integer>
     ]*
@@ -284,7 +284,7 @@ token array_of_floats
     <float>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <float>
     ]*
@@ -295,7 +295,7 @@ token array_of_booleans
     <boolean>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <boolean>
     ]*
@@ -306,7 +306,7 @@ token array_of_date_times
     <date_time>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <date_time>
     ]*
@@ -317,12 +317,66 @@ token array_of_arrays
     <array>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
         \s*
         <array>
     ]*
 }
 
 # end array grammar }}}
+# table grammar {{{
+
+token keypair
+{
+    <keypair_key> \h* '=' \h* <keypair_value>
+}
+
+token keypair_key
+{
+    <keypair_key_quoted=.string_basic> || <keypair_key_bare>
+}
+
+token keypair_key_bare
+{
+    <+alnum +[-]>+
+}
+
+token keypair_value
+{
+    <table_inline>
+    || <array>
+    || <string>
+    || <date_time>
+    || <number>
+    || <boolean>
+}
+
+token table_inline_keypairs
+{
+    <keypair>
+    [
+        \s*
+        [
+            ',' \s* <table_inline_comment=.array_comment>
+            || <table_inline_comment=.array_comment> ','
+               <table_inline_comment=.array_comment>
+        ]
+        \s*
+        <keypair>
+    ]*
+}
+
+token table_inline
+{
+    '{'
+    \s*
+    <table_inline_comment=.array_comment>
+    [ <table_inline_keypairs> [\s* ',']? ]?
+    \s*
+    <table_inline_comment=.array_comment>
+    '}'
+}
+
+# end table grammar }}}
 
 # vim: ft=perl6 fdm=marker fdl=0

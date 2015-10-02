@@ -17,8 +17,8 @@ subtest
     );
 
     is(
-        $match_comment.WHAT.perl,
-        'Match',
+        $match_comment.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($comment, :rule<comment>)] - 1 of 19
         ┏━━━━━━━━━━━━━┓
@@ -109,8 +109,8 @@ subtest
     );
 
     is(
-        $match_string_basic.WHAT.perl,
-        'Match',
+        $match_string_basic.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($string_basic, :rule<string_basic>)] - 2 of 19
         ┏━━━━━━━━━━━━━┓
@@ -122,8 +122,8 @@ subtest
     );
 
     is(
-        $match_string_basic_backslash.WHAT.perl,
-        'Match',
+        $match_string_basic_backslash.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse(
               $string_basic_backslash,
@@ -138,8 +138,8 @@ subtest
     );
 
     is(
-        $match_string_basic_empty.WHAT.perl,
-        'Match',
+        $match_string_basic_empty.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($string_basic_empty, :rule<string_basic>)] - 4 of 19
         ┏━━━━━━━━━━━━━┓
@@ -151,8 +151,8 @@ subtest
     );
 
     is(
-        $match_string_basic_multiline.WHAT.perl,
-        'Match',
+        $match_string_basic_multiline.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse(
             $string_basic_multiline,
@@ -167,8 +167,8 @@ subtest
     );
 
     is(
-        $match_string_literal.WHAT.perl,
-        'Match',
+        $match_string_literal.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($string_literal, :rule<string_literal>)] - 6 of 19
         ┏━━━━━━━━━━━━━┓
@@ -180,8 +180,8 @@ subtest
     );
 
     is(
-        $match_string_literal_empty.WHAT.perl,
-        'Match',
+        $match_string_literal_empty.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse(
               $string_literal_empty,
@@ -196,8 +196,8 @@ subtest
     );
 
     is(
-        $match_string_literal_multiline.WHAT.perl,
-        'Match',
+        $match_string_literal_multiline.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse(
               $string_literal_multiline,
@@ -250,8 +250,8 @@ subtest
     );
 
     is(
-        $match_integer_basic.WHAT.perl,
-        'Match',
+        $match_integer_basic.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($integer_basic, :rule<integer>)] - 9 of 19
         ┏━━━━━━━━━━━━━┓
@@ -263,8 +263,8 @@ subtest
     );
 
     is(
-        $match_integer_underscore.WHAT.perl,
-        'Match',
+        $match_integer_underscore.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($integer_underscore, :rule<integer>)] - 10 of 19
         ┏━━━━━━━━━━━━━┓
@@ -276,8 +276,8 @@ subtest
     );
 
     is(
-        $match_float_basic.WHAT.perl,
-        'Match',
+        $match_float_basic.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($float_basic, :rule<float>)] - 11 of 19
         ┏━━━━━━━━━━━━━┓
@@ -289,8 +289,8 @@ subtest
     );
 
     is(
-        $match_float_underscore.WHAT.perl,
-        'Match',
+        $match_float_underscore.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($float_underscore, :rule<float>)] - 12 of 19
         ┏━━━━━━━━━━━━━┓
@@ -302,8 +302,8 @@ subtest
     );
 
     is(
-        $match_float_exponent.WHAT.perl,
-        'Match',
+        $match_float_exponent.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($float_exponent, :rule<float>)] - 13 of 19
         ┏━━━━━━━━━━━━━┓
@@ -315,8 +315,8 @@ subtest
     );
 
     is(
-        $match_float_exponent_underscore.WHAT.perl,
-        'Match',
+        $match_float_exponent_underscore.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($float_exponent_underscore, :rule<float>)] - 14 of 19
         ┏━━━━━━━━━━━━━┓
@@ -346,8 +346,8 @@ subtest
     );
 
     is(
-        $match_boolean_true.WHAT.perl,
-        'Match',
+        $match_boolean_true.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($boolean_true, :rule<boolean>)] - 15 of 19
         ┏━━━━━━━━━━━━━┓
@@ -359,8 +359,8 @@ subtest
     );
 
     is(
-        $match_boolean_false.WHAT.perl,
-        'Match',
+        $match_boolean_false.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($boolean_false, :rule<boolean>)] - 16 of 19
         ┏━━━━━━━━━━━━━┓
@@ -395,8 +395,8 @@ subtest
     );
 
     is(
-        $match_date1.WHAT.perl,
-        'Match',
+        $match_date1.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($date1, :rule<date_time>)] - 17 of 19
         ┏━━━━━━━━━━━━━┓
@@ -408,8 +408,8 @@ subtest
     );
 
     is(
-        $match_date2.WHAT.perl,
-        'Match',
+        $match_date2.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($date2, :rule<date_time>)] - 18 of 19
         ┏━━━━━━━━━━━━━┓
@@ -421,8 +421,8 @@ subtest
     );
 
     is(
-        $match_date3.WHAT.perl,
-        'Match',
+        $match_date3.WHAT,
+        Match,
         q:to/EOF/
         ♪ [Grammar.parse($date3, :rule<date_time>)] - 19 of 19
         ┏━━━━━━━━━━━━━┓
