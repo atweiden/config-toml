@@ -27,10 +27,10 @@ token comment_text
 
 token string
 {
-    <string_basic>
-    || <string_basic_multiline>
-    || <string_literal>
+    <string_basic_multiline>
+    || <string_basic>
     || <string_literal_multiline>
+    || <string_literal>
 }
 
 token string_basic
@@ -40,7 +40,7 @@ token string_basic
 
 token string_basic_text
 {
-    [ <-[\" \\]> || \\ . ]*
+    [ <+[\N] -[\" \\]> || \\ \N ]*
 }
 
 token string_basic_multiline
@@ -72,7 +72,7 @@ token string_literal_text
     # quote inside a literal string enclosed by single quotes. Luckily,
     # TOML supports a multi-line version of literal strings that solves
     # this problem.
-    <-[\']>*
+    <+[\N] -[\']>*
 }
 
 token string_literal_multiline
@@ -98,7 +98,7 @@ token string_literal_multiline_delimiters
 
 token number
 {
-    <integer> || <float>
+    <float> || <integer>
 }
 
 token plus_or_minus
@@ -115,7 +115,7 @@ token digits
     # For large numbers, you may use underscores to enhance
     # readability. Each underscore must be surrounded by at least
     # one digit.
-    [ \d+ '_' <.digits> ]
+    \d+ '_' <.digits>
 }
 
 token whole_number
@@ -205,7 +205,7 @@ token time_numoffset
 
 token time_offset
 {
-    Z || <time_numoffset>
+    <[Zz]> || <time_numoffset>
 }
 
 token partial_time
@@ -229,5 +229,100 @@ token date_time
 }
 
 # end datetime grammar }}}
+# array grammar {{{
+
+token array
+{
+    '['
+    \s*
+    <array_comment>
+    [ <array_elements> [\s* ',']? ]?
+    \s*
+    <array_comment>
+    ']'
+}
+
+token array_comment
+{
+    [ \s* <comment> \n \s* ]*
+}
+
+token array_elements
+{
+    <array_of_strings>
+    || <array_of_date_times>
+    || <array_of_floats>
+    || <array_of_integers>
+    || <array_of_booleans>
+    || <array_of_arrays>
+}
+
+token array_of_strings
+{
+    <string>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        \s*
+        <string>
+    ]*
+}
+
+token array_of_integers
+{
+    <integer>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        \s*
+        <integer>
+    ]*
+}
+
+token array_of_floats
+{
+    <float>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        \s*
+        <float>
+    ]*
+}
+
+token array_of_booleans
+{
+    <boolean>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        \s*
+        <boolean>
+    ]*
+}
+
+token array_of_date_times
+{
+    <date_time>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        \s*
+        <date_time>
+    ]*
+}
+
+token array_of_arrays
+{
+    <array>
+    [
+        \s*
+        [ ',' \s* <array_comment> || <array_comment> ',' ]
+        \s*
+        <array>
+    ]*
+}
+
+# end array grammar }}}
 
 # vim: ft=perl6 fdm=marker fdl=0

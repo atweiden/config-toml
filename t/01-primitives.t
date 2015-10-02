@@ -20,7 +20,7 @@ subtest
         $match_comment.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($comment, :rule<comment>)] - 1 of 18
+        ♪ [Grammar.parse($comment, :rule<comment>)] - 1 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal comment successfully
         ┃   Success   ┃
@@ -39,6 +39,11 @@ subtest
     "I'm a string with backslashes (\\). \"You can quote me\". Name\tJosh\nLocation\tSF.\\"
     EOF
     $string_basic .= trim;
+
+    my Str $string_basic_backslash = Q:to/EOF/;
+    "I'm a string ending with a backslash followed by a whitespace\ "
+    EOF
+    $string_basic_backslash .= trim;
 
     my Str $string_basic_empty = Q:to/EOF/;
     ""
@@ -75,6 +80,10 @@ subtest
         $string_basic,
         :rule<string_basic>
     );
+    my $match_string_basic_backslash = Config::TOML::Parser::Grammar.parse(
+        $string_basic_backslash,
+        :rule<string_basic>
+    );
     my $match_string_basic_empty = Config::TOML::Parser::Grammar.parse(
         $string_basic_empty,
         :rule<string_basic>
@@ -100,7 +109,23 @@ subtest
         $match_string_basic.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($string_basic, :rule<string_basic>)] - 2 of 18
+        ♪ [Grammar.parse($string_basic, :rule<string_basic>)] - 2 of 19
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses double quoted string successfully
+        ┃   Success   ┃
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+
+    is(
+        $match_string_basic_backslash.WHAT.perl,
+        'Match',
+        q:to/EOF/
+        ♪ [Grammar.parse(
+              $string_basic_backslash,
+              :rule<string_basic>
+           )] - 3 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted string successfully
         ┃   Success   ┃
@@ -113,7 +138,7 @@ subtest
         $match_string_basic_empty.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($string_basic_empty, :rule<string_basic>)] - 3 of 18
+        ♪ [Grammar.parse($string_basic_empty, :rule<string_basic>)] - 4 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted empty string successfully
         ┃   Success   ┃
@@ -126,7 +151,10 @@ subtest
         $match_string_basic_multiline.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($string_basic_multiline, :rule<string_basic_multiline>)] - 4 of 18
+        ♪ [Grammar.parse(
+            $string_basic_multiline,
+            :rule<string_basic_multiline>
+           )] - 5 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted multiline string successfully
         ┃   Success   ┃
@@ -139,7 +167,7 @@ subtest
         $match_string_literal.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($string_literal, :rule<string_literal>)] - 5 of 18
+        ♪ [Grammar.parse($string_literal, :rule<string_literal>)] - 6 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses single quoted string successfully
         ┃   Success   ┃
@@ -152,7 +180,10 @@ subtest
         $match_string_literal_empty.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($string_literal_empty, :rule<string_literal>)] - 6 of 18
+        ♪ [Grammar.parse(
+              $string_literal_empty,
+              :rule<string_literal>
+           )] - 7 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses single quoted empty string successfully
         ┃   Success   ┃
@@ -165,10 +196,13 @@ subtest
         $match_string_literal_multiline.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($string_literal_multiline, :rule<string_literal_multiline>)] - 7 of 18
+        ♪ [Grammar.parse(
+              $string_literal_multiline,
+              :rule<string_literal_multiline>
+           )] - 8 of 19
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ Parses single quoted multiline string successfully
-        ┃   Success   ┃
+        ┃             ┃  ∙ Parses single quoted multiline string
+        ┃   Success   ┃    successfully
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -216,7 +250,7 @@ subtest
         $match_integer_basic.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($integer_basic, :rule<integer>)] - 8 of 18
+        ♪ [Grammar.parse($integer_basic, :rule<integer>)] - 9 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal integer successfully
         ┃   Success   ┃
@@ -229,10 +263,10 @@ subtest
         $match_integer_underscore.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($integer_underscore, :rule<integer>)] - 9 of 18
+        ♪ [Grammar.parse($integer_underscore, :rule<integer>)] - 10 of 19
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ Parses string literal integer (with underscores) successfully
-        ┃   Success   ┃
+        ┃             ┃  ∙ Parses string literal integer (with
+        ┃   Success   ┃    underscores) successfully
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -242,7 +276,7 @@ subtest
         $match_float_basic.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($float_basic, :rule<float>)] - 10 of 18
+        ♪ [Grammar.parse($float_basic, :rule<float>)] - 11 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal float successfully
         ┃   Success   ┃
@@ -255,10 +289,10 @@ subtest
         $match_float_underscore.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($float_underscore, :rule<float>)] - 11 of 18
+        ♪ [Grammar.parse($float_underscore, :rule<float>)] - 12 of 19
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ Parses string literal float (with underscores) successfully
-        ┃   Success   ┃
+        ┃             ┃  ∙ Parses string literal float (with underscores)
+        ┃   Success   ┃    successfully
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -268,10 +302,10 @@ subtest
         $match_float_exponent.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($float_exponent, :rule<float>)] - 12 of 18
+        ♪ [Grammar.parse($float_exponent, :rule<float>)] - 13 of 19
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ Parses string literal float (with exponent) successfully
-        ┃   Success   ┃
+        ┃             ┃  ∙ Parses string literal float (with exponent)
+        ┃   Success   ┃    successfully
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -281,10 +315,10 @@ subtest
         $match_float_exponent_underscore.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($float_exponent_underscore, :rule<float>)] - 13 of 18
+        ♪ [Grammar.parse($float_exponent_underscore, :rule<float>)] - 14 of 19
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ Parses string literal float (with exponent and underscores) successfully
-        ┃   Success   ┃
+        ┃             ┃  ∙ Parses string literal float (with exponent
+        ┃   Success   ┃    and underscores) successfully
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -312,7 +346,7 @@ subtest
         $match_boolean_true.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($boolean_true, :rule<boolean>)] - 14 of 18
+        ♪ [Grammar.parse($boolean_true, :rule<boolean>)] - 15 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal true successfully
         ┃   Success   ┃
@@ -325,7 +359,7 @@ subtest
         $match_boolean_false.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($boolean_false, :rule<boolean>)] - 15 of 18
+        ♪ [Grammar.parse($boolean_false, :rule<boolean>)] - 16 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal false successfully
         ┃   Success   ┃
@@ -361,7 +395,7 @@ subtest
         $match_date1.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($date1, :rule<date_time>)] - 16 of 18
+        ♪ [Grammar.parse($date1, :rule<date_time>)] - 17 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal datetime successfully
         ┃   Success   ┃
@@ -374,7 +408,7 @@ subtest
         $match_date2.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($date2, :rule<date_time>)] - 17 of 18
+        ♪ [Grammar.parse($date2, :rule<date_time>)] - 18 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal datetime successfully
         ┃   Success   ┃
@@ -387,7 +421,7 @@ subtest
         $match_date3.WHAT.perl,
         'Match',
         q:to/EOF/
-        ♪ [Config::TOML::Parser::Grammar.parse($date3, :rule<date_time>)] - 18 of 18
+        ♪ [Grammar.parse($date3, :rule<date_time>)] - 19 of 19
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal datetime successfully
         ┃   Success   ┃
@@ -397,6 +431,6 @@ subtest
     );
 }
 
-# end datetime gramar tests }}}
+# end datetime grammar tests }}}
 
 # vim: ft=perl6 fdm=marker fdl=0
