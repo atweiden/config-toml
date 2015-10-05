@@ -41,7 +41,7 @@ subtest
     $string_basic .= trim;
 
     my Str $string_basic_backslash = Q:to/EOF/;
-    "I'm a string ending with a backslash followed by a whitespace\ "
+    "I'm a string ending with a backslash followed by a whitespace\\ "
     EOF
     $string_basic_backslash .= trim;
 
@@ -72,7 +72,7 @@ subtest
 
     my Str $string_literal_multiline = Q:to/EOF/;
     '''\
-    asdf
+    asdf		<-- two tabs
     \'\'\'
     what
     '''

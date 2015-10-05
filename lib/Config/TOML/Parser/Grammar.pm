@@ -33,65 +33,213 @@ token string
     || <string_literal>
 }
 
+# --- string basic grammar {{{
+
 token string_basic
 {
-    '"' <string_basic_text> '"'
+    '"' <string_basic_text>? '"'
 }
 
 token string_basic_text
 {
-    [ <+[\N] -[\" \\]> || \\ \N ]*
+    <string_basic_char>+
+}
+
+proto token string_basic_char {*}
+
+token string_basic_char:common
+{
+    # anything but linebreaks, double-quotes, backslashes and control
+    # characters (U+0000 to U+001F)
+    <+[\N] -[\" \\] -[\x00..\x1F]>
+}
+
+token string_basic_char:tab
+{
+    \t
+}
+
+token string_basic_char:escape_sequence
+{
+    # backslash followed by a valid TOML escape code, or error
+    \\
+    [
+        <escape>
+
+        ||
+
+        .
+        {
+            say "Found bad escape sequence 「$/」";
+            exit;
+        }
+    ]
+}
+
+# For convenience, some popular characters have a compact escape sequence.
+#
+# \b         - backspace       (U+0008)
+# \t         - tab             (U+0009)
+# \n         - linefeed        (U+000A)
+# \f         - form feed       (U+000C)
+# \r         - carriage return (U+000D)
+# \"         - quote           (U+0022)
+# \\         - backslash       (U+005C)
+# \uXXXX     - unicode         (U+XXXX)
+# \UXXXXXXXX - unicode         (U+XXXXXXXX)
+proto token escape {*}
+token escape:sym<b> { <sym> }
+token escape:sym<t> { <sym> }
+token escape:sym<n> { <sym> }
+token escape:sym<f> { <sym> }
+token escape:sym<r> { <sym> }
+token escape:sym<quote> { \" }
+token escape:sym<backslash> { \\ }
+token escape:sym<u> { <sym> <hex> ** 4 }
+token escape:sym<U> { <sym> <hex> ** 8 }
+
+token hex
+{
+    <[0..9A..F]>
 }
 
 token string_basic_multiline
 {
-    <string_basic_multiline_delimiters>
-    \n*
-    <string_basic_multiline_text>
-    <string_basic_multiline_delimiters>
+    <string_basic_multiline_delimiter>
+    <string_basic_multiline_leading_newline>?
+    <string_basic_multiline_text>?
+    <string_basic_multiline_delimiter>
+}
+
+token string_basic_multiline_delimiter
+{
+    '"""'
+}
+
+token string_basic_multiline_leading_newline
+{
+    # A newline immediately following the opening delimiter will be
+    # trimmed.
+    \n
 }
 
 token string_basic_multiline_text
 {
-    <-string_basic_multiline_delimiters>*
+    <string_basic_multiline_char>+
 }
 
-token string_basic_multiline_delimiters
+proto token string_basic_multiline_char {*}
+
+token string_basic_multiline_char:common
 {
-    <!after \\> '"""'
+    # anything but delimiters ("""), backslashes and control characters
+    # (U+0000 to U+001F)
+    <-string_basic_multiline_delimiter -[\\] -[\x00..\x1F]>
 }
+
+token string_basic_multiline_char:newline
+{
+    \n+
+}
+
+token string_basic_multiline_char:escape_sequence
+{
+    # backslash followed by either a valid TOML escape code or linebreak,
+    # else error
+    \\
+    [
+        <escape>
+
+        ||
+
+        $$ <ws_remover>
+
+        ||
+
+        .
+        {
+            say "Found bad escape sequence 「$/」";
+            exit;
+        }
+    ]
+}
+
+token ws_remover
+{
+    # For writing long strings without introducing extraneous whitespace,
+    # end a line with a \. The \ will be trimmed along with all whitespace
+    # (including newlines) up to the next non-whitespace character or
+    # closing delimiter.
+    \n+\s*
+}
+
+# --- end string basic grammar }}}
+# --- string literal grammar {{{
 
 token string_literal
 {
-    \' <string_literal_text> \'
+    \' <string_literal_text>? \'
 }
 
 token string_literal_text
 {
+    <string_literal_char>+
+}
+
+proto token string_literal_char {*}
+
+token string_literal_char:common
+{
+    # anything but linebreaks and single quotes
     # Since there is no escaping, there is no way to write a single
-    # quote inside a literal string enclosed by single quotes. Luckily,
-    # TOML supports a multi-line version of literal strings that solves
-    # this problem.
-    <+[\N] -[\']>*
+    # quote inside a literal string enclosed by single quotes.
+    <+[\N] -[\']>
+}
+
+token string_literal_char:backslash
+{
+    \\
 }
 
 token string_literal_multiline
 {
-    <string_literal_multiline_delimiters>
-    \n*
-    <string_literal_multiline_text>
-    <string_literal_multiline_delimiters>
+    <string_literal_multiline_delimiter>
+    <string_literal_multiline_leading_newline>?
+    <string_literal_multiline_text>?
+    <string_literal_multiline_delimiter>
+}
+
+token string_literal_multiline_delimiter
+{
+    \'\'\'
+}
+
+token string_literal_multiline_leading_newline
+{
+    # A newline immediately following the opening delimiter will be
+    # trimmed.
+    \n
 }
 
 token string_literal_multiline_text
 {
-    <-string_literal_multiline_delimiters>*
+    <string_literal_multiline_char>+
 }
 
-token string_literal_multiline_delimiters
+proto token string_literal_multiline_char {*}
+
+token string_literal_multiline_char:common
 {
-    \'\'\'
+    # anything but delimiters (''') and backslashes
+    <-string_literal_multiline_delimiter -[\\]>
 }
+
+token string_literal_multiline_char:backslash
+{
+    \\
+}
+
+# --- end string literal grammar }}}
 
 # end string grammar }}}
 # number grammar {{{
@@ -225,7 +373,7 @@ token full_time
 
 token date_time
 {
-    <full_date> T <full_time>
+    <full_date> <[Tt]> <full_time>
 }
 
 # end datetime grammar }}}
@@ -343,14 +491,16 @@ token keypair
     <keypair_key> \h* '=' \h* <keypair_value>
 }
 
-token keypair_key
-{
-    <keypair_key_quoted=.string_basic> || <keypair_key_bare>
-}
+proto token keypair_key {*}
 
-token keypair_key_bare
+token keypair_key:bare
 {
     <+alnum +[-]>+
+}
+
+token keypair_key:quoted
+{
+    <string_basic>
 }
 
 token keypair_value
@@ -361,6 +511,33 @@ token keypair_value
     || <date_time>
     || <number>
     || <boolean>
+}
+
+token table_inline
+{
+    '{'
+    \s*
+    <table_inline_comment=.array_comment>
+    [ <table_inline_keypairs> [\s* ',']? ]?
+    \s*
+    <table_inline_comment=.array_comment>
+    '}'
+    {
+        # verify inline table does not contain duplicate keys
+        if $<table_inline_keypairs>.made
+        {
+            my Str @keys_seen;
+
+            push @keys_seen, $_
+                for $<table_inline_keypairs>.made».keys;
+
+            unless @keys_seen.elems == @keys_seen.unique.elems
+            {
+                helpmsg_duplicate_keys($/.orig.Str, @keys_seen);
+                exit;
+            }
+        }
+    }
 }
 
 token table_inline_keypairs
@@ -378,17 +555,42 @@ token table_inline_keypairs
     ]*
 }
 
-token table_inline
+# end table grammar }}}
+
+# helper functions {{{
+
+sub helpmsg_duplicate_keys(Str:D $table_inline_orig, Str:D @keys_seen)
 {
-    '{'
-    \s*
-    <table_inline_comment=.array_comment>
-    [ <table_inline_keypairs> [\s* ',']? ]?
-    \s*
-    <table_inline_comment=.array_comment>
-    '}'
+    say "Sorry, inline table contains duplicate keys.";
+    say "------------------------------------------------------------------------";
+    say "Inline table:";
+    say $table_inline_orig;
+    say "------------------------------------------------------------------------";
+    say "Keys seen:";
+    .say for @keys_seen.sort».subst(
+        /(.*)/,
+        -> $/
+        {
+            state Int $i = 1;
+            my Str $replacement = "$i.「$0」";
+            $i++;
+            $replacement;
+        }
+    );
+    say "------------------------------------------------------------------------";
+    say "Keys seen (unique):";
+    .say for @keys_seen.unique.sort».subst(
+        /(.*)/,
+        -> $/
+        {
+            state Int $i = 1;
+            my Str $replacement = "$i.「$0」";
+            $i++;
+            $replacement;
+        }
+    );
 }
 
-# end table grammar }}}
+# end helper functions }}}
 
 # vim: ft=perl6 fdm=marker fdl=0

@@ -97,7 +97,7 @@ subtest
         ], # this is ok 69
         # this is ok 70
         # this is ok 71
-        "diff\"i\ \"cult\"?#'\'" = true, # this is ok 72
+        "diff\"i\\ \"cult\"?#'\\'" = true, # this is ok 72
         # this is ok 73
         # this is ok 74
         date_times = {# this is ok 75
