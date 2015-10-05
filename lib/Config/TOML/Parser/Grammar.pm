@@ -298,11 +298,10 @@ token float
 # end number grammar }}}
 # boolean grammar {{{
 
-token boolean
-{
-    # Booleans are just the tokens you're used to. Always lowercase.
-    true || false
-}
+# Booleans are just the tokens you're used to. Always lowercase.
+proto token boolean {*}
+token boolean:sym<true> { <sym> }
+token boolean:sym<false> { <sym> }
 
 # end boolean grammar }}}
 # datetime grammar {{{
