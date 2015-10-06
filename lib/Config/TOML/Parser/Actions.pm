@@ -276,11 +276,19 @@ method time_offset($/)
 method partial_time($/)
 {
     my Rat $second = Rat($<time_second>.made);
-    $second += Rat($<time_secfrac>.made) if $<time_secfrac>;
+    my Bool $subseconds = False;
+
+    if $<time_secfrac>
+    {
+        $second += Rat($<time_secfrac>.made);
+        $subseconds = True;
+    }
+
     make %(
         :hour(Int($<time_hour>.made)),
         :minute(Int($<time_minute>.made)),
-        :$second
+        :$second,
+        :$subseconds
     );
 }
 
@@ -299,12 +307,39 @@ method full_time($/)
         :hour(Int($<partial_time>.made<hour>)),
         :minute(Int($<partial_time>.made<minute>)),
         :second(Rat($<partial_time>.made<second>)),
+        :subseconds(Bool($<partial_time>.made<subseconds>)),
         :timezone(Int($<time_offset>.made))
     );
 }
 
 method date_time($/)
 {
+    my %fmt;
+    %fmt<formatter> =
+        {
+            # adapted from rakudo/src/core/Temporal.pm
+            # needed in place of passing a True :$subseconds arg to
+            # the rakudo DateTime default-formatter subroutine
+            # for DateTimes with defined time_secfrac
+            my $o = .offset;
+            $o %% 60
+                or warn "DateTime subseconds formatter: offset $o not
+                         divisible by 60.";
+            my $year = sprintf(
+                (0 <= .year <= 9999 ?? '%04d' !! '%+05d'),
+                .year
+            );
+            sprintf '%s-%02d-%02dT%02d:%02d:%s%s',
+                $year, .month, .day, .hour, .minute,
+                .second.fmt('%09.6f'),
+                do $o
+                    ?? sprintf '%s%02d:%02d',
+                        $o < 0 ?? '-' !! '+',
+                        ($o.abs / 60 / 60).floor,
+                        ($o.abs / 60 % 60).floor
+                    !! 'Z';
+        } if $<full_time>.made<subseconds>;
+
     make DateTime.new(
         :year(Int($<full_date>.made<year>)),
         :month(Int($<full_date>.made<month>)),
@@ -312,7 +347,8 @@ method date_time($/)
         :hour(Int($<full_time>.made<hour>)),
         :minute(Int($<full_time>.made<minute>)),
         :second(Rat($<full_time>.made<second>)),
-        :timezone(Int($<full_time>.made<timezone>))
+        :timezone(Int($<full_time>.made<timezone>)),
+        |%fmt
     );
 }
 

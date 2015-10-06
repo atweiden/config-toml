@@ -1403,17 +1403,7 @@ subtest
     );
     is(
         $match_date_time3.made,
-        # is there a built-in way to stringify a DateTime with fractional
-        # seconds displayed by default?
-        DateTime.new(
-            :year(1979),
-            :month(5),
-            :day(27),
-            :hour(0),
-            :minute(32),
-            :second(0.999999),
-            :timezone(-25200)
-        ),
+        '1979-05-27T00:32:00.999999-07:00',
         q:to/EOF/
         ♪ [Is expected date_time value?] - 84 of 84
         ┏━━━━━━━━━━━━━┓
