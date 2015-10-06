@@ -28,9 +28,9 @@ token comment_text
 token string
 {
     <string_basic_multiline>
-    || <string_basic>
-    || <string_literal_multiline>
-    || <string_literal>
+    | <string_basic>
+    | <string_literal_multiline>
+    | <string_literal>
 }
 
 # --- string basic grammar {{{
@@ -148,11 +148,9 @@ token string_basic_multiline_char:escape_sequence
     # else error
     \\
     [
-        <escape>
-
-        ||
-
-        $$ <ws_remover>
+        [
+            <escape> | $$ <ws_remover>
+        ]
 
         ||
 
@@ -246,13 +244,12 @@ token string_literal_multiline_char:backslash
 
 token number
 {
-    <float> || <integer>
+    <float> | <integer>
 }
 
-token plus_or_minus
-{
-    '+' || '-'
-}
+proto token plus_or_minus {*}
+token plus_or_minus:sym<+> { <sym> }
+token plus_or_minus:sym<-> { <sym> }
 
 token digits
 {
@@ -270,7 +267,7 @@ token whole_number
 {
     0
 
-    ||
+    |
 
     # Leading zeros are not allowed.
     <[1..9]> [ '_'? <.digits> ]?
@@ -291,7 +288,7 @@ token float
     <integer_part=.integer>
     [
         '.' <fractional_part=.digits> <exponent_part>?
-        || <exponent_part>
+        | <exponent_part>
     ]
 }
 
@@ -315,17 +312,17 @@ token date_fullyear
 
 token date_month
 {
-    0 <[1..9]> || 1 <[0..2]>
+    0 <[1..9]> | 1 <[0..2]>
 }
 
 token date_mday
 {
-    0 <[1..9]> || <[1..2]> \d || 3 <[0..1]>
+    0 <[1..9]> | <[1..2]> \d | 3 <[0..1]>
 }
 
 token time_hour
 {
-    <[0..1]> \d || 2 <[0..3]>
+    <[0..1]> \d | 2 <[0..3]>
 }
 
 token time_minute
@@ -337,7 +334,7 @@ token time_second
 {
     # The grammar element time-second may have the value "60" at the end
     # of months in which a leap second occurs.
-    <[0..5]> \d || 60
+    <[0..5]> \d | 60
 }
 
 token time_secfrac
@@ -352,7 +349,7 @@ token time_numoffset
 
 token time_offset
 {
-    <[Zz]> || <time_numoffset>
+    <[Zz]> | <time_numoffset>
 }
 
 token partial_time
@@ -394,89 +391,80 @@ token array_comment
     [ \s* <comment> \n \s* ]*
 }
 
-token array_elements
-{
-    <array_of_strings>
-    || <array_of_date_times>
-    || <array_of_floats>
-    || <array_of_integers>
-    || <array_of_booleans>
-    || <array_of_arrays>
-    || <array_of_table_inlines>
-}
+proto token array_elements {*}
 
-token array_of_strings
+token array_elements:strings
 {
     <string>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <string>
     ]*
 }
 
-token array_of_integers
+token array_elements:integers
 {
     <integer>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <integer>
     ]*
 }
 
-token array_of_floats
+token array_elements:floats
 {
     <float>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <float>
     ]*
 }
 
-token array_of_booleans
+token array_elements:booleans
 {
     <boolean>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <boolean>
     ]*
 }
 
-token array_of_date_times
+token array_elements:date_times
 {
     <date_time>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <date_time>
     ]*
 }
 
-token array_of_arrays
+token array_elements:arrays
 {
     <array>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <array>
     ]*
 }
 
-token array_of_table_inlines
+token array_elements:table_inlines
 {
     <table_inline>
     [
         \s*
-        [ ',' \s* <array_comment> || <array_comment> ',' <array_comment> ]
+        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
         \s*
         <table_inline>
     ]*
@@ -502,15 +490,13 @@ token keypair_key:quoted
     <string_basic>
 }
 
-token keypair_value
-{
-    <table_inline>
-    || <array>
-    || <string>
-    || <date_time>
-    || <number>
-    || <boolean>
-}
+proto token keypair_value {*}
+token keypair_value:string { <string> }
+token keypair_value:number { <number> }
+token keypair_value:boolean { <boolean> }
+token keypair_value:date_time { <date_time> }
+token keypair_value:array { <array> }
+token keypair_value:table_inline { <table_inline> }
 
 token table_inline
 {
@@ -528,7 +514,7 @@ token table_inline
             my Str @keys_seen;
 
             push @keys_seen, $_
-                for $<table_inline_keypairs>.made».keys;
+                for $<table_inline_keypairs>.made».keys.flat;
 
             unless @keys_seen.elems == @keys_seen.unique.elems
             {
@@ -546,8 +532,8 @@ token table_inline_keypairs
         \s*
         [
             ',' \s* <table_inline_comment=.array_comment>
-            || <table_inline_comment=.array_comment> ','
-               <table_inline_comment=.array_comment>
+            | <table_inline_comment=.array_comment> ','
+              <table_inline_comment=.array_comment>
         ]
         \s*
         <keypair>
