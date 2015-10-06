@@ -52,7 +52,7 @@ subtest
 
     my Str $string_basic_multiline = Q:to/EOF/;
     """\
-    asdf
+    asdf	<-- tab
     \"\"\"
     \"""
     what

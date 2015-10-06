@@ -80,6 +80,11 @@ method string_basic_multiline_char:common ($/)
     make ~$/;
 }
 
+method string_basic_multiline_char:tab ($/)
+{
+    make ~$/;
+}
+
 method string_basic_multiline_char:newline ($/)
 {
     make ~$/;
@@ -186,7 +191,7 @@ method integer($/)
 
 method float($/)
 {
-    make Rat(+$/);
+    make +$/;
 }
 
 method number($/)

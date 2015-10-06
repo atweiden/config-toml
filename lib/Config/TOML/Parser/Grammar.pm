@@ -70,7 +70,7 @@ token string_basic_char:escape_sequence
 
         .
         {
-            say "Found bad escape sequence 「$/」";
+            say "Sorry, found bad TOML escape sequence 「$/」";
             exit;
         }
     ]
@@ -137,6 +137,11 @@ token string_basic_multiline_char:common
     <-string_basic_multiline_delimiter -[\\] -[\x00..\x1F]>
 }
 
+token string_basic_multiline_char:tab
+{
+    \t
+}
+
 token string_basic_multiline_char:newline
 {
     \n+
@@ -156,7 +161,7 @@ token string_basic_multiline_char:escape_sequence
 
         .
         {
-            say "Found bad escape sequence 「$/」";
+            say "Sorry, found bad TOML escape sequence 「$/」";
             exit;
         }
     ]
@@ -512,10 +517,7 @@ token table_inline
         if $<table_inline_keypairs>.made
         {
             my Str @keys_seen;
-
-            push @keys_seen, $_
-                for $<table_inline_keypairs>.made».keys.flat;
-
+            push @keys_seen, $_ for $<table_inline_keypairs>.made».keys.flat;
             unless @keys_seen.elems == @keys_seen.unique.elems
             {
                 helpmsg_duplicate_keys($/.orig.Str, @keys_seen);
