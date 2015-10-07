@@ -392,7 +392,7 @@ method array_elements:table_inlines ($/)
 
 method array($/)
 {
-    make $<array_elements> ?? $<array_elements>.made !! Array;
+    make $<array_elements> ?? $<array_elements>.made !! [];
 }
 
 # end array grammar-actions }}}
@@ -450,9 +450,7 @@ method table_inline_keypairs($/)
 
 method table_inline($/)
 {
-    make $<table_inline_keypairs>
-        ?? $<table_inline_keypairs>.made
-        !! Array[Hash];
+    make $<table_inline_keypairs> ?? $<table_inline_keypairs>.made !! [%()];
 }
 
 # end table grammar-actions }}}

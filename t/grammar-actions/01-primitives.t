@@ -1166,11 +1166,11 @@ subtest
     );
     is(
         $match_float9.made,
-        1e1_000,
+        1e1000,
         q:to/EOF/
         ♪ [Is expected float value?] - 69 of 84
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_float9.made == 1e1_000
+        ┃             ┃  ∙ $match_float9.made == 1e1000
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

@@ -1,15 +1,13 @@
 use v6;
 unit grammar Config::TOML::Parser::Grammar;
 
-token ws
-{
-    # When parsing file formats where some whitespace (for example
-    # vertical whitespace) is significant, it is advisable to
-    # override ws:
-    <!ww>    # only match when not within a word
-    \h*      # only match horizontal whitespace
-}
+# disposable grammar {{{
 
+proto token gap {*}
+token gap:spacer { \s }
+token gap:comment { <comment> \n }
+
+# end disposable grammar }}}
 # comment grammar {{{
 
 token comment
@@ -252,9 +250,24 @@ token number
     <float> | <integer>
 }
 
+token integer
+{
+    <plus_or_minus>? <whole_number>
+}
+
 proto token plus_or_minus {*}
 token plus_or_minus:sym<+> { <sym> }
 token plus_or_minus:sym<-> { <sym> }
+
+token whole_number
+{
+    0
+
+    |
+
+    # Leading zeros are not allowed.
+    <[1..9]> [ '_'? <.digits> ]?
+}
 
 token digits
 {
@@ -268,26 +281,6 @@ token digits
     \d+ '_' <.digits>
 }
 
-token whole_number
-{
-    0
-
-    |
-
-    # Leading zeros are not allowed.
-    <[1..9]> [ '_'? <.digits> ]?
-}
-
-token integer
-{
-    <plus_or_minus>? <whole_number>
-}
-
-token exponent_part
-{
-    <[Ee]> <integer_part=.integer>
-}
-
 token float
 {
     <integer_part=.integer>
@@ -295,6 +288,11 @@ token float
         '.' <fractional_part=.digits> <exponent_part>?
         | <exponent_part>
     ]
+}
+
+token exponent_part
+{
+    <[Ee]> <integer_part=.integer>
 }
 
 # end number grammar }}}
@@ -383,17 +381,10 @@ token date_time
 token array
 {
     '['
-    \s*
-    <array_comment>
-    [ <array_elements> [\s* ',']? ]?
-    \s*
-    <array_comment>
+    <gap>*
+    [ <array_elements> <gap>* ','? ]?
+    <gap>*
     ']'
-}
-
-token array_comment
-{
-    [ \s* <comment> \n \s* ]*
 }
 
 proto token array_elements {*}
@@ -402,9 +393,7 @@ token array_elements:strings
 {
     <string>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <string>
     ]*
 }
@@ -413,9 +402,7 @@ token array_elements:integers
 {
     <integer>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <integer>
     ]*
 }
@@ -424,9 +411,7 @@ token array_elements:floats
 {
     <float>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <float>
     ]*
 }
@@ -435,9 +420,7 @@ token array_elements:booleans
 {
     <boolean>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <boolean>
     ]*
 }
@@ -446,9 +429,7 @@ token array_elements:date_times
 {
     <date_time>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <date_time>
     ]*
 }
@@ -457,9 +438,7 @@ token array_elements:arrays
 {
     <array>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <array>
     ]*
 }
@@ -468,9 +447,7 @@ token array_elements:table_inlines
 {
     <table_inline>
     [
-        \s*
-        [ ',' \s* <array_comment> | <array_comment> ',' <array_comment> ]
-        \s*
+        <gap>* ',' <gap>*
         <table_inline>
     ]*
 }
@@ -506,11 +483,9 @@ token keypair_value:table_inline { <table_inline> }
 token table_inline
 {
     '{'
-    \s*
-    <table_inline_comment=.array_comment>
-    [ <table_inline_keypairs> [\s* ',']? ]?
-    \s*
-    <table_inline_comment=.array_comment>
+    <gap>*
+    [ <table_inline_keypairs> <gap>* ','? ]?
+    <gap>*
     '}'
     {
         # verify inline table does not contain duplicate keys
@@ -531,13 +506,7 @@ token table_inline_keypairs
 {
     <keypair>
     [
-        \s*
-        [
-            ',' \s* <table_inline_comment=.array_comment>
-            | <table_inline_comment=.array_comment> ','
-              <table_inline_comment=.array_comment>
-        ]
-        \s*
+        <gap>* ',' <gap>*
         <keypair>
     ]*
 }
