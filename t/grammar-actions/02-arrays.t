@@ -277,7 +277,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 17 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -289,7 +289,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 18 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array_space.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array_space.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -301,7 +301,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 19 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array_spaces.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array_spaces.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -313,7 +313,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 20 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array_tab.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array_tab.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -325,7 +325,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 21 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array_tabs.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array_tabs.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -337,7 +337,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 22 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array_newline.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array_newline.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -349,7 +349,7 @@ subtest
         q:to/EOF/
         ♪ [Is expected array value?] - 23 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_empty_array_newlines.made ~~ Array
+        ┃             ┃  ∙ $match_empty_array_newlines.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -362,7 +362,7 @@ subtest
         ♪ [Is expected array value?] - 24 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_empty_array_newlines_tabbed.made
-        ┃   Success   ┃        ~~ Array
+        ┃   Success   ┃        ~~ []
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -972,7 +972,7 @@ subtest
         $match_array_of_basic_strings_newlines.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
-        ♪ [Is array?] - 56 of 123
+        ♪ [Is expected array value?] - 56 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_array_of_basic_strings_newlines.made
         ┃   Success   ┃        ~~ ["red", "maroon", "crimson"]
@@ -1030,7 +1030,7 @@ subtest
         ♪ [Is expected array value?] - 60 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_array_of_basic_multiline_strings_newlines
-        ┃   Success   ┃        .made ~~ ...
+        ┃   Success   ┃        .made ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -1106,7 +1106,7 @@ subtest
         ♪ [Is expected array value?] - 66 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_array_of_literal_multiline_strings_newlines
-        ┃   Success   ┃        .made ~~ ...
+        ┃   Success   ┃        .made ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -1224,7 +1224,7 @@ subtest
         ♪ [Is array?] - 73 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_array_of_integers_newlines.made.WHAT
-        ┃   Success   ┃        ~~ Array[Int]
+        ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -1577,7 +1577,7 @@ subtest
             '1979-05-27T00:32:00.999999-07:00'
         ],
         q:to/EOF/
-        ♪ [Is array?] - 93 of 123
+        ♪ [Is expected array value?] - 93 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_array_of_date_times_newlines.made
         ┃   Success   ┃        ~~ [ ... ]
@@ -2247,7 +2247,7 @@ subtest
             ]
         ],
         q:to/EOF/
-        ♪ [Is array?] - 123 of 123
+        ♪ [Is expected array value?] - 123 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_commented_array_of_arrays.made
         ┃   Success   ┃        ~~ [ ... ]

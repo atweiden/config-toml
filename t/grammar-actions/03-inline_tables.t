@@ -134,7 +134,7 @@ subtest
         ♪ [Grammar.parse(
               $commented_inline_table_difficult,
               :rule<table_inline>
-           )] - 1 of X
+           )] - 1 of 3
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal commented inline
         ┃   Success   ┃    table successfully
@@ -147,7 +147,7 @@ subtest
         $match_commented_inline_table_difficult.made.WHAT,
         Array,
         q:to/EOF/
-        ♪ [Is inline table?] - 1 of X
+        ♪ [Is inline table?] - 2 of 3
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_commented_inline_table_difficult.made.WHAT
         ┃   Success   ┃        ~~ Array
@@ -197,7 +197,7 @@ subtest
             :empty_array_of_arrays([[[[[[[[],],],],],],],])
         ],
         q:to/EOF/
-        ♪ [Is expected inline table value?] - 1 of X
+        ♪ [Is expected inline table value?] - 3 of 3
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match_commented_inline_table_difficult.made
         ┃   Success   ┃        ~~ [ ... ]
