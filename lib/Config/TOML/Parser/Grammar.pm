@@ -5,7 +5,7 @@ unit grammar Config::TOML::Parser::Grammar;
 
 proto token gap {*}
 token gap:spacer { \s }
-token gap:comment { <comment> \n }
+token gap:comment { <.comment> \n }
 
 # end disposable grammar }}}
 # comment grammar {{{
@@ -381,9 +381,9 @@ token date_time
 token array
 {
     '['
-    <gap>*
-    [ <array_elements> <gap>* ','? ]?
-    <gap>*
+    <.gap>*
+    [ <array_elements> <.gap>* ','? ]?
+    <.gap>*
     ']'
 }
 
@@ -393,7 +393,7 @@ token array_elements:strings
 {
     <string>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <string>
     ]*
 }
@@ -402,7 +402,7 @@ token array_elements:integers
 {
     <integer>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <integer>
     ]*
 }
@@ -411,7 +411,7 @@ token array_elements:floats
 {
     <float>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <float>
     ]*
 }
@@ -420,7 +420,7 @@ token array_elements:booleans
 {
     <boolean>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <boolean>
     ]*
 }
@@ -429,7 +429,7 @@ token array_elements:date_times
 {
     <date_time>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <date_time>
     ]*
 }
@@ -438,7 +438,7 @@ token array_elements:arrays
 {
     <array>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <array>
     ]*
 }
@@ -447,13 +447,44 @@ token array_elements:table_inlines
 {
     <table_inline>
     [
-        <gap>* ',' <gap>*
+        <.gap>* ',' <.gap>*
         <table_inline>
     ]*
 }
 
 # end array grammar }}}
 # table grammar {{{
+
+token table_inline
+{
+    '{'
+    <.gap>*
+    [ <table_inline_keypairs> <.gap>* ','? ]?
+    <.gap>*
+    '}'
+    {
+        # verify inline table does not contain duplicate keys
+        if $<table_inline_keypairs>.made
+        {
+            my Str @keys_seen;
+            push @keys_seen, $_ for $<table_inline_keypairs>.made».keys.flat;
+            unless @keys_seen.elems == @keys_seen.unique.elems
+            {
+                helpmsg_duplicate_keys($/.orig.Str, @keys_seen);
+                exit;
+            }
+        }
+    }
+}
+
+token table_inline_keypairs
+{
+    <keypair>
+    [
+        <.gap>* ',' <.gap>*
+        <keypair>
+    ]*
+}
 
 token keypair
 {
@@ -480,38 +511,86 @@ token keypair_value:date_time { <date_time> }
 token keypair_value:array { <array> }
 token keypair_value:table_inline { <table_inline> }
 
-token table_inline
+proto token table {*}
+
+# standard TOML table (with keypairs stored in type: Hash)
+token table:hash
 {
-    '{'
-    <gap>*
-    [ <table_inline_keypairs> <gap>* ','? ]?
-    <gap>*
-    '}'
-    {
-        # verify inline table does not contain duplicate keys
-        if $<table_inline_keypairs>.made
-        {
-            my Str @keys_seen;
-            push @keys_seen, $_ for $<table_inline_keypairs>.made».keys.flat;
-            unless @keys_seen.elems == @keys_seen.unique.elems
-            {
-                helpmsg_duplicate_keys($/.orig.Str, @keys_seen);
-                exit;
-            }
-        }
-    }
+    ^^ \h* <hashtable_header> \h* <.comment>? $$ \n
+    [ <keypair_line> | <.comment_line> | <.blank_line> ]*
 }
 
-token table_inline_keypairs
+# TOML array of tables (with keypairs stored in type: Array[Hash])
+token table:array
 {
-    <keypair>
-    [
-        <gap>* ',' <gap>*
-        <keypair>
-    ]*
+    ^^ \h* <arraytable_header> \h* <.comment>? $$ \n
+    [ <keypair_line> | <.comment_line> | <.blank_line> ]*
+}
+
+token hashtable_header
+{
+    '[' \h* <table_header_text> \h* ']'
+}
+
+token arraytable_header
+{
+    '[[' \h* <table_header_text> \h* ']]'
+}
+
+token table_header_text
+{
+    <keypair_key> [ \h* '.' \h* <keypair_key> ]*
 }
 
 # end table grammar }}}
+# document grammar {{{
+
+# blank line
+token blank_line
+{
+    ^^ \h* $$ \n
+}
+
+# comment appearing on its own line
+token comment_line
+{
+    ^^ \h* <.comment> $$ \n
+}
+
+# keypair appearing on its own line
+token keypair_line
+{
+    ^^ \h* <keypair> \h* <.comment>? $$ \n
+}
+
+proto token segment {*}
+
+token segment:blank_line
+{
+    <blank_line>
+}
+
+token segment:comment_line
+{
+    <comment_line>
+}
+
+token segment:keypair_line
+{
+    <keypair_line>
+}
+
+token segment:table
+{
+    <table>
+}
+
+token TOP
+{
+    <segment>*
+}
+
+# end document grammar }}}
 
 # helper functions {{{
 

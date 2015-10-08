@@ -131,7 +131,7 @@ subtest
         ♪ [Grammar.parse(
               $commented_inline_table_difficult,
               :rule<table_inline>
-           )] - 1 of X
+           )] - 1 of 1
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal commented inline
         ┃   Success   ┃    table successfully
