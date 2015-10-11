@@ -462,19 +462,6 @@ token table_inline
     [ <table_inline_keypairs> <.gap>* ','? ]?
     <.gap>*
     '}'
-    {
-        # verify inline table does not contain duplicate keys
-        if $<table_inline_keypairs>.made
-        {
-            my Str @keys_seen;
-            push @keys_seen, $_ for $<table_inline_keypairs>.made».keys.flat;
-            unless @keys_seen.elems == @keys_seen.unique.elems
-            {
-                helpmsg_duplicate_keys($/.orig.Str, @keys_seen);
-                exit;
-            }
-        }
-    }
 }
 
 token table_inline_keypairs
@@ -488,7 +475,7 @@ token table_inline_keypairs
 
 token keypair
 {
-    <keypair_key> \h* '=' \h* <keypair_value>
+    <keypair_key> \h* '=' \h* [ <keypair_value> | <table_inline> ]
 }
 
 proto token keypair_key {*}
@@ -500,7 +487,13 @@ token keypair_key:bare
 
 token keypair_key:quoted
 {
-    <string_basic>
+    <keypair_key_string_basic>
+}
+
+# quoted keys must contain chars inside double quotes
+token keypair_key_string_basic
+{
+    '"' <string_basic_text> '"'
 }
 
 proto token keypair_value {*}
@@ -509,38 +502,6 @@ token keypair_value:number { <number> }
 token keypair_value:boolean { <boolean> }
 token keypair_value:date_time { <date_time> }
 token keypair_value:array { <array> }
-token keypair_value:table_inline { <table_inline> }
-
-proto token table {*}
-
-# standard TOML table (with keypairs stored in type: Hash)
-token table:hash
-{
-    ^^ \h* <hashtable_header> \h* <.comment>? $$ \n
-    [ <keypair_line> | <.comment_line> | <.blank_line> ]*
-}
-
-# TOML array of tables (with keypairs stored in type: Array[Hash])
-token table:array
-{
-    ^^ \h* <arraytable_header> \h* <.comment>? $$ \n
-    [ <keypair_line> | <.comment_line> | <.blank_line> ]*
-}
-
-token hashtable_header
-{
-    '[' \h* <table_header_text> \h* ']'
-}
-
-token arraytable_header
-{
-    '[[' \h* <table_header_text> \h* ']]'
-}
-
-token table_header_text
-{
-    <keypair_key> [ \h* '.' \h* <keypair_key> ]*
-}
 
 # end table grammar }}}
 # document grammar {{{
@@ -563,16 +524,49 @@ token keypair_line
     ^^ \h* <keypair> \h* <.comment>? $$ \n
 }
 
+proto token table {*}
+
+# standard TOML table (hash of hashes)
+token table:hoh
+{
+    ^^ \h* <hoh_header> \h* <.comment>? $$ \n
+    [ <keypair_line> | <.comment_line> | <.blank_line> ]*
+}
+
+# TOML array of tables (array of hashes)
+token table:aoh
+{
+    ^^ \h* <aoh_header> \h* <.comment>? $$ \n
+    [ <keypair_line> | <.comment_line> | <.blank_line> ]*
+}
+
+# hash of hashes header
+token hoh_header
+{
+    '[' \h* <table_header_text> \h* ']'
+}
+
+# array of hashes header
+token aoh_header
+{
+    '[[' \h* <table_header_text> \h* ']]'
+}
+
+token table_header_text
+{
+    <keypair_key> [ \h* '.' \h* <keypair_key> ]*
+}
+
 proto token segment {*}
 
 token segment:blank_line
 {
-    <blank_line>
+    <.blank_line>
 }
 
 token segment:comment_line
 {
-    <comment_line>
+    <.comment_line>
 }
 
 token segment:keypair_line
@@ -585,47 +579,16 @@ token segment:table
     <table>
 }
 
-token TOP
+token document
 {
     <segment>*
 }
 
-# end document grammar }}}
-
-# helper functions {{{
-
-sub helpmsg_duplicate_keys(Str:D $table_inline_orig, Str:D @keys_seen)
+token TOP
 {
-    say "Sorry, inline table contains duplicate keys.";
-    say "------------------------------------------------------------------------";
-    say "Inline table:";
-    say $table_inline_orig;
-    say "------------------------------------------------------------------------";
-    say "Keys seen:";
-    .say for @keys_seen.sort».subst(
-        /(.*)/,
-        -> $/
-        {
-            state Int $i = 1;
-            my Str $replacement = "$i.「$0」";
-            $i++;
-            $replacement;
-        }
-    );
-    say "------------------------------------------------------------------------";
-    say "Keys seen (unique):";
-    .say for @keys_seen.unique.sort».subst(
-        /(.*)/,
-        -> $/
-        {
-            state Int $i = 1;
-            my Str $replacement = "$i.「$0」";
-            $i++;
-            $replacement;
-        }
-    );
+    <document>
 }
 
-# end helper functions }}}
+# end document grammar }}}
 
 # vim: ft=perl6 fdm=marker fdl=0
