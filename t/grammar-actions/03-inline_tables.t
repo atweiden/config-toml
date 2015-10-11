@@ -101,18 +101,19 @@ subtest
         "diff\"i\\ \"cult\"?#'\\'" = true, # this is ok 72
         # this is ok 73
         # this is ok 74
-        date_times = {# this is ok 75
-            # this is ok 76
-            date1 = 1979-05-27T07:32:00Z, # this is ok 77
-            date2 = 1979-05-27T00:32:00-07:00,# this is ok 78
-            date3 = 1979-05-27T00:32:00.999999-07:00,# this is ok 79
-            # this is ok 80
-            1979-05-27 = [1979-05-27T07:32:00Z,# this is ok 81
-                1979-05-27T00:32:00-07:00,# this is ok 82
-                1979-05-27T00:32:00.999999-07:00,]# this is ok 83
-        }# this is ok 84
+        # date_times = {# this is ok 75
+        #     # this is ok 76
+        #     date1 = 1979-05-27T07:32:00Z, # this is ok 77
+        #     date2 = 1979-05-27T00:32:00-07:00,# this is ok 78
+        #     # date3 = 1979-05-27T00:32:00.999999-07:00,# this is ok 79
+        #     # this is ok 80
+        #     1979-05-27 = [1979-05-27T07:32:00Z,# this is ok 81
+        #         1979-05-27T00:32:00-07:00,# this is ok 82
+        #         # 1979-05-27T00:32:00.999999-07:00,
+        #     ]# this is ok 83
+        # }# this is ok 84
         # this is ok 85
-        , # this is ok 86
+        # , # this is ok 86
         empty_array_of_arrays = [[[[[[[[]]]]]]]]# this is ok 87
         # this is ok 88
     # this is ok 89
@@ -156,57 +157,43 @@ subtest
         EOF
     );
 
-    # is(
-    #     $match_commented_inline_table_difficult.made,
-    #     [
-    #         :array_of_arrays(
-    #             [
-    #                 ["a", "b", "c", "d"],
-    #                 [
-    #                     [
-    #                         [1, 2],
-    #                         [3, 4, 5]
-    #                     ],
-    #                     [
-    #                         [1, 2],
-    #                         ["a", "b", "c"]
-    #                     ],
-    #                     [
-    #                         [
-    #                             ["#this is not a comment\n                        line one # this is not a comment\n                        line two # this is not a comment\n                        line three # this is not a comment\n                        ", "                        line four\n                        line five\n                        line six\n                        "],
-    #                             ["                        line seven\n                        line eight\n                        line nine\n                        ", "                        line ten\n                        line eleven\n                        line twelve\n                        "]
-    #                         ],
-    #                         [3, 6, 9]
-    #                     ]
-    #                 ]
-    #             ]
-    #         ),
-    #         "diff\"i\\ \"cult\"?#'\\'" => Bool::True,
-    #         {
-    #             :date_times(
-    #                 ${
-    #                     "1979-05-27" => [
-    #                         '1979-05-27T07:32:00Z',
-    #                         '1979-05-27T00:32:00-07:00',
-    #                         '1979-05-27T00:32:00.999999-07:00'
-    #                     ],
-    #                     :date1('1979-05-27T07:32:00Z'),
-    #                     :date2('1979-05-27T00:32:00-07:00'),
-    #                     :date3('1979-05-27T00:32:00.999999-07:00')
-    #                 }
-    #             )
-    #         },
-    #         :empty_array_of_arrays([[[[[[[[],],],],],],],])
-    #     ],
-    #     q:to/EOF/
-    #     ♪ [Is expected inline table value?] - 3 of 3
-    #     ┏━━━━━━━━━━━━━┓
-    #     ┃             ┃  ∙ $match_commented_inline_table_difficult.made
-    #     ┃   Success   ┃        ~~ [ ... ]
-    #     ┃             ┃
-    #     ┗━━━━━━━━━━━━━┛
-    #     EOF
-    # );
+    is(
+        $match_commented_inline_table_difficult.made,
+        [
+            :array_of_arrays(
+                [
+                    ["a", "b", "c", "d"],
+                    [
+                        [
+                            [1, 2],
+                            [3, 4, 5]
+                        ],
+                        [
+                            [1, 2],
+                            ["a", "b", "c"]
+                        ],
+                        [
+                            [
+                                ["#this is not a comment\n                        line one # this is not a comment\n                        line two # this is not a comment\n                        line three # this is not a comment\n                        ", "                        line four\n                        line five\n                        line six\n                        "],
+                                ["                        line seven\n                        line eight\n                        line nine\n                        ", "                        line ten\n                        line eleven\n                        line twelve\n                        "]
+                            ],
+                            [3, 6, 9]
+                        ]
+                    ]
+                ]
+            ),
+            "diff\"i\\ \"cult\"?#'\\'" => Bool::True,
+            :empty_array_of_arrays([[[[[[[[],],],],],],],])
+        ],
+        q:to/EOF/
+        ♪ [Is expected inline table value?] - 3 of 3
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ $match_commented_inline_table_difficult.made
+        ┃   Success   ┃        ~~ [ ... ]
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
 }
 
 # end commented inline table grammar tests }}}
