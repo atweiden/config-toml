@@ -504,19 +504,19 @@ method keypair_line($/)
 method segment:keypair_line ($/)
 {
     # update keypath
-    my Str @current_keypath = $<keypair_line>.made.keys[0];
+    my Str @keypath = $<keypair_line>.made.keys[0];
 
     # verify current keypath hasn't already been seen
-    if at_keypath(%!toml, @current_keypath).defined
+    if at_keypath(%!toml, @keypath).defined
     {
         helpmsg_segment_keypair_line_duplicate_key(
             $/.Str,
-            @current_keypath.join('.')
+            @keypath.join('.')
         );
         exit;
     }
 
-    at_keypath(%!toml, @current_keypath) = $<keypair_line>.made.values[0];
+    at_keypath(%!toml, @keypath) = $<keypair_line>.made.values[0];
 }
 
 method table_header_text($/)
@@ -705,7 +705,7 @@ method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
     my Bool $clear;
 
     # does full keypath exist?
-    if at_keypath(%!toml, @full_keypath)
+    if at_keypath(%!toml, @full_keypath).defined
     {
         $clear = False;
     }
