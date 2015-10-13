@@ -2,10 +2,10 @@ use v6;
 unit class Config::TOML::Parser::Actions;
 
 # TOML document
-has %!toml;
+has %.toml;
 
 # TOML array table tracker, records array tables seen
-has Bool %!arraytable;
+has Bool %.arraytable;
 
 # string grammar-actions {{{
 
@@ -167,24 +167,24 @@ method string_literal_multiline($/)
 
 # --- end string literal grammar-actions }}}
 
-method string($/)
+method string:basic ($/)
 {
-    if $<string_basic_multiline>
-    {
-        make $<string_basic_multiline>.made;
-    }
-    elsif $<string_basic>
-    {
-        make $<string_basic>.made;
-    }
-    elsif $<string_literal_multiline>
-    {
-        make $<string_literal_multiline>.made;
-    }
-    elsif $<string_literal>
-    {
-        make $<string_literal>.made;
-    }
+    make $<string_basic>.made;
+}
+
+method string:basic_multi ($/)
+{
+    make $<string_basic_multiline>.made;
+}
+
+method string:literal ($/)
+{
+    make $<string_literal>.made;
+}
+
+method string:literal_multi ($/)
+{
+    make $<string_literal_multiline>.made;
 }
 
 # end string grammar-actions }}}
@@ -507,7 +507,7 @@ method segment:keypair_line ($/)
     my Str @keypath = $<keypair_line>.made.keys[0];
 
     # verify current keypath hasn't already been seen
-    if at_keypath(%!toml, @keypath).defined
+    if at_keypath(%.toml, @keypath).defined
     {
         helpmsg_segment_keypair_line_duplicate_key(
             $/.Str,
@@ -588,7 +588,7 @@ method table:aoh ($/)
     }
 
     # is base keypath an existing array of hashes?
-    if %!arraytable{$@base_keypath}
+    if %.arraytable{$@base_keypath}
     {
         # push values to existing array of hashes
         append_to_aoh(@base_keypath, %h);
@@ -600,7 +600,7 @@ method table:aoh ($/)
         unless self!is_keypath_clear(@base_keypath)
         {
             say "Sorry, table keypath 「{@base_keypath.join('.')}」 trodden.";
-            say "Array tables: ", %!arraytable.perl;
+            say "Array tables: ", %.arraytable.perl;
             say "Array table header: 「{$<aoh_header>.Str}」";
             exit;
         }
@@ -615,7 +615,7 @@ method table:aoh ($/)
 
 method TOP($/)
 {
-    make %!toml;
+    make %.toml;
 }
 
 # end document grammar-actions }}}
@@ -705,7 +705,7 @@ method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
     my Bool $clear;
 
     # does full keypath exist?
-    if at_keypath(%!toml, @full_keypath).defined
+    if at_keypath(%.toml, @full_keypath).defined
     {
         $clear = False;
     }
@@ -733,8 +733,8 @@ multi method _is_keypath_clear(@keypath where *.end > 0) returns Bool:D
 {
     if at_keypath(%!toml, @keypath).defined
     {
-        unless at_keypath(%!toml, @keypath).WHAT ~~ Hash
-            || at_keypath(%!toml, @keypath).WHAT ~~ Pair
+        unless at_keypath(%.toml, @keypath).WHAT ~~ Hash
+            || at_keypath(%.toml, @keypath).WHAT ~~ Pair
         {
             False;
         }
@@ -744,10 +744,10 @@ multi method _is_keypath_clear(@keypath where *.end > 0) returns Bool:D
 
 multi method _is_keypath_clear(@keypath where *.end == 0) returns Bool:D
 {
-    if at_keypath(%!toml, @keypath).defined
+    if at_keypath(%.toml, @keypath).defined
     {
-        unless at_keypath(%!toml, @keypath).WHAT ~~ Hash
-            || at_keypath(%!toml, @keypath).WHAT ~~ Pair
+        unless at_keypath(%.toml, @keypath).WHAT ~~ Hash
+            || at_keypath(%.toml, @keypath).WHAT ~~ Pair
         {
             False;
         }

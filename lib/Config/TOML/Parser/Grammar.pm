@@ -23,13 +23,11 @@ token comment_text
 # end comment grammar }}}
 # string grammar {{{
 
-token string
-{
-    <string_basic_multiline>
-    | <string_basic>
-    | <string_literal_multiline>
-    | <string_literal>
-}
+proto token string {*}
+token string:basic { <string_basic> }
+token string:basic_multi { <string_basic_multiline> }
+token string:literal { <string_literal> }
+token string:literal_multi { <string_literal_multiline> }
 
 # --- string basic grammar {{{
 
