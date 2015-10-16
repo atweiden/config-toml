@@ -731,28 +731,27 @@ method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
 
 multi method _is_keypath_clear(@keypath where *.end > 0) returns Bool:D
 {
-    if at_keypath(%!toml, @keypath).defined
-    {
-        unless at_keypath(%.toml, @keypath).WHAT ~~ Hash
-            || at_keypath(%.toml, @keypath).WHAT ~~ Pair
-        {
-            False;
-        }
-    }
-    self._is_keypath_clear(@keypath[0..^@keypath.end]);
+    self!is_trodden(@keypath)
+        ?? False
+        !! self._is_keypath_clear(@keypath[0..^@keypath.end]);
 }
 
 multi method _is_keypath_clear(@keypath where *.end == 0) returns Bool:D
+{
+    self!is_trodden(@keypath) ?? False !! True;
+}
+
+method !is_trodden(@keypath) returns Bool:D
 {
     if at_keypath(%.toml, @keypath).defined
     {
         unless at_keypath(%.toml, @keypath).WHAT ~~ Hash
             || at_keypath(%.toml, @keypath).WHAT ~~ Pair
         {
-            False;
+            True;
         }
     }
-    True;
+    False;
 }
 
 # end helper functions }}}
