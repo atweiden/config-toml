@@ -7,6 +7,12 @@ has %.toml;
 # TOML array table tracker, records array tables seen
 has Bool %.arraytable;
 
+# DateTime offset for when the local offset is omitted in TOML dates,
+# see: https://github.com/toml-lang/toml#datetime
+# if not passed as a parameter during instantiation, use host machine's
+# local offset
+has Int $.date_local_offset = $*TZ;
+
 # string grammar-actions {{{
 
 # --- string basic grammar-actions {{{
@@ -318,6 +324,46 @@ method full_time($/)
     );
 }
 
+method date_time_omit_local_offset($/)
+{
+    my %fmt;
+    %fmt<formatter> =
+        {
+            # adapted from rakudo/src/core/Temporal.pm
+            # needed in place of passing a True :$subseconds arg to
+            # the rakudo DateTime default-formatter subroutine
+            # for DateTimes with defined time_secfrac
+            my $o = .offset;
+            $o %% 60
+                or warn "DateTime subseconds formatter: offset $o not
+                         divisible by 60.";
+            my $year = sprintf(
+                (0 <= .year <= 9999 ?? '%04d' !! '%+05d'),
+                .year
+            );
+            sprintf '%s-%02d-%02dT%02d:%02d:%s%s',
+                $year, .month, .day, .hour, .minute,
+                .second.fmt('%09.6f'),
+                do $o
+                    ?? sprintf '%s%02d:%02d',
+                        $o < 0 ?? '-' !! '+',
+                        ($o.abs / 60 / 60).floor,
+                        ($o.abs / 60 % 60).floor
+                    !! 'Z';
+        } if $<partial_time>.made<subseconds>;
+
+    make DateTime.new(
+        :year(Int($<full_date>.made<year>)),
+        :month(Int($<full_date>.made<month>)),
+        :day(Int($<full_date>.made<day>)),
+        :hour(Int($<partial_time>.made<hour>)),
+        :minute(Int($<partial_time>.made<minute>)),
+        :second(Rat($<partial_time>.made<second>)),
+        :timezone($.date_local_offset),
+        |%fmt
+    );
+}
+
 method date_time($/)
 {
     my %fmt;
@@ -358,6 +404,21 @@ method date_time($/)
     );
 }
 
+method date:full_date ($/)
+{
+    make DateTime.new(|$<full_date>.made, :timezone($.date_local_offset));
+}
+
+method date:date_time_omit_local_offset ($/)
+{
+    make $<date_time_omit_local_offset>.made;
+}
+
+method date:date_time ($/)
+{
+    make $<date_time>.made;
+}
+
 # end datetime grammar-actions }}}
 # array grammar-actions {{{
 
@@ -381,9 +442,9 @@ method array_elements:booleans ($/)
     make @<boolean>».made;
 }
 
-method array_elements:date_times ($/)
+method array_elements:dates ($/)
 {
-    make @<date_time>».made;
+    make @<date>».made;
 }
 
 method array_elements:arrays ($/)
@@ -434,9 +495,9 @@ method keypair_value:boolean ($/)
     make $<boolean>.made;
 }
 
-method keypair_value:date_time ($/)
+method keypair_value:date ($/)
 {
-    make $<date_time>.made;
+    make $<date>.made;
 }
 
 method keypair_value:array ($/)

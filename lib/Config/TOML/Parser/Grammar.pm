@@ -304,7 +304,45 @@ token boolean:sym<false> { <sym> }
 # end boolean grammar }}}
 # datetime grammar {{{
 
-# Datetimes are RFC 3339 dates: http://tools.ietf.org/html/rfc3339
+# There are three ways to express a datetime. The first is simply by
+# using the RFC 3339 spec.
+#
+#     date1 = 1979-05-27T07:32:00Z
+#     date2 = 1979-05-27T00:32:00-07:00
+#     date3 = 1979-05-27T00:32:00.999999-07:00
+#
+# You may omit the local offset and let the parser or host application
+# decide that information. A good default is to use the host machine's
+# local offset.
+#
+#     1979-05-27T07:32:00
+#     1979-05-27T00:32:00.999999
+#
+# If you only care about the day, you can omit the local offset and the
+# time, letting the parser or host application decide both. Good defaults
+# are to use the host machine's local offset and 00:00:00.
+#
+#     1979-05-27
+
+proto token date {*}
+
+# RFC 3339 timestamp: http://tools.ietf.org/html/rfc3339
+token date:date_time
+{
+    <date_time>
+}
+
+# RFC 3339 timestamp (omit local offset)
+token date:date_time_omit_local_offset
+{
+    <date_time_omit_local_offset>
+}
+
+# YYYY-MM-DD
+token date:full_date
+{
+    <full_date>
+}
 
 token date_fullyear
 {
@@ -373,6 +411,11 @@ token date_time
     <full_date> <[Tt]> <full_time>
 }
 
+token date_time_omit_local_offset
+{
+    <full_date> <[Tt]> <partial_time>
+}
+
 # end datetime grammar }}}
 # array grammar {{{
 
@@ -423,12 +466,12 @@ token array_elements:booleans
     ]*
 }
 
-token array_elements:date_times
+token array_elements:dates
 {
-    <date_time>
+    <date>
     [
         <.gap>* ',' <.gap>*
-        <date_time>
+        <date>
     ]*
 }
 
@@ -498,7 +541,7 @@ proto token keypair_value {*}
 token keypair_value:string { <string> }
 token keypair_value:number { <number> }
 token keypair_value:boolean { <boolean> }
-token keypair_value:date_time { <date_time> }
+token keypair_value:date { <date> }
 token keypair_value:array { <array> }
 
 # end table grammar }}}

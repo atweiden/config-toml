@@ -20,7 +20,7 @@ subtest
         $match_comment.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($comment, :rule<comment>)] - 1 of 19
+        ♪ [Grammar.parse($comment, :rule<comment>)] - 1 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal comment successfully
         ┃   Success   ┃
@@ -112,7 +112,7 @@ subtest
         $match_string_basic.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($string_basic, :rule<string_basic>)] - 2 of 19
+        ♪ [Grammar.parse($string_basic, :rule<string_basic>)] - 2 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted string successfully
         ┃   Success   ┃
@@ -128,7 +128,7 @@ subtest
         ♪ [Grammar.parse(
               $string_basic_backslash,
               :rule<string_basic>
-           )] - 3 of 19
+           )] - 3 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted string successfully
         ┃   Success   ┃
@@ -141,7 +141,7 @@ subtest
         $match_string_basic_empty.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($string_basic_empty, :rule<string_basic>)] - 4 of 19
+        ♪ [Grammar.parse($string_basic_empty, :rule<string_basic>)] - 4 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted empty string successfully
         ┃   Success   ┃
@@ -157,7 +157,7 @@ subtest
         ♪ [Grammar.parse(
             $string_basic_multiline,
             :rule<string_basic_multiline>
-           )] - 5 of 19
+           )] - 5 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses double quoted multiline string successfully
         ┃   Success   ┃
@@ -170,7 +170,7 @@ subtest
         $match_string_literal.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($string_literal, :rule<string_literal>)] - 6 of 19
+        ♪ [Grammar.parse($string_literal, :rule<string_literal>)] - 6 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses single quoted string successfully
         ┃   Success   ┃
@@ -186,7 +186,7 @@ subtest
         ♪ [Grammar.parse(
               $string_literal_empty,
               :rule<string_literal>
-           )] - 7 of 19
+           )] - 7 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses single quoted empty string successfully
         ┃   Success   ┃
@@ -202,7 +202,7 @@ subtest
         ♪ [Grammar.parse(
               $string_literal_multiline,
               :rule<string_literal_multiline>
-           )] - 8 of 19
+           )] - 8 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses single quoted multiline string
         ┃   Success   ┃    successfully
@@ -253,7 +253,7 @@ subtest
         $match_integer_basic.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($integer_basic, :rule<integer>)] - 9 of 19
+        ♪ [Grammar.parse($integer_basic, :rule<integer>)] - 9 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal integer successfully
         ┃   Success   ┃
@@ -266,7 +266,7 @@ subtest
         $match_integer_underscore.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($integer_underscore, :rule<integer>)] - 10 of 19
+        ♪ [Grammar.parse($integer_underscore, :rule<integer>)] - 10 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal integer (with
         ┃   Success   ┃    underscores) successfully
@@ -279,7 +279,7 @@ subtest
         $match_float_basic.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($float_basic, :rule<float>)] - 11 of 19
+        ♪ [Grammar.parse($float_basic, :rule<float>)] - 11 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal float successfully
         ┃   Success   ┃
@@ -292,7 +292,7 @@ subtest
         $match_float_underscore.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($float_underscore, :rule<float>)] - 12 of 19
+        ♪ [Grammar.parse($float_underscore, :rule<float>)] - 12 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal float (with underscores)
         ┃   Success   ┃    successfully
@@ -305,7 +305,7 @@ subtest
         $match_float_exponent.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($float_exponent, :rule<float>)] - 13 of 19
+        ♪ [Grammar.parse($float_exponent, :rule<float>)] - 13 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal float (with exponent)
         ┃   Success   ┃    successfully
@@ -318,7 +318,7 @@ subtest
         $match_float_exponent_underscore.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($float_exponent_underscore, :rule<float>)] - 14 of 19
+        ♪ [Grammar.parse($float_exponent_underscore, :rule<float>)] - 14 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal float (with exponent
         ┃   Success   ┃    and underscores) successfully
@@ -349,7 +349,7 @@ subtest
         $match_boolean_true.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($boolean_true, :rule<boolean>)] - 15 of 19
+        ♪ [Grammar.parse($boolean_true, :rule<boolean>)] - 15 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal true successfully
         ┃   Success   ┃
@@ -362,7 +362,7 @@ subtest
         $match_boolean_false.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($boolean_false, :rule<boolean>)] - 16 of 19
+        ♪ [Grammar.parse($boolean_false, :rule<boolean>)] - 16 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal false successfully
         ┃   Success   ┃
@@ -380,25 +380,65 @@ subtest
     my Str $date1 = '1979-05-27T07:32:00Z';
     my Str $date2 = '1979-05-27T00:32:00-07:00';
     my Str $date3 = '1979-05-27T00:32:00.999999-07:00';
+    my Str $date4 = '1979-05-27T07:32:00';
+    my Str $date5 = '1979-05-27T00:32:00.999999';
+    my Str $date6 = '1979-05-27';
 
+    # *_proto vars test for match against proto token date
     my $match_date1 = Config::TOML::Parser::Grammar.parse(
         $date1,
         :rule<date_time>
+    );
+    my $match_date1_proto = Config::TOML::Parser::Grammar.parse(
+        $date1,
+        :rule<date>
     );
     my $match_date2 = Config::TOML::Parser::Grammar.parse(
         $date2,
         :rule<date_time>
     );
+    my $match_date2_proto = Config::TOML::Parser::Grammar.parse(
+        $date2,
+        :rule<date>
+    );
     my $match_date3 = Config::TOML::Parser::Grammar.parse(
         $date3,
         :rule<date_time>
+    );
+    my $match_date3_proto = Config::TOML::Parser::Grammar.parse(
+        $date3,
+        :rule<date>
+    );
+    my $match_date4 = Config::TOML::Parser::Grammar.parse(
+        $date4,
+        :rule<date_time_omit_local_offset>
+    );
+    my $match_date4_proto = Config::TOML::Parser::Grammar.parse(
+        $date4,
+        :rule<date>
+    );
+    my $match_date5 = Config::TOML::Parser::Grammar.parse(
+        $date5,
+        :rule<date_time_omit_local_offset>
+    );
+    my $match_date5_proto = Config::TOML::Parser::Grammar.parse(
+        $date5,
+        :rule<date>
+    );
+    my $match_date6 = Config::TOML::Parser::Grammar.parse(
+        $date6,
+        :rule<full_date>
+    );
+    my $match_date6_proto = Config::TOML::Parser::Grammar.parse(
+        $date6,
+        :rule<date>
     );
 
     is(
         $match_date1.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($date1, :rule<date_time>)] - 17 of 19
+        ♪ [Grammar.parse($date1, :rule<date_time>)] - 17 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal datetime successfully
         ┃   Success   ┃
@@ -406,12 +446,23 @@ subtest
         ┗━━━━━━━━━━━━━┛
         EOF
     );
-
+    is(
+        $match_date1_proto.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date1, :rule<date>)] - 18 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime successfully
+        ┃   Success   ┃
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
     is(
         $match_date2.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($date2, :rule<date_time>)] - 18 of 19
+        ♪ [Grammar.parse($date2, :rule<date_time>)] - 19 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal datetime successfully
         ┃   Success   ┃
@@ -419,15 +470,116 @@ subtest
         ┗━━━━━━━━━━━━━┛
         EOF
     );
-
+    is(
+        $match_date2_proto.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date2, :rule<date>)] - 20 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime successfully
+        ┃   Success   ┃
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
     is(
         $match_date3.WHAT,
         Match,
         q:to/EOF/
-        ♪ [Grammar.parse($date3, :rule<date_time>)] - 19 of 19
+        ♪ [Grammar.parse($date3, :rule<date_time>)] - 21 of 28
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal datetime successfully
         ┃   Success   ┃
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date3_proto.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date3, :rule<date>)] - 22 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime successfully
+        ┃   Success   ┃
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date4.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse(
+               $date4,
+               :rule<date_time_omit_local_offset>
+           )] - 23 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime (omit local offset)
+        ┃   Success   ┃    successfully
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date4_proto.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date4, :rule<date>)] - 24 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime (omit local offset)
+        ┃   Success   ┃    successfully
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date5.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse(
+               $date5,
+               :rule<date_time_omit_local_offset>
+           )] - 25 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime (omit local offset)
+        ┃   Success   ┃    successfully
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date5_proto.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date5, :rule<date>)] - 26 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime (omit local offset)
+        ┃   Success   ┃    successfully
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date6.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date6, :rule<full_date>)] - 27 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime (omit local offset
+        ┃   Success   ┃    and time) successfully
+        ┃             ┃
+        ┗━━━━━━━━━━━━━┛
+        EOF
+    );
+    is(
+        $match_date6_proto.WHAT,
+        Match,
+        q:to/EOF/
+        ♪ [Grammar.parse($date6, :rule<date>)] - 28 of 28
+        ┏━━━━━━━━━━━━━┓
+        ┃             ┃  ∙ Parses string literal datetime (omit local offset
+        ┃   Success   ┃    and time) successfully
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF

@@ -1002,7 +1002,10 @@ subtest
         # this is ok
         1979-05-27T07:32:00Z, # this is ok
         1979-05-27T00:32:00-07:00,# this is ok
-        1979-05-27T00:32:00.999999-07:00# this is ok
+        1979-05-27T00:32:00.999999-07:00,# this is ok
+        1979-05-27T07:32:00,# this is ok
+        1979-05-27T00:32:00.999999,# this is ok
+        1979-05-27# this is ok
         # this is ok
         # this is ok
         # this is ok

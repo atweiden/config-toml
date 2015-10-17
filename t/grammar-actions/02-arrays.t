@@ -1487,12 +1487,16 @@ subtest
     [
         1979-05-27T07:32:00Z,
         1979-05-27T00:32:00-07:00,
-        1979-05-27T00:32:00.999999-07:00
+        1979-05-27T00:32:00.999999-07:00,
+        1979-05-27T07:32:00,
+        1979-05-27T00:32:00.999999,
+        1979-05-27
     ]
     EOF
     $array_of_date_times_newlines .= trim;
 
-    my Config::TOML::Parser::Actions $actions .= new;
+    # assume UTC when local offset unspecified in TOML dates
+    my Config::TOML::Parser::Actions $actions .= new(:date_local_offset(0));
     my $match_array_of_date_times = Config::TOML::Parser::Grammar.parse(
         $array_of_date_times,
         :$actions,
@@ -1574,7 +1578,10 @@ subtest
         [
             '1979-05-27T07:32:00Z',
             '1979-05-27T00:32:00-07:00',
-            '1979-05-27T00:32:00.999999-07:00'
+            '1979-05-27T00:32:00.999999-07:00',
+            '1979-05-27T07:32:00Z',
+            '1979-05-27T00:32:00.999999Z',
+            '1979-05-27T00:00:00Z'
         ],
         q:to/EOF/
         ♪ [Is expected array value?] - 93 of 123
@@ -1908,7 +1915,10 @@ subtest
         # this is ok
         1979-05-27T07:32:00Z, # this is ok
         1979-05-27T00:32:00-07:00,# this is ok
-        1979-05-27T00:32:00.999999-07:00# this is ok
+        1979-05-27T00:32:00.999999-07:00,# this is ok
+        1979-05-27T07:32:00,# this is ok
+        1979-05-27T00:32:00.999999,# this is ok
+        1979-05-27# this is ok
         # this is ok
         # this is ok
         # this is ok
@@ -1979,7 +1989,8 @@ subtest
     EOF
     $commented_array_of_arrays .= trim;
 
-    my Config::TOML::Parser::Actions $actions .= new;
+    # assume UTC when local offset unspecified in TOML dates
+    my Config::TOML::Parser::Actions $actions .= new(:date_local_offset(0));
     my $match_commented_array_of_mixed_strings = Config::TOML::Parser::Grammar.parse(
         $commented_array_of_mixed_strings,
         :$actions,
@@ -2216,7 +2227,10 @@ subtest
         [
             '1979-05-27T07:32:00Z',
             '1979-05-27T00:32:00-07:00',
-            '1979-05-27T00:32:00.999999-07:00'
+            '1979-05-27T00:32:00.999999-07:00',
+            '1979-05-27T07:32:00Z',
+            '1979-05-27T00:32:00.999999Z',
+            '1979-05-27T00:00:00Z'
         ],
         q:to/EOF/
         ♪ [Is expected array value?] - 122 of 123
