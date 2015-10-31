@@ -551,7 +551,7 @@ method table_inline($/)
     else
     {
         # empty inline table
-        make [{}];
+        make {};
     }
 }
 
