@@ -765,12 +765,19 @@ sub helpmsg_table_inline_duplicate_keys(
 # verify keypath does not conflict with existing key
 method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
 {
-    my Bool $clear;
+    my Bool:D $clear = False;
 
     # does full keypath exist?
     if at_keypath(%.toml, @full_keypath).defined
     {
-        $clear = False;
+        # is it a scalar?
+        unless at_keypath(%.toml, @full_keypath).WHAT ~~ Hash
+            || at_keypath(%.toml, @full_keypath).WHAT ~~ Pair
+        {
+            $clear = False;
+        }
+
+        $clear = True;
     }
     else
     {
