@@ -525,7 +525,9 @@ method keypair($/)
 
 method table_inline_keypairs($/)
 {
-    make @<keypair>».made;
+    my %h;
+    @<keypair>».made.map({ %h{.keys[0]} = .values[0] });
+    make %h;
 }
 
 method table_inline($/)
@@ -536,7 +538,7 @@ method table_inline($/)
         # verify inline table does not contain duplicate keys
         {
             my Str @keys_seen;
-            push @keys_seen, $_ for $<table_inline_keypairs>.made».keys.flat;
+            push @keys_seen, $_ for $<table_inline_keypairs>.made.keys.flat;
             unless @keys_seen.elems == @keys_seen.unique.elems
             {
                 helpmsg_table_inline_duplicate_keys($/.orig.Str, @keys_seen);
