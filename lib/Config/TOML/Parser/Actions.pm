@@ -5,13 +5,191 @@ unit class Config::TOML::Parser::Actions;
 has %.toml;
 
 # TOML array table tracker, records array tables seen
-has Bool %.arraytable;
+has Bool %.aoh_seen;
 
 # DateTime offset for when the local offset is omitted in TOML dates,
 # see: https://github.com/toml-lang/toml#datetime
 # if not passed as a parameter during instantiation, use host machine's
 # local offset
 has Int $.date_local_offset = $*TZ;
+
+# exceptions {{{
+
+class X::Config::TOML::AOH::DuplicateKeys is Exception
+{
+    has Str $.aoh_text;
+    has Str @.keys_seen;
+
+    method message()
+    {
+        say "Sorry, arraytable contains duplicate keys.";
+        print '-' x 72, "\n";
+        say "Array table:";
+        say $.aoh_text;
+        print '-' x 72, "\n";
+        say "Keys seen:";
+        .say for @.keys_seen.sort».subst(
+            /(.*)/,
+            -> $/
+            {
+                state Int $i = 1;
+                my Str $replacement = "$i.「$0」";
+                $i++;
+                $replacement;
+            }
+        );
+        print '-' x 72, "\n";
+        say "Keys seen (unique):";
+        .say for @.keys_seen.unique.sort».subst(
+            /(.*)/,
+            -> $/
+            {
+                state Int $i = 1;
+                my Str $replacement = "$i.「$0」";
+                $i++;
+                $replacement;
+            }
+        );
+    }
+}
+
+class X::Config::TOML::InlineTable::DuplicateKeys is Exception
+{
+    has Str $.table_inline_text;
+    has Str @.keys_seen;
+
+    method message()
+    {
+        say "Sorry, inline table contains duplicate keys.";
+        print '-' x 72, "\n";
+        say "Inline table:";
+        say $.table_inline_text;
+        print '-' x 72, "\n";
+        say "Keys seen:";
+        .say for @.keys_seen.sort».subst(
+            /(.*)/,
+            -> $/
+            {
+                state Int $i = 1;
+                my Str $replacement = "$i.「$0」";
+                $i++;
+                $replacement;
+            }
+        );
+        print '-' x 72, "\n";
+        say "Keys seen (unique):";
+        .say for @.keys_seen.unique.sort».subst(
+            /(.*)/,
+            -> $/
+            {
+                state Int $i = 1;
+                my Str $replacement = "$i.「$0」";
+                $i++;
+                $replacement;
+            }
+        );
+    }
+}
+
+class X::Config::TOML::AOH is Exception
+{
+    has Str $.aoh_text;
+    has Str @.keypath;
+
+    method message()
+    {
+        say qq:to/EOF/;
+        Sorry, arraytable keypath 「{@.keypath.join('.')}」 trodden.
+
+        In arraytable:
+
+        {$.aoh_text}
+        EOF
+    }
+}
+
+class X::Config::TOML::AOH::OverwritesHOH is X::Config::TOML::AOH
+{
+    has Str $.aoh_header_text;
+
+    method message()
+    {
+        say qq:to/EOF/;
+        Sorry, arraytable 「$.aoh_header_text」 has been declared previously
+        as regular table in TOML document.
+
+        In arraytable:
+
+        {$.aoh_text}
+        EOF
+    }
+}
+
+class X::Config::TOML::HOH is Exception
+{
+    has Str $.hoh_text;
+    has Str @.keypath;
+
+    method message()
+    {
+        say qq:to/EOF/;
+        Sorry, table keypath 「{@.keypath.join('.')}」 trodden.
+
+        In table:
+
+        {$.hoh_text}
+        EOF
+    }
+}
+
+class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH
+{
+    has Str $.hoh_header_text;
+
+    method message()
+    {
+        say qq:to/EOF/;
+        Sorry, table 「$.hoh_header_text」 has been declared previously in TOML document.
+
+        In table:
+
+        {$.hoh_text}
+        EOF
+    }
+}
+
+class X::Config::TOML::KeypairLine::DuplicateKeys is Exception
+{
+    has Str $.keypair_line_text;
+    has Str @.keypath;
+
+    method message()
+    {
+        say "Sorry, keypair line contains duplicate key.";
+        print '-' x 72, "\n";
+        say "Keypair line:";
+        say $.keypair_line_text;
+        print '-' x 72, "\n";
+        say "The key 「{@.keypath.join('.')}」 has already been seen";
+    }
+}
+
+class X::Config::TOML::Keypath is Exception
+{
+    has Str @.keypath;
+
+    method message()
+    {
+        say qq:to/EOF/;
+        「{@.keypath.join('.')}」
+        EOF
+    }
+}
+
+class X::Config::TOML::Keypath::AOH is X::Config::TOML::AOH {*}
+class X::Config::TOML::Keypath::HOH is X::Config::TOML::HOH {*}
+
+# end exceptions }}}
 
 # string grammar-actions {{{
 
@@ -525,6 +703,18 @@ method keypair($/)
 
 method table_inline_keypairs($/)
 {
+    # verify inline table does not contain duplicate keys
+    {
+        my Str @keys_seen = |@<keypair>».made».keys.flat;
+        unless @keys_seen.elems == @keys_seen.unique.elems
+        {
+            die X::Config::TOML::InlineTable::DuplicateKeys.new(
+                :table_inline_text($/.Str),
+                :@keys_seen
+            );
+        }
+    }
+
     my %h;
     @<keypair>».made.map({ %h{.keys[0]} = .values[0] });
     make %h;
@@ -535,17 +725,6 @@ method table_inline($/)
     # did inline table contain keypairs?
     if $<table_inline_keypairs>
     {
-        # verify inline table does not contain duplicate keys
-        {
-            my Str @keys_seen;
-            push @keys_seen, $_ for $<table_inline_keypairs>.made.keys.flat;
-            unless @keys_seen.elems == @keys_seen.unique.elems
-            {
-                helpmsg_table_inline_duplicate_keys($/.orig.Str, @keys_seen);
-                exit;
-            }
-        }
-
         make $<table_inline_keypairs>.made;
     }
     else
@@ -570,13 +749,20 @@ method segment:keypair_line ($/)
     my Str @keypath = $<keypair_line>.made.keys[0];
 
     # verify current keypath hasn't already been seen
-    if at_keypath(%.toml, @keypath).defined
+    try
     {
-        helpmsg_segment_keypair_line_duplicate_key(
-            $/.Str,
-            @keypath.join('.')
-        );
-        exit;
+        at_keypath(%.toml, @keypath).defined;
+
+        CATCH
+        {
+            default
+            {
+                die X::Config::TOML::KeypairLine::DuplicateKeys.new(
+                    :keypair_line_text($/.Str),
+                    :@keypath
+                );
+            }
+        }
     }
 
     at_keypath(%!toml, @keypath) = $<keypair_line>.made.values[0];
@@ -595,12 +781,32 @@ method hoh_header($/)
 method table:hoh ($/)
 {
     my Str @base_keypath = $<hoh_header>.made;
+    my Str $hoh_text = $/.Str;
 
-    unless self!is_keypath_clear(@base_keypath)
+    # mark table as seen, verify table is not being redeclared
+    # if %!hoh_seen{$@base_keypath}++
+    # {
+    #     die X::Config::TOML::HOH::Seen.new(
+    #         :hoh_header_text($<hoh_header>.Str),
+    #         :$hoh_text
+    #     );
+    # }
+
+    # verify base keypath is clear
+    try
     {
-        say "Sorry, table keypath 「{@base_keypath.join('.')}」 trodden.";
-        say "Table header: 「{$<hoh_header>.Str}」";
-        exit;
+        self.is_keypath_clear(@base_keypath);
+
+        CATCH
+        {
+            default
+            {
+                die X::Config::TOML::Keypath::HOH.new(
+                    :$hoh_text,
+                    :keypath(@base_keypath)
+                );
+            }
+        }
     }
 
     # does table contain keypairs?
@@ -612,10 +818,20 @@ method table:hoh ($/)
             push @keypath, $keypair.keys[0];
 
             # verify keypair key does not conflict with existing key
-            unless self!is_keypath_clear(@keypath)
+            try
             {
-                say "Sorry, keypath 「{@keypath.join('.')}」 trodden.";
-                exit;
+                self.is_keypath_clear(@keypath);
+
+                CATCH
+                {
+                    default
+                    {
+                        die X::Config::TOML::Keypath::HOH.new(
+                            :$hoh_text,
+                            :@keypath
+                        );
+                    }
+                }
             }
 
             # assign value to keypath
@@ -636,11 +852,27 @@ method aoh_header($/)
 method table:aoh ($/)
 {
     my Str @base_keypath = $<aoh_header>.made;
+    my Str $aoh_header_text = $<aoh_header>.Str;
+    my Str $aoh_text = $/.Str;
 
     my %h;
-    @<keypair_line>».made.map({
-        %h{.keys[0]} = .values[0];
-    }) if @<keypair_line>;
+    if @<keypair_line>
+    {
+        # verify keypair lines do not contain duplicate keys
+        {
+            my Str @keys_seen = |@<keypair_line>».made».keys.flat;
+            unless @keys_seen.elems == @keys_seen.unique.elems
+            {
+                die X::Config::TOML::AOH::DuplicateKeys.new(
+                    :$aoh_text,
+                    :@keys_seen
+                );
+            }
+        }
+
+        @<keypair_line>».made.map({ %h{.keys[0]} = .values[0]; });
+    }
+
 
     sub append_to_aoh(@keypath, %h)
     {
@@ -651,7 +883,7 @@ method table:aoh ($/)
     }
 
     # is base keypath an existing array of hashes?
-    if %.arraytable{$@base_keypath}
+    if %.aoh_seen{$@base_keypath}
     {
         # push values to existing array of hashes
         append_to_aoh(@base_keypath, %h);
@@ -659,20 +891,29 @@ method table:aoh ($/)
     # new array of hashes
     else
     {
-        # make sure we're not trodding over scalars
-        unless self!is_keypath_clear(@base_keypath)
+        # make sure we're not trodding over scalars or tables
+        try
         {
-            say "Sorry, table keypath 「{@base_keypath.join('.')}」 trodden.";
-            say "Array tables: ", %.arraytable.perl;
-            say "Array table header: 「{$<aoh_header>.Str}」";
-            exit;
+            self.is_keypath_clear(@base_keypath, :aoh);
+
+            CATCH
+            {
+                default
+                {
+                    die X::Config::TOML::AOH::OverwritesHOH.new(
+                        :$aoh_header_text,
+                        :$aoh_text,
+                        :keypath(@base_keypath)
+                    );
+                }
+            }
         }
 
         # push values to new array of hashes
         append_to_aoh(@base_keypath, %h);
 
         # mark arraytable as seen
-        %!arraytable{$@base_keypath}++;
+        %!aoh_seen{$@base_keypath}++;
     }
 }
 
@@ -714,56 +955,8 @@ sub at_keypath(%h, *@k) is rw
     $h;
 }
 
-sub helpmsg_segment_keypair_line_duplicate_key(
-    Str:D $segment_keypair_line_orig,
-    Str:D $key_duplicate
-)
-{
-    say "Sorry, keypair line contains duplicate key.";
-    print '-' x 72, "\n";
-    say "Keypair line:";
-    say $segment_keypair_line_orig;
-    print '-' x 72, "\n";
-    say "The key 「$key_duplicate」 has already been seen";
-}
-
-sub helpmsg_table_inline_duplicate_keys(
-    Str:D $table_inline_orig,
-    Str:D @keys_seen
-)
-{
-    say "Sorry, inline table contains duplicate keys.";
-    print '-' x 72, "\n";
-    say "Inline table:";
-    say $table_inline_orig;
-    print '-' x 72, "\n";
-    say "Keys seen:";
-    .say for @keys_seen.sort».subst(
-        /(.*)/,
-        -> $/
-        {
-            state Int $i = 1;
-            my Str $replacement = "$i.「$0」";
-            $i++;
-            $replacement;
-        }
-    );
-    print '-' x 72, "\n";
-    say "Keys seen (unique):";
-    .say for @keys_seen.unique.sort».subst(
-        /(.*)/,
-        -> $/
-        {
-            state Int $i = 1;
-            my Str $replacement = "$i.「$0」";
-            $i++;
-            $replacement;
-        }
-    );
-}
-
 # verify keypath does not conflict with existing key
-method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
+multi method is_keypath_clear(Str:D @full_keypath) returns Bool:D
 {
     my Bool:D $clear = False;
 
@@ -772,9 +965,9 @@ method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
     {
         # is it a scalar?
         unless at_keypath(%.toml, @full_keypath).WHAT ~~ Hash
-            || at_keypath(%.toml, @full_keypath).WHAT ~~ Pair
         {
             $clear = False;
+            die X::Config::TOML::Keypath.new(:keypath(@full_keypath));
         }
 
         $clear = True;
@@ -799,16 +992,55 @@ method !is_keypath_clear(Str:D @full_keypath) returns Bool:D
     $clear;
 }
 
+# special keypath check for arraytables
+multi method is_keypath_clear(
+    Str:D @full_keypath,
+    Bool:D :$aoh! where *.so
+) returns Bool:D
+{
+    my Bool:D $clear = False;
+
+    # does full keypath exist?
+    if at_keypath(%.toml, @full_keypath).defined
+    {
+        # we're tracking arraytables so if we got here, it's because
+        # we're tasked with making a new arraytable
+        # this new arraytable cannot overwrite any existing value
+        $clear = False;
+        die X::Config::TOML::Keypath.new(:keypath(@full_keypath));
+    }
+    else
+    {
+        # full keypath does not exist, and full keypath has depth of 1?
+        if @full_keypath.end == 0
+        {
+            $clear = True;
+        }
+        else
+        {
+            # for extended keypaths, make sure we're not trodding
+            # over scalars
+            $clear = self._is_keypath_clear(
+                @full_keypath[0..^@full_keypath.end].Array
+            );
+        }
+    }
+
+    $clear;
+}
+
 multi method _is_keypath_clear(@keypath where *.end > 0) returns Bool:D
 {
     self!is_trodden(@keypath)
-        ?? False
+        ?? die X::Config::TOML::Keypath.new(:@keypath)
         !! self._is_keypath_clear(@keypath[0..^@keypath.end]);
 }
 
 multi method _is_keypath_clear(@keypath where *.end == 0) returns Bool:D
 {
-    self!is_trodden(@keypath) ?? False !! True;
+    self!is_trodden(@keypath)
+        ?? die X::Config::TOML::Keypath.new(:@keypath)
+        !! True;
 }
 
 method !is_trodden(@keypath) returns Bool:D
@@ -816,8 +1048,8 @@ method !is_trodden(@keypath) returns Bool:D
     if at_keypath(%.toml, @keypath).defined
     {
         unless at_keypath(%.toml, @keypath).WHAT ~~ Hash
-            || at_keypath(%.toml, @keypath).WHAT ~~ Pair
         {
+            die X::Config::TOML::Keypath.new(:@keypath);
             True;
         }
     }
