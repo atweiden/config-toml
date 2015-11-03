@@ -7,6 +7,9 @@ has %.toml;
 # TOML array table tracker, records array tables seen
 has Bool %.aoh_seen;
 
+# TOML table tracker, records tables seen
+has Bool %.hoh_seen;
+
 # DateTime offset for when the local offset is omitted in TOML dates,
 # see: https://github.com/toml-lang/toml#datetime
 # if not passed as a parameter during instantiation, use host machine's
@@ -157,6 +160,8 @@ class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH
         EOF
     }
 }
+
+class X::Config::TOML::HOH::Seen::AOH is X::Config::TOML::HOH::Seen {*}
 
 class X::Config::TOML::KeypairLine::DuplicateKeys is Exception
 {
@@ -704,6 +709,10 @@ method keypair($/)
 method table_inline_keypairs($/)
 {
     # verify inline table does not contain duplicate keys
+    #
+    # this is necessary to do early since keys are subsequently in this
+    # method being assigned in a hash and are at risk of being overwritten
+    # by duplicate keys
     {
         my Str @keys_seen = |@<keypair>».made».keys.flat;
         unless @keys_seen.elems == @keys_seen.unique.elems
@@ -749,20 +758,12 @@ method segment:keypair_line ($/)
     my Str @keypath = $<keypair_line>.made.keys[0];
 
     # verify current keypath hasn't already been seen
-    try
+    if at_keypath(%.toml, @keypath).defined
     {
-        at_keypath(%.toml, @keypath).defined;
-
-        CATCH
-        {
-            default
-            {
-                die X::Config::TOML::KeypairLine::DuplicateKeys.new(
-                    :keypair_line_text($/.Str),
-                    :@keypath
-                );
-            }
-        }
+        die X::Config::TOML::KeypairLine::DuplicateKeys.new(
+            :keypair_line_text($/.Str),
+            :@keypath
+        );
     }
 
     at_keypath(%!toml, @keypath) = $<keypair_line>.made.values[0];
@@ -784,13 +785,22 @@ method table:hoh ($/)
     my Str $hoh_text = $/.Str;
 
     # mark table as seen, verify table is not being redeclared
-    # if %!hoh_seen{$@base_keypath}++
-    # {
-    #     die X::Config::TOML::HOH::Seen.new(
-    #         :hoh_header_text($<hoh_header>.Str),
-    #         :$hoh_text
-    #     );
-    # }
+    if %!hoh_seen{$(self!pwd(%.toml, @base_keypath))}++
+    {
+        die X::Config::TOML::HOH::Seen.new(
+            :hoh_header_text($<hoh_header>.Str),
+            :$hoh_text
+        );
+    }
+
+    # verify table does not overwrite existing arraytable
+    if %.aoh_seen{$(self!pwd(%.toml, @base_keypath))}
+    {
+        die X::Config::TOML::HOH::Seen::AOH.new(
+            :hoh_header_text($<hoh_header>.Str),
+            :$hoh_text
+        );
+    }
 
     # verify base keypath is clear
     try
@@ -883,7 +893,7 @@ method table:aoh ($/)
     }
 
     # is base keypath an existing array of hashes?
-    if %.aoh_seen{$@base_keypath}
+    if %.aoh_seen{$(self!pwd(%.toml, @base_keypath))}
     {
         # push values to existing array of hashes
         append_to_aoh(@base_keypath, %h);
@@ -913,7 +923,7 @@ method table:aoh ($/)
         append_to_aoh(@base_keypath, %h);
 
         # mark arraytable as seen
-        %!aoh_seen{$@base_keypath}++;
+        %!aoh_seen{$(self!pwd(%.toml, @base_keypath))}++;
     }
 }
 
@@ -1054,6 +1064,55 @@ method !is_trodden(@keypath) returns Bool:D
         }
     }
     False;
+}
+
+# given TOML hash and keypath, print working directory including
+# arraytable indices
+# returns either a keyname or array index at each step of the path
+class Step { has $.key; has Int $.index; }
+method !pwd(%h, *@k) returns Array[Str]
+{
+    my Step @steps;
+
+    my $h := %h;
+    for @k -> $k
+    {
+        # if keypath step is array of hashes, always traverse array
+        # element of highest index
+        if $h{$k} ~~ List
+        {
+            # verify array of hashes (each key is type Hash or Pair)
+            # unless $h{$k}.grep({
+            #     .WHAT ~~ Hash || .WHAT ~~ Pair
+            # }).elems == $h{$k}.elems
+            # {
+            #     die "Expected array of tables, but found value is array";
+            # }
+            my Int $l = $h{$k}.end;
+            $h := $h{$k}[$l];
+            push @steps, Step.new(:key($k),:index($l));
+        }
+        else
+        {
+            $h := $h{$k};
+            push @steps, Step.new(:key($k));
+        }
+    }
+
+    unfold(@steps);
+}
+
+sub unfold(Step @steps) returns Array[Str]
+{
+    my Str @unfold;
+
+    for @steps -> $step
+    {
+        push @unfold, '<' ~ $step.key ~ '>';
+        push @unfold, '[' ~ $step.index ~ ']' if defined $step.index;
+    }
+
+    @unfold;
 }
 
 # end helper functions }}}
