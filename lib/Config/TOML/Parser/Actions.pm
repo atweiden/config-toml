@@ -794,7 +794,7 @@ method table:hoh ($/)
     }
 
     # verify table does not overwrite existing arraytable
-    if %.aoh_seen{$(self!pwd(%.toml, @base_keypath))}
+    if %.aoh_seen{$@base_keypath}
     {
         die X::Config::TOML::HOH::Seen::AOH.new(
             :hoh_header_text($<hoh_header>.Str),
@@ -893,7 +893,7 @@ method table:aoh ($/)
     }
 
     # is base keypath an existing array of hashes?
-    if %.aoh_seen{$(self!pwd(%.toml, @base_keypath))}
+    if %.aoh_seen{$@base_keypath}
     {
         # push values to existing array of hashes
         append_to_aoh(@base_keypath, %h);
@@ -923,7 +923,7 @@ method table:aoh ($/)
         append_to_aoh(@base_keypath, %h);
 
         # mark arraytable as seen
-        %!aoh_seen{$(self!pwd(%.toml, @base_keypath))}++;
+        %!aoh_seen{$@base_keypath}++;
     }
 }
 
