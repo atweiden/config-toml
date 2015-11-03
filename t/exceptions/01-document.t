@@ -4,7 +4,7 @@ use Test;
 use Config::TOML::Parser::Actions;
 use Config::TOML::Parser::Grammar;
 
-plan 14;
+plan 13;
 
 subtest
 {
@@ -18,7 +18,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::InlineTable::DuplicateKeys,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 1 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 1 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -40,9 +40,9 @@ subtest
     my Config::TOML::Parser::Actions $actions .= new;
     throws-like(
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
-        X::Config::TOML::Keypath::HOH,
+        X::Config::TOML::HOH::DuplicateKeys,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 2 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 2 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -68,7 +68,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::HOH::Seen,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 3 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 3 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -91,7 +91,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::HOH::Seen,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 4 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 4 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -117,7 +117,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::AOH::OverwritesHOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 5 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 5 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -140,7 +140,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::AOH::OverwritesHOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 6 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 6 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -166,7 +166,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::HOH::Seen::AOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 7 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 7 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -189,7 +189,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::HOH::Seen::AOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 8 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 8 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -215,7 +215,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::Keypath::HOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 9 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 9 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -238,31 +238,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::KeypairLine::DuplicateKeys,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 10 of 14
-        ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ Throws exception
-        ┃   Success   ┃
-        ┃             ┃
-        ┗━━━━━━━━━━━━━┛
-        EOF
-    );
-}
-
-subtest
-{
-    my Str $toml = Q:to/EOF/;
-    # DO NOT DO THIS
-    [a]
-    b = 1
-    b = 2
-    EOF
-
-    my Config::TOML::Parser::Actions $actions .= new;
-    throws-like(
-        {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
-        X::Config::TOML::Keypath::HOH,
-        q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 11 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 10 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -287,7 +263,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::Keypath::HOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 12 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 11 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -312,7 +288,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::Keypath::HOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 13 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 12 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃
@@ -337,7 +313,7 @@ subtest
         {Config::TOML::Parser::Grammar.parse($toml, :$actions)},
         X::Config::TOML::Keypath::HOH,
         q:to/EOF/
-        ♪ [Grammar.parse($toml, :$actions)] - 14 of 14
+        ♪ [Grammar.parse($toml, :$actions)] - 13 of 13
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Throws exception
         ┃   Success   ┃

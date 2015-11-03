@@ -56,6 +56,44 @@ class X::Config::TOML::AOH::DuplicateKeys is Exception
     }
 }
 
+class X::Config::TOML::HOH::DuplicateKeys is Exception
+{
+    has Str $.hoh_text;
+    has Str @.keys_seen;
+
+    method message()
+    {
+        say "Sorry, table contains duplicate keys.";
+        print '-' x 72, "\n";
+        say "Table:";
+        say $.hoh_text;
+        print '-' x 72, "\n";
+        say "Keys seen:";
+        .say for @.keys_seen.sort».subst(
+            /(.*)/,
+            -> $/
+            {
+                state Int $i = 1;
+                my Str $replacement = "$i.「$0」";
+                $i++;
+                $replacement;
+            }
+        );
+        print '-' x 72, "\n";
+        say "Keys seen (unique):";
+        .say for @.keys_seen.unique.sort».subst(
+            /(.*)/,
+            -> $/
+            {
+                state Int $i = 1;
+                my Str $replacement = "$i.「$0」";
+                $i++;
+                $replacement;
+            }
+        );
+    }
+}
+
 class X::Config::TOML::InlineTable::DuplicateKeys is Exception
 {
     has Str $.table_inline_text;
@@ -822,6 +860,18 @@ method table:hoh ($/)
     # does table contain keypairs?
     if @<keypair_line>
     {
+        # verify keypair lines do not contain duplicate keys
+        {
+            my Str @keys_seen = |@<keypair_line>».made».keys.flat;
+            unless @keys_seen.elems == @keys_seen.unique.elems
+            {
+                die X::Config::TOML::HOH::DuplicateKeys.new(
+                    :$hoh_text,
+                    :@keys_seen
+                );
+            }
+        }
+
         for @<keypair_line>».made -> $keypair
         {
             my Str @keypath = @base_keypath;
