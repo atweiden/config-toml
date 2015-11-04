@@ -1,7 +1,7 @@
 use v6;
 unit class Config::TOML::Parser::Exceptions;
 
-class X::Config::TOML::AOH::DuplicateKeys is Exception is export
+class X::Config::TOML::AOH::DuplicateKeys is Exception
 {
     has Str $.aoh_text;
     has Str @.keys_seen;
@@ -39,7 +39,7 @@ class X::Config::TOML::AOH::DuplicateKeys is Exception is export
     }
 }
 
-class X::Config::TOML::HOH::DuplicateKeys is Exception is export
+class X::Config::TOML::HOH::DuplicateKeys is Exception
 {
     has Str $.hoh_text;
     has Str @.keys_seen;
@@ -77,7 +77,7 @@ class X::Config::TOML::HOH::DuplicateKeys is Exception is export
     }
 }
 
-class X::Config::TOML::InlineTable::DuplicateKeys is Exception is export
+class X::Config::TOML::InlineTable::DuplicateKeys is Exception
 {
     has Str $.table_inline_text;
     has Str @.keys_seen;
@@ -115,7 +115,7 @@ class X::Config::TOML::InlineTable::DuplicateKeys is Exception is export
     }
 }
 
-class X::Config::TOML::KeypairLine::DuplicateKeys is Exception is export
+class X::Config::TOML::KeypairLine::DuplicateKeys is Exception
 {
     has Str $.keypair_line_text;
     has Str @.keypath;
@@ -131,7 +131,7 @@ class X::Config::TOML::KeypairLine::DuplicateKeys is Exception is export
     }
 }
 
-class X::Config::TOML::AOH is Exception is export
+class X::Config::TOML::AOH is Exception
 {
     has Str $.aoh_text;
     has Str @.keypath;
@@ -148,7 +148,7 @@ class X::Config::TOML::AOH is Exception is export
     }
 }
 
-class X::Config::TOML::AOH::OverwritesHOH is X::Config::TOML::AOH is export
+class X::Config::TOML::AOH::OverwritesHOH is X::Config::TOML::AOH
 {
     has Str $.aoh_header_text;
 
@@ -165,7 +165,7 @@ class X::Config::TOML::AOH::OverwritesHOH is X::Config::TOML::AOH is export
     }
 }
 
-class X::Config::TOML::AOH::OverwritesKey is X::Config::TOML::AOH is export
+class X::Config::TOML::AOH::OverwritesKey is X::Config::TOML::AOH
 {
     has Str $.aoh_header_text;
 
@@ -182,7 +182,7 @@ class X::Config::TOML::AOH::OverwritesKey is X::Config::TOML::AOH is export
     }
 }
 
-class X::Config::TOML::HOH is Exception is export
+class X::Config::TOML::HOH is Exception
 {
     has Str $.hoh_text;
     has Str @.keypath;
@@ -199,7 +199,7 @@ class X::Config::TOML::HOH is Exception is export
     }
 }
 
-class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH is export
+class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH
 {
     has Str $.hoh_header_text;
 
@@ -215,9 +215,9 @@ class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH is export
     }
 }
 
-class X::Config::TOML::HOH::Seen::AOH is X::Config::TOML::HOH::Seen is export {*}
+class X::Config::TOML::HOH::Seen::AOH is X::Config::TOML::HOH::Seen {*}
 
-class X::Config::TOML::HOH::Seen::Key is X::Config::TOML::HOH is export
+class X::Config::TOML::HOH::Seen::Key is X::Config::TOML::HOH
 {
     method message()
     {
@@ -231,7 +231,7 @@ class X::Config::TOML::HOH::Seen::Key is X::Config::TOML::HOH is export
     }
 }
 
-class X::Config::TOML::Keypath is Exception is export
+class X::Config::TOML::Keypath is Exception
 {
     has Str @.keypath;
 
@@ -243,8 +243,8 @@ class X::Config::TOML::Keypath is Exception is export
     }
 }
 
-class X::Config::TOML::Keypath::AOH is X::Config::TOML::AOH is export {*}
-class X::Config::TOML::Keypath::HOH is X::Config::TOML::HOH is export {*}
+class X::Config::TOML::Keypath::AOH is X::Config::TOML::AOH {*}
+class X::Config::TOML::Keypath::HOH is X::Config::TOML::HOH {*}
 
 class X::Config::TOML::BadKeypath::ArrayNotAOH is Exception {*}
 
