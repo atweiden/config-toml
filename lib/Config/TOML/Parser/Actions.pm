@@ -10,6 +10,9 @@ has Bool %.aoh_seen;
 # TOML table tracker, records tables seen
 has Bool %.hoh_seen;
 
+# TOML key tracker, records keypair keys seen
+has Bool %.keys_seen;
+
 # DateTime offset for when the local offset is omitted in TOML dates,
 # see: https://github.com/toml-lang/toml#datetime
 # if not passed as a parameter during instantiation, use host machine's
@@ -200,6 +203,20 @@ class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH
 }
 
 class X::Config::TOML::HOH::Seen::AOH is X::Config::TOML::HOH::Seen {*}
+
+class X::Config::TOML::HOH::Seen::Key is X::Config::TOML::HOH
+{
+    method message()
+    {
+        say qq:to/EOF/;
+        Sorry, table keypath 「{@.keypath.join('.')}」 overwrites existing key.
+
+        In table:
+
+        {$.hoh_text}
+        EOF
+    }
+}
 
 class X::Config::TOML::KeypairLine::DuplicateKeys is Exception
 {
@@ -795,8 +812,8 @@ method segment:keypair_line ($/)
     # update keypath
     my Str @keypath = $<keypair_line>.made.keys[0];
 
-    # verify current keypath hasn't already been seen
-    if at_keypath(%.toml, @keypath).defined
+    # mark key as seen, verify key is not being redeclared
+    if %!keys_seen{$(self!pwd(%.toml, @keypath))}++
     {
         die X::Config::TOML::KeypairLine::DuplicateKeys.new(
             :keypair_line_text($/.Str),
@@ -822,12 +839,12 @@ method table:hoh ($/)
     my Str @base_keypath = $<hoh_header>.made;
     my Str $hoh_text = $/.Str;
 
-    # mark table as seen, verify table is not being redeclared
-    if %!hoh_seen{$(self!pwd(%.toml, @base_keypath))}++
+    # verify table does not overwrite existing key
+    if %.keys_seen{$(self!pwd(%.toml, @base_keypath))}
     {
-        die X::Config::TOML::HOH::Seen.new(
-            :hoh_header_text($<hoh_header>.Str),
-            :$hoh_text
+        die X::Config::TOML::HOH::Seen::Key.new(
+            :$hoh_text,
+            :keypath(@base_keypath)
         );
     }
 
@@ -835,6 +852,15 @@ method table:hoh ($/)
     if %.aoh_seen{$@base_keypath}
     {
         die X::Config::TOML::HOH::Seen::AOH.new(
+            :hoh_header_text($<hoh_header>.Str),
+            :$hoh_text
+        );
+    }
+
+    # mark table as seen, verify table is not being redeclared
+    if %!hoh_seen{$(self!pwd(%.toml, @base_keypath))}++
+    {
+        die X::Config::TOML::HOH::Seen.new(
             :hoh_header_text($<hoh_header>.Str),
             :$hoh_text
         );
@@ -896,6 +922,9 @@ method table:hoh ($/)
 
             # assign value to keypath
             at_keypath(%!toml, @keypath) = $keypair.values[0];
+
+            # mark key as seen
+            %!keys_seen{$(self!pwd(%.toml, @keypath))}++;
         }
     }
     else
@@ -915,6 +944,16 @@ method table:aoh ($/)
     my Str $aoh_header_text = $<aoh_header>.Str;
     my Str $aoh_text = $/.Str;
 
+    # make sure we're not overwriting existing hoh
+    if %.hoh_seen{$(self!pwd(%.toml, @base_keypath))}
+    {
+        die X::Config::TOML::AOH::OverwritesHOH.new(
+            :$aoh_header_text,
+            :$aoh_text,
+            :keypath(@base_keypath)
+        );
+    }
+
     my %h;
     if @<keypair_line>
     {
@@ -932,7 +971,6 @@ method table:aoh ($/)
 
         @<keypair_line>».made.map({ %h{.keys[0]} = .values[0]; });
     }
-
 
     sub append_to_aoh(@keypath, %h)
     {
@@ -960,8 +998,7 @@ method table:aoh ($/)
             {
                 default
                 {
-                    die X::Config::TOML::AOH::OverwritesHOH.new(
-                        :$aoh_header_text,
+                    die X::Config::TOML::Keypath::AOH.new(
                         :$aoh_text,
                         :keypath(@base_keypath)
                     );
