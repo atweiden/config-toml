@@ -955,7 +955,7 @@ method !is_trodden(@keypath) returns Bool:D
 # arraytable indices
 # returns either a keyname or array index at each step of the path
 class Step { has $.key; has Int $.index; }
-method !pwd(%h, *@k) returns Array[Str]
+method !pwd(%h, *@k) returns Array
 {
     my Step @steps;
 
@@ -981,7 +981,7 @@ method !pwd(%h, *@k) returns Array[Str]
 }
 
 # convert list of Steps to strings
-sub unfold(Step @steps) returns Array[Str]
+sub unfold(Step @steps) returns Array
 {
     my Str @unfold;
 
