@@ -526,8 +526,8 @@ token keypair_key:quoted { <keypair_key_string> }
 # quoted keys follow the exact same rules as either basic strings or
 # literal strings
 proto token keypair_key_string {*}
-token keypair_key_string:basic { '"' <string_basic_text> '"' }
-token keypair_key_string:literal { \' <string_literal_text> \' }
+token keypair_key_string:basic { <string_basic> }
+token keypair_key_string:literal { <string_literal> }
 
 proto token keypair_value {*}
 token keypair_value:string { <string> }

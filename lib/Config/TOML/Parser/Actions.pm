@@ -425,12 +425,12 @@ method keypair_key:bare ($/)
 
 method keypair_key_string:basic ($/)
 {
-    make $<string_basic_text>.made;
+    make $<string_basic>.made;
 }
 
 method keypair_key_string:literal ($/)
 {
-    make $<string_literal_text>.made;
+    make $<string_literal>.made;
 }
 
 method keypair_key:quoted ($/)
