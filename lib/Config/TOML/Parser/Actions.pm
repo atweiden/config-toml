@@ -423,14 +423,19 @@ method keypair_key:bare ($/)
     make ~$/;
 }
 
-method keypair_key_string_basic($/)
+method keypair_key_string:basic ($/)
 {
     make $<string_basic_text>.made;
 }
 
+method keypair_key_string:literal ($/)
+{
+    make $<string_literal_text>.made;
+}
+
 method keypair_key:quoted ($/)
 {
-    make $<keypair_key_string_basic>.made;
+    make $<keypair_key_string>.made;
 }
 
 method keypair_value:string ($/)

@@ -520,22 +520,14 @@ token keypair
 }
 
 proto token keypair_key {*}
+token keypair_key:bare { <+alnum +[-]>+ }
+token keypair_key:quoted { <keypair_key_string> }
 
-token keypair_key:bare
-{
-    <+alnum +[-]>+
-}
-
-token keypair_key:quoted
-{
-    <keypair_key_string_basic>
-}
-
-# quoted keys must contain chars inside double quotes
-token keypair_key_string_basic
-{
-    '"' <string_basic_text> '"'
-}
+# quoted keys follow the exact same rules as either basic strings or
+# literal strings
+proto token keypair_key_string {*}
+token keypair_key_string:basic { '"' <string_basic_text> '"' }
+token keypair_key_string:literal { \' <string_literal_text> \' }
 
 proto token keypair_value {*}
 token keypair_value:string { <string> }
