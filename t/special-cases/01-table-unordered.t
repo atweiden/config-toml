@@ -21,10 +21,10 @@ subtest
     EOF
 
     my Config::TOML::Parser::Actions $actions .= new;
-    my $match_toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
+    my $match-toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
 
     is(
-        $match_toml.WHAT,
+        $match-toml.WHAT,
         Match,
         q:to/EOF/
         ♪ [Grammar.parse($toml, :$actions)] - 1 of 4
@@ -37,36 +37,36 @@ subtest
     );
 
     is(
-        $match_toml.made<table><sub1><item>,
+        $match-toml.made<table><sub1><item>,
         "ok",
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made<table><sub1><item> ~~ "ok"
+        ┃             ┃  ∙ $match-toml.made<table><sub1><item> ~~ "ok"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match_toml.made<table><item>,
+        $match-toml.made<table><item>,
         "ok",
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made<table><item> ~~ "ok"
+        ┃             ┃  ∙ $match-toml.made<table><item> ~~ "ok"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match_toml.made<table><sub2><item>,
+        $match-toml.made<table><sub2><item>,
         "ok",
         q:to/EOF/
         ♪ [Is expected value?] - 4 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made<table><sub2><item> ~~ "ok"
+        ┃             ┃  ∙ $match-toml.made<table><sub2><item> ~~ "ok"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

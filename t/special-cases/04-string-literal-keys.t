@@ -17,10 +17,10 @@ subtest
     EOF
 
     my Config::TOML::Parser::Actions $actions .= new;
-    my $match_toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
+    my $match-toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
 
     is(
-        $match_toml.WHAT,
+        $match-toml.WHAT,
         Match,
         q:to/EOF/
         ♪ [Grammar.parse($toml, :$actions)] - 1 of 3
@@ -32,24 +32,24 @@ subtest
         EOF
     );
     is(
-        $match_toml.made<j><ʞ><l><key2>,
+        $match-toml.made<j><ʞ><l><key2>,
         'value',
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made<j><ʞ><l><key2> eq 'value'
+        ┃             ┃  ∙ $match-toml.made<j><ʞ><l><key2> eq 'value'
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match_toml.made<j><ʞ><l>{'quoted "value"'},
+        $match-toml.made<j><ʞ><l>{'quoted "value"'},
         'value',
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made<j><ʞ><l>{'quoted "value"'} eq 'value'
+        ┃             ┃  ∙ $match-toml.made<j><ʞ><l>{'quoted "value"'} eq 'value'
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

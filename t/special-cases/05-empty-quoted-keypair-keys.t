@@ -16,10 +16,10 @@ subtest
     EOF
 
     my Config::TOML::Parser::Actions $actions .= new;
-    my $match_toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
+    my $match-toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
 
     is(
-        $match_toml.WHAT,
+        $match-toml.WHAT,
         Match,
         q:to/EOF/
         ♪ [Grammar.parse($toml, :$actions)] - 1 of 4
@@ -31,36 +31,36 @@ subtest
         EOF
     );
     is(
-        $match_toml.made{''}{''}{''}{'a'},
+        $match-toml.made{''}{''}{''}{'a'},
         1,
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made{''}{''}{''}{'a'} == 1
+        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{'a'} == 1
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match_toml.made{''}{''}{''}{'b'},
+        $match-toml.made{''}{''}{''}{'b'},
         2,
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made{''}{''}{''}{'b'} == 2
+        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{'b'} == 2
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match_toml.made{''}{''}{''}{''},
+        $match-toml.made{''}{''}{''}{''},
         3,
         q:to/EOF/
         ♪ [Is expected value?] - 4 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match_toml.made{''}{''}{''}{''} == 3
+        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{''} == 3
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

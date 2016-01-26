@@ -9,8 +9,8 @@ Usage
 
 ```perl6
 use Config::TOML;
-my $toml_text = slurp 'config.toml';
-my %toml = from-toml $toml_text;
+my $toml-text = slurp 'config.toml';
+my %toml = from-toml $toml-text;
 ```
 
 
