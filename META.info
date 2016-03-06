@@ -4,6 +4,7 @@
     "author"      : "Andy Weidenbaum",
     "description" : "TOML parser for Perl6",
     "license"     : "http://unlicense.org/UNLICENSE",
+    "depends"     : ["Crane"],
     "source-type" : "git",
     "source-url"  : "git://github.com/atweiden/config-toml.git",
     "support"     : {

@@ -1,10 +1,12 @@
 use v6;
-unit class Config::TOML::Parser::Exceptions;
+unit module X::Config::TOML;
 
-class X::Config::TOML::AOH::DuplicateKeys is Exception
+# X::Config::TOML::AOH::DuplicateKeys {{{
+
+class AOH::DuplicateKeys is Exception
 {
     has Str $.aoh-text;
-    has Str @.keys-seen;
+    has @.keys-seen;
 
     method message()
     {
@@ -39,10 +41,14 @@ class X::Config::TOML::AOH::DuplicateKeys is Exception
     }
 }
 
-class X::Config::TOML::HOH::DuplicateKeys is Exception
+# end X::Config::TOML::AOH::DuplicateKeys }}}
+
+# X::Config::TOML::HOH::DuplicateKeys {{{
+
+class HOH::DuplicateKeys is Exception
 {
     has Str $.hoh-text;
-    has Str @.keys-seen;
+    has @.keys-seen;
 
     method message()
     {
@@ -76,11 +82,14 @@ class X::Config::TOML::HOH::DuplicateKeys is Exception
         );
     }
 }
+# end X::Config::TOML::HOH::DuplicateKeys }}}
 
-class X::Config::TOML::InlineTable::DuplicateKeys is Exception
+# X::Config::TOML::InlineTable::DuplicateKeys {{{
+
+class InlineTable::DuplicateKeys is Exception
 {
     has Str $.table-inline-text;
-    has Str @.keys-seen;
+    has @.keys-seen;
 
     method message()
     {
@@ -115,10 +124,14 @@ class X::Config::TOML::InlineTable::DuplicateKeys is Exception
     }
 }
 
-class X::Config::TOML::KeypairLine::DuplicateKeys is Exception
+# end X::Config::TOML::InlineTable::DuplicateKeys }}}
+
+# X::Config::TOML::KeypairLine::DuplicateKeys {{{
+
+class KeypairLine::DuplicateKeys is Exception
 {
     has Str $.keypair-line-text;
-    has Str @.keypath;
+    has @.path;
 
     method message()
     {
@@ -127,19 +140,23 @@ class X::Config::TOML::KeypairLine::DuplicateKeys is Exception
         say "Keypair line:";
         say $.keypair-line-text;
         print '-' x 72, "\n";
-        say "The key 「{@.keypath.join('.')}」 has already been seen";
+        say "The key at path「{@.path.join(', ')}」 has already been seen";
     }
 }
 
-class X::Config::TOML::AOH is Exception
+# end X::Config::TOML::KeypairLine::DuplicateKeys }}}
+
+# X::Config::TOML::AOH {{{
+
+class AOH is Exception
 {
     has Str $.aoh-text;
-    has Str @.keypath;
+    has @.path;
 
     method message()
     {
         say qq:to/EOF/;
-        Sorry, arraytable keypath 「{@.keypath.join('.')}」 trodden.
+        Sorry, arraytable keypath 「{@.path.join(', ')}」 trodden.
 
         In arraytable:
 
@@ -148,7 +165,11 @@ class X::Config::TOML::AOH is Exception
     }
 }
 
-class X::Config::TOML::AOH::OverwritesHOH is X::Config::TOML::AOH
+# end X::Config::TOML::AOH }}}
+
+# X::Config::TOML::AOH::OverwritesHOH {{{
+
+class AOH::OverwritesHOH is AOH
 {
     has Str $.aoh-header-text;
 
@@ -165,7 +186,11 @@ class X::Config::TOML::AOH::OverwritesHOH is X::Config::TOML::AOH
     }
 }
 
-class X::Config::TOML::AOH::OverwritesKey is X::Config::TOML::AOH
+# end X::Config::TOML::AOH::OverwritesHOH }}}
+
+# X::Config::TOML::AOH::OverwritesKey {{{
+
+class AOH::OverwritesKey is AOH
 {
     has Str $.aoh-header-text;
 
@@ -182,15 +207,19 @@ class X::Config::TOML::AOH::OverwritesKey is X::Config::TOML::AOH
     }
 }
 
-class X::Config::TOML::HOH is Exception
+# end X::Config::TOML::AOH::OverwritesKey }}}
+
+# X::Config::TOML::HOH {{{
+
+class HOH is Exception
 {
     has Str $.hoh-text;
-    has Str @.keypath;
+    has @.path;
 
     method message()
     {
         say qq:to/EOF/;
-        Sorry, table keypath 「{@.keypath.join('.')}」 trodden.
+        Sorry, table keypath 「{@.path.join(', ')}」 trodden.
 
         In table:
 
@@ -199,7 +228,11 @@ class X::Config::TOML::HOH is Exception
     }
 }
 
-class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH
+# end X::Config::TOML::HOH }}}
+
+# X::Config::TOML::HOH::Seen {{{
+
+class HOH::Seen is HOH
 {
     has Str $.hoh-header-text;
 
@@ -215,14 +248,22 @@ class X::Config::TOML::HOH::Seen is X::Config::TOML::HOH
     }
 }
 
-class X::Config::TOML::HOH::Seen::AOH is X::Config::TOML::HOH::Seen {*}
+# end X::Config::TOML::HOH::Seen }}}
 
-class X::Config::TOML::HOH::Seen::Key is X::Config::TOML::HOH
+# X::Config::TOML::HOH::Seen::AOH {{{
+
+class HOH::Seen::AOH is HOH::Seen {*}
+
+# end X::Config::TOML::HOH::Seen::AOH }}}
+
+# X::Config::TOML::HOH::Seen::Key {{{
+
+class HOH::Seen::Key is HOH
 {
     method message()
     {
         say qq:to/EOF/;
-        Sorry, table keypath 「{@.keypath.join('.')}」 overwrites existing key.
+        Sorry, table keypath 「{@.path.join(', ')}」 overwrites existing key.
 
         In table:
 
@@ -231,21 +272,40 @@ class X::Config::TOML::HOH::Seen::Key is X::Config::TOML::HOH
     }
 }
 
-class X::Config::TOML::Keypath is Exception
+# end X::Config::TOML::HOH::Seen::Key }}}
+
+# X::Config::TOML::Keypath {{{
+
+class Keypath is Exception
 {
-    has Str @.keypath;
+    has @.path;
 
     method message()
     {
         say qq:to/EOF/;
-        「{@.keypath.join('.')}」
+        「{@.path.join(', ')}」
         EOF
     }
 }
 
-class X::Config::TOML::Keypath::AOH is X::Config::TOML::AOH {*}
-class X::Config::TOML::Keypath::HOH is X::Config::TOML::HOH {*}
+# end X::Config::TOML::Keypath }}}
 
-class X::Config::TOML::BadKeypath::ArrayNotAOH is Exception {*}
+# X::Config::TOML::Keypath::AOH {{{
 
-# vim: ft=perl6
+class Keypath::AOH is AOH {*}
+
+# end X::Config::TOML::Keypath::AOH }}}
+
+# X::Config::TOML::Keypath::HOH {{{
+
+class Keypath::HOH is HOH {*}
+
+# end X::Config::TOML::Keypath::HOH }}}
+
+# X::Config::TOML::BadKeypath::ArrayNotAOH {{{
+
+class BadKeypath::ArrayNotAOH is Exception {*}
+
+# end X::Config::TOML::BadKeypath::ArrayNotAOH }}}
+
+# vim: ft=perl6 fdm=marker fdl=0
