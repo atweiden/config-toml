@@ -741,11 +741,6 @@ multi sub pwd(Positional $container, :@steps where *.elems > 0) returns Array
 
 multi sub pwd(Positional $container, :@steps where *.elems == 0) returns Array
 {
-    # my @steps-taken;
-    # my $root := $container;
-    # my Int $index = $container.end;
-    # $root := $root[$index];
-    # push @steps-taken, $index;
     my @steps-taken;
 }
 
