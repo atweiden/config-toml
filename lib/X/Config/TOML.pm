@@ -1,128 +1,71 @@
 use v6;
 unit module X::Config::TOML;
 
-# X::Config::TOML::AOH::DuplicateKeys {{{
+# X::Config::TOML::DuplicateKeys {{{
 
-class AOH::DuplicateKeys is Exception
+class DuplicateKeys is Exception
 {
-    has Str $.aoh-text;
-    has @.keys-seen;
+    has @.keys-seen is required;
+    has Str $.subject is required;
+    has Str $.text is required;
 
     method message()
     {
-        say "Sorry, arraytable contains duplicate keys.";
-        print '-' x 72, "\n";
-        say "Array table:";
-        say $.aoh-text;
-        print '-' x 72, "\n";
-        say "Keys seen:";
-        .say for @.keys-seen.sort».subst(
-            /(.*)/,
-            -> $/
-            {
-                state Int $i = 1;
-                my Str $replacement = "$i.「$0」";
-                $i++;
-                $replacement;
-            }
-        );
-        print '-' x 72, "\n";
-        say "Keys seen (unique):";
-        .say for @.keys-seen.unique.sort».subst(
-            /(.*)/,
-            -> $/
-            {
-                state Int $i = 1;
-                my Str $replacement = "$i.「$0」";
-                $i++;
-                $replacement;
-            }
-        );
+        my Str $help-text = qq:to/EOF/;
+        Sorry, $.subject contains duplicate keys.
+        {'-' x 72}
+        {$.subject.tc}:
+        $.text
+        {'-' x 72}
+        Keys seen:
+        {
+            @.keys-seen.sort».subst(
+                /(.*)/,
+                -> $/
+                {
+                    state Int $i = 1;
+                    my Str $replacement = "$i.「$0」 \n";
+                    $i++;
+                    $replacement;
+                }
+            );
+        }
+        {'-' x 72}
+        Keys seen (unique):
+        {
+            @.keys-seen.unique.sort».subst(
+                /(.*)/,
+                -> $/
+                {
+                    state Int $i = 1;
+                    my Str $replacement = "$i.「$0」 \n";
+                    $i++;
+                    $replacement;
+                }
+            );
+        }
+        EOF
+        $help-text.trim;
     }
 }
+
+# end X::Config::TOML::DuplicateKeys }}}
+
+# X::Config::TOML::AOH::DuplicateKeys {{{
+
+class AOH::DuplicateKeys is DuplicateKeys {*}
 
 # end X::Config::TOML::AOH::DuplicateKeys }}}
 
 # X::Config::TOML::HOH::DuplicateKeys {{{
 
-class HOH::DuplicateKeys is Exception
-{
-    has Str $.hoh-text;
-    has @.keys-seen;
+class HOH::DuplicateKeys is DuplicateKeys {*}
 
-    method message()
-    {
-        say "Sorry, table contains duplicate keys.";
-        print '-' x 72, "\n";
-        say "Table:";
-        say $.hoh-text;
-        print '-' x 72, "\n";
-        say "Keys seen:";
-        .say for @.keys-seen.sort».subst(
-            /(.*)/,
-            -> $/
-            {
-                state Int $i = 1;
-                my Str $replacement = "$i.「$0」";
-                $i++;
-                $replacement;
-            }
-        );
-        print '-' x 72, "\n";
-        say "Keys seen (unique):";
-        .say for @.keys-seen.unique.sort».subst(
-            /(.*)/,
-            -> $/
-            {
-                state Int $i = 1;
-                my Str $replacement = "$i.「$0」";
-                $i++;
-                $replacement;
-            }
-        );
-    }
-}
 # end X::Config::TOML::HOH::DuplicateKeys }}}
 
 # X::Config::TOML::InlineTable::DuplicateKeys {{{
 
-class InlineTable::DuplicateKeys is Exception
-{
-    has Str $.table-inline-text;
-    has @.keys-seen;
-
-    method message()
-    {
-        say "Sorry, inline table contains duplicate keys.";
-        print '-' x 72, "\n";
-        say "Inline table:";
-        say $.table-inline-text;
-        print '-' x 72, "\n";
-        say "Keys seen:";
-        .say for @.keys-seen.sort».subst(
-            /(.*)/,
-            -> $/
-            {
-                state Int $i = 1;
-                my Str $replacement = "$i.「$0」";
-                $i++;
-                $replacement;
-            }
-        );
-        print '-' x 72, "\n";
-        say "Keys seen (unique):";
-        .say for @.keys-seen.unique.sort».subst(
-            /(.*)/,
-            -> $/
-            {
-                state Int $i = 1;
-                my Str $replacement = "$i.「$0」";
-                $i++;
-                $replacement;
-            }
-        );
-    }
-}
+class InlineTable::DuplicateKeys is DuplicateKeys {*}
 
 # end X::Config::TOML::InlineTable::DuplicateKeys }}}
 
@@ -135,12 +78,15 @@ class KeypairLine::DuplicateKeys is Exception
 
     method message()
     {
-        say "Sorry, keypair line contains duplicate key.";
-        print '-' x 72, "\n";
-        say "Keypair line:";
-        say $.keypair-line-text;
-        print '-' x 72, "\n";
-        say "The key at path「{@.path.join(', ')}」 has already been seen";
+        my Str $help-text = qq:to/EOF/;
+        Sorry, keypair line contains duplicate key.
+        {'-' x 72}
+        Keypair line:
+        $.keypair-line-text
+        {'-' x 72}
+        The key at path「{@.path.join(', ')}」 has already been seen
+        EOF
+        $help-text.trim;
     }
 }
 
@@ -155,13 +101,14 @@ class AOH is Exception
 
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         Sorry, arraytable keypath 「{@.path.join(', ')}」 trodden.
 
         In arraytable:
 
         {$.aoh-text}
         EOF
+        $help-text.trim;
     }
 }
 
@@ -175,7 +122,7 @@ class AOH::OverwritesHOH is AOH
 
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         Sorry, arraytable 「$.aoh-header-text」 has been declared previously
         as regular table in TOML document.
 
@@ -183,6 +130,7 @@ class AOH::OverwritesHOH is AOH
 
         {$.aoh-text}
         EOF
+        $help-text.trim;
     }
 }
 
@@ -196,7 +144,7 @@ class AOH::OverwritesKey is AOH
 
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         Sorry, arraytable 「$.aoh-header-text」 overwrites existing key in
         TOML document.
 
@@ -204,6 +152,7 @@ class AOH::OverwritesKey is AOH
 
         {$.aoh-text}
         EOF
+        $help-text.trim;
     }
 }
 
@@ -218,13 +167,14 @@ class HOH is Exception
 
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         Sorry, table keypath 「{@.path.join(', ')}」 trodden.
 
         In table:
 
         {$.hoh-text}
         EOF
+        $help-text.trim;
     }
 }
 
@@ -238,13 +188,14 @@ class HOH::Seen is HOH
 
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         Sorry, table 「$.hoh-header-text」 has been declared previously in TOML document.
 
         In table:
 
         {$.hoh-text}
         EOF
+        $help-text.trim;
     }
 }
 
@@ -262,13 +213,14 @@ class HOH::Seen::Key is HOH
 {
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         Sorry, table keypath 「{@.path.join(', ')}」 overwrites existing key.
 
         In table:
 
         {$.hoh-text}
         EOF
+        $help-text.trim;
     }
 }
 
@@ -282,9 +234,10 @@ class Keypath is Exception
 
     method message()
     {
-        say qq:to/EOF/;
+        my Str $help-text = qq:to/EOF/;
         「{@.path.join(', ')}」
         EOF
+        $help-text.trim;
     }
 }
 

@@ -485,8 +485,9 @@ method table-inline-keypairs($/)
         unless @keys-seen.elems == @keys-seen.unique.elems
         {
             die X::Config::TOML::InlineTable::DuplicateKeys.new(
-                :table-inline-text(~$/),
-                :@keys-seen
+                :@keys-seen,
+                :subject('inline table'),
+                :text(~$/)
             );
         }
     }
@@ -609,8 +610,9 @@ method table:hoh ($/)
                 unless @keys-seen.elems == @keys-seen.unique.elems
                 {
                     die X::Config::TOML::HOH::DuplicateKeys.new(
-                        :$hoh-text,
-                        :@keys-seen
+                        :@keys-seen,
+                        :subject('table'),
+                        :text($hoh-text)
                     );
                 }
             }
@@ -690,8 +692,9 @@ method table:aoh ($/)
             unless @keys-seen.elems == @keys-seen.unique.elems
             {
                 die X::Config::TOML::AOH::DuplicateKeys.new(
-                    :$aoh-text,
-                    :@keys-seen
+                    :@keys-seen,
+                    :subject('array table'),
+                    :text($aoh-text)
                 );
             }
         }
