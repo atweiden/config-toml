@@ -205,7 +205,7 @@ multi sub to-toml(Real:U $r) returns Str
 
 multi sub to-toml(Bool:D $b) returns Str
 {
-    ~$b;
+    ~$b.lc;
 }
 
 multi sub to-toml(Bool:U $b) returns Str

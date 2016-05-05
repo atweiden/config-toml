@@ -3,7 +3,7 @@ use lib 'lib';
 use Config::TOML;
 use Test;
 
-plan 1;
+plan 2;
 
 subtest
 {
@@ -78,6 +78,29 @@ subtest
     l = "charlie-levels"
     [[a.h.zoology.charlie]]
     h = "charlie-here"
+    EOF
+    $expected .= trim;
+
+    my Str $toml = to-toml(%h);
+    is $toml, $expected, 'Is expected value';
+}
+
+subtest
+{
+    my Str $s = 'Hello, world!';
+    my Int $n = 1111111;
+    my Rat $r = 1.11111;
+    my Bool $b = True;
+    my Date $d = Date.new('2011-11-11');
+    my DateTime $dt = DateTime.new('2011-11-11T00:00:00Z');
+    my %h = :$s, :$n, :$r, :$b, :$d, :$dt;
+    my Str $expected = q:to/EOF/;
+    b = true
+    d = 2011-11-11
+    dt = 2011-11-11T00:00:00Z
+    n = 1111111
+    r = 1.11111
+    s = "Hello, world!"
     EOF
     $expected .= trim;
 
