@@ -3,7 +3,7 @@ use lib 'lib';
 use Config::TOML;
 use Test;
 
-plan 3;
+plan 4;
 
 subtest
 {
@@ -94,6 +94,7 @@ subtest
     my Date $d = Date.new('2011-11-11');
     my DateTime $dt = DateTime.new('2011-11-11T00:00:00Z');
     my %h = :$s, :$n, :$r, :$b, :$d, :$dt;
+
     my Str $expected = q:to/EOF/;
     b = true
     d = 2011-11-11
@@ -120,6 +121,7 @@ subtest
         },
         'this is an arraytable header' => [ {:arraytable}, {:!table} ],
         'which way to the Sun?' => 'up';
+
     my Str $expected = q:to/EOF/;
     "which way to the Sun?" = "up"
     ["hello world"."again and again"."and again"]
@@ -128,6 +130,39 @@ subtest
     arraytable = true
     [["this is an arraytable header"]]
     table = false
+    EOF
+    $expected .= trim;
+
+    my Str $toml = to-toml(%h);
+    is $toml, $expected, 'Is expected value';
+}
+
+subtest
+{
+    my %h =
+        "" => {
+            '' => {
+                '' => 'empty'
+            },
+            'an empty quoted' => {
+                'arraytable' => {
+                    '' => {
+                        '' => [
+                            :start,
+                            :end
+                        ]
+                    }
+                }
+            }
+        };
+
+    my Str $expected = q:to/EOF/;
+    ["".""]
+    "" = "empty"
+    [[""."an empty quoted".arraytable."".""]]
+    start = true
+    [[""."an empty quoted".arraytable."".""]]
+    end = true
     EOF
     $expected .= trim;
 
