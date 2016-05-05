@@ -52,6 +52,10 @@ sub sort-pairs(%h) returns List
         }
     }
 
+    @simple-pairs .= sort;
+    @nested-pairs .= sort;
+    @table-array-pairs .= sort;
+
     (@simple-pairs, @nested-pairs, @table-array-pairs);
 }
 
