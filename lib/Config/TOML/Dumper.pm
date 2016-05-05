@@ -33,6 +33,11 @@ sub sort-pairs(%h) returns List
 
     for %h.kv -> $key, $val
     {
+        unless is-valid-key($key)
+        {
+            die X::Config::TOML::Dumper::BadKey.new(:$key);
+        }
+
         if $val ~~ Associative
         {
             @nested-pairs.unshift: %($key => $val);
@@ -116,14 +121,25 @@ sub is-bare-key($key) returns Bool
     Config::TOML::Parser::Grammar.parse($key, :rule<keypair-key:bare>).so;
 }
 
-multi sub to-toml(Bool $b) returns Str
+sub is-valid-key($key) returns Bool
 {
-    ~$b;
+    $key.isa(Str)
+        && Config::TOML::Parser::Grammar.parse($key, :rule<keypair-key>).so;
+}
+
+multi sub to-toml(Str $s) returns Str
+{
+    $s.perl;
 }
 
 multi sub to-toml(Real $r) returns Str
 {
     ~$r;
+}
+
+multi sub to-toml(Bool $b) returns Str
+{
+    ~$b;
 }
 
 multi sub to-toml(Dateish $d) returns Str
@@ -150,9 +166,9 @@ multi sub to-toml(List $l) returns Str
     '[ ' ~ @elements.join(', ') ~ ' ]';
 }
 
-multi sub to-toml($obj) returns Str
+multi sub to-toml($value)
 {
-    $obj.perl;
+    die X::Config::TOML::Dumper::BadValue.new(:$value);
 }
 
 # vim: ft=perl6 fdm=marker fdl=0 nowrap
