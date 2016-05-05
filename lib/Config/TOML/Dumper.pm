@@ -129,10 +129,15 @@ sub is-bare-key($key) returns Bool
     Config::TOML::Parser::Grammar.parse($key, :rule<keypair-key:bare>).so;
 }
 
-sub is-valid-key($key) returns Bool
+multi sub is-valid-key(Str:D $key) returns Bool
 {
-    $key.isa(Str)
-        && Config::TOML::Parser::Grammar.parse($key, :rule<keypair-key>).so;
+    is-bare-key($key)
+        || Config::TOML::Parser::Grammar.parse($key.perl, :rule<keypair-key>).so;
+}
+
+multi sub is-valid-key($key) returns Bool
+{
+    False;
 }
 
 multi sub is-valid-array(@ where {.grep(Str:D).elems == .elems}) returns Bool

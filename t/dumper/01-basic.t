@@ -3,7 +3,7 @@ use lib 'lib';
 use Config::TOML;
 use Test;
 
-plan 2;
+plan 3;
 
 subtest
 {
@@ -101,6 +101,33 @@ subtest
     n = 1111111
     r = 1.11111
     s = "Hello, world!"
+    EOF
+    $expected .= trim;
+
+    my Str $toml = to-toml(%h);
+    is $toml, $expected, 'Is expected value';
+}
+
+subtest
+{
+    my %h =
+        'hello world' => {
+            'again and again' => {
+                'and again' => {
+                    :yes
+                }
+            }
+        },
+        'this is an arraytable header' => [ {:arraytable}, {:!table} ],
+        'which way to the Sun?' => 'up';
+    my Str $expected = q:to/EOF/;
+    "which way to the Sun?" = "up"
+    ["hello world"."again and again"."and again"]
+    yes = true
+    [["this is an arraytable header"]]
+    arraytable = true
+    [["this is an arraytable header"]]
+    table = false
     EOF
     $expected .= trim;
 
