@@ -30,7 +30,7 @@ subtest
 # check values for validity
 subtest
 {
-    my Any $any = Any;
+    my Any $any = Any.new;
     my Buf $buf = Buf.new;
     my Complex $complex = 2i;
     my Match $match = Config::TOML::Parser::Grammar.parse("i = 1\n");
@@ -109,7 +109,7 @@ subtest
     %invalid<invalid> = @a-invalid;
     lives-ok {to-toml(%valid)}, 'Valid array is valid';
     throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
-        :message(/'Sorry, TOML arrays can only contain one type.'/),
+        :message(/'Sorry, invalid TOML array.'/),
         'Raise exception when array contains more than one TOML type';
     (%valid, %invalid) = Empty;
 
@@ -120,7 +120,7 @@ subtest
     %invalid<invalid> = @b-invalid;
     lives-ok {to-toml(%valid)}, 'Valid array is valid';
     throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
-        :message(/'Sorry, TOML arrays can only contain one type.'/),
+        :message(/'Sorry, invalid TOML array.'/),
         'Raise exception when array contains more than one TOML type';
     (%valid, %invalid) = Empty;
 
@@ -134,7 +134,7 @@ subtest
     %invalid<invalid> = @c-invalid;
     lives-ok {to-toml(%valid)}, 'Valid array is valid';
     throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
-        :message(/'Sorry, TOML arrays can only contain one type.'/),
+        :message(/'Sorry, invalid TOML array.'/),
         'Raise exception when array contains more than one TOML type';
     (%valid, %invalid) = Empty;
 
@@ -151,7 +151,7 @@ subtest
     %invalid<invalid> = @d-invalid;
     lives-ok {to-toml(%valid)}, 'Valid array is valid';
     throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
-        :message(/'Sorry, TOML arrays can only contain one type.'/),
+        :message(/'Sorry, invalid TOML array.'/),
         'Raise exception when array contains more than one TOML type';
     (%valid, %invalid) = Empty;
 
@@ -162,8 +162,98 @@ subtest
     %invalid<invalid> = @e-invalid;
     lives-ok {to-toml(%valid)}, 'Valid array is valid';
     throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
-        :message(/'Sorry, TOML arrays can only contain one type.'/),
+        :message(/'Sorry, invalid TOML array.'/),
         'Raise exception when array contains more than one TOML type';
+    (%valid, %invalid) = Empty;
+
+    my @f-valid = '', '', '';
+    my @f-invalid = Str, Str, Str;
+    %valid<valid> = @f-valid;
+    %invalid<invalid> = @f-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @g-valid = 0, 0, 0;
+    my @g-invalid = Int, Int, Int;
+    %valid<valid> = @g-valid;
+    %invalid<invalid> = @g-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @h-valid = 0.0, 0.0, 0.0;
+    my @h-invalid = Real, Real, Real;
+    %valid<valid> = @h-valid;
+    %invalid<invalid> = @h-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @i-valid = False, False, False;
+    my @i-invalid = Bool, Bool, Bool;
+    %valid<valid> = @i-valid;
+    %invalid<invalid> = @i-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadValue,
+        :message('Sorry, undefined Bool types cannot be represented as TOML keypair value'),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @j-valid = Date.new('0000-01-01'), Date.new('0000-01-01'), Date.new('0000-01-01');
+    my @j-invalid = Date, Date, Date;
+    %valid<valid> = @j-valid;
+    %invalid<invalid> = @j-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @k-valid = DateTime.new(0), DateTime.new(0), DateTime.new(0);
+    my @k-invalid = DateTime, DateTime, DateTime;
+    %valid<valid> = @k-valid;
+    %invalid<invalid> = @k-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @l-valid = (), (), ();
+    my @l-invalid = List, List, List;
+    %valid<valid> = @l-valid;
+    %invalid<invalid> = @l-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @m-valid = {}, {}, {};
+    my @m-invalid = Associative, Associative, Associative;
+    %valid<valid> = @m-valid;
+    %invalid<invalid> = @m-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
+    (%valid, %invalid) = Empty;
+
+    my @n-valid = 1, 1, 1;
+    my @n-invalid = Any, Any, Any;
+    %valid<valid> = @n-valid;
+    %invalid<invalid> = @n-invalid;
+    lives-ok {to-toml(%valid)}, 'Valid array is valid';
+    throws-like {to-toml(%invalid)}, X::Config::TOML::Dumper::BadArray,
+        :message(/'Sorry, invalid TOML array.'/),
+        'Raise exception when array contains undefined values';
     (%valid, %invalid) = Empty;
 }
 

@@ -306,9 +306,11 @@ class Dumper::BadValue is Exception
     has $.value is required;
     method message() returns Str
     {
-        my Str $message = 'Sorry, '
-            ~ $.value.^name
-            ~ ' types cannot be represented as TOML keypair value';
+        my Str $message = 'Sorry, ';
+        $message ~= 'undefined ' unless $.value.defined;
+        $message ~= $.value.^name;
+        $message ~= ' types cannot be represented as TOML keypair value';
+        $message;
     }
 }
 
@@ -322,7 +324,7 @@ class Dumper::BadArray is Exception
     method message() returns Str
     {
         my Str $message = qq:to/EOF/;
-        Sorry, TOML arrays can only contain one type.
+        Sorry, invalid TOML array.
 
         Got: {$.array.perl}
         EOF
