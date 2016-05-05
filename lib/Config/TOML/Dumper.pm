@@ -40,15 +40,15 @@ sub sort-pairs(%h) returns List
 
         if $val ~~ Associative
         {
-            @nested-pairs.unshift: %($key => $val);
+            push @nested-pairs, %($key => $val);
         }
         elsif $val ~~ List && $val[0] ~~ Associative
         {
-            @table-array-pairs.unshift: %($key => $val);
+            push @table-array-pairs, %($key => $val);
         }
         else
         {
-            @simple-pairs.unshift: %($key => $val);
+            push @simple-pairs, %($key => $val);
         }
     }
 
