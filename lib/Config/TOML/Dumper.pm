@@ -44,6 +44,11 @@ sub sort-pairs(%h) returns List
         }
         elsif $val ~~ List && $val[0] ~~ Associative
         {
+            # check all values are of type Associative
+            unless $val.elems == $val.grep(Associative).elems
+            {
+                die X::Config::TOML::Dumper::BadArray.new(:array($val));
+            }
             push @table-array-pairs, %($key => $val);
         }
         else
@@ -131,6 +136,17 @@ sub is-valid-key($key) returns Bool
         && Config::TOML::Parser::Grammar.parse($key, :rule<keypair-key>).so;
 }
 
+multi sub is-valid-array(@ where {.grep(Str).elems == .elems}) returns Bool { True }
+multi sub is-valid-array(@ where {.grep(Int).elems == .elems}) returns Bool { True }
+# if the above Int-only signature test fails, Perl6 will test each array
+# element against Real. Int ~~ Real
+multi sub is-valid-array(@ where {.grep(Int).not && .grep(Real).elems == .elems}) returns Bool { True }
+multi sub is-valid-array(@ where {.grep(Bool).elems == .elems}) returns Bool { True }
+multi sub is-valid-array(@ where {.grep(Dateish).elems == .elems}) returns Bool { True }
+multi sub is-valid-array(@ where {.grep(List).elems == .elems}) returns Bool { True }
+multi sub is-valid-array(@ where {.grep(Associative).elems == .elems}) returns Bool { True }
+multi sub is-valid-array(@) returns Bool { False }
+
 multi sub to-toml(Str $s) returns Str
 {
     $s.perl;
@@ -165,6 +181,11 @@ multi sub to-toml(Associative $a) returns Str
 
 multi sub to-toml(List $l) returns Str
 {
+    unless is-valid-array($l)
+    {
+        die X::Config::TOML::Dumper::BadArray.new(:array($l));
+    }
+
     my Str @elements;
     $l.map({ push @elements, to-toml($_) });
     '[ ' ~ @elements.join(', ') ~ ' ]';

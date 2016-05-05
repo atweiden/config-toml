@@ -318,13 +318,13 @@ class Dumper::BadValue is Exception
 
 class Dumper::BadArray is Exception
 {
-    has Positional $.list is required;
+    has Positional $.array is required;
     method message() returns Str
     {
         my Str $message = qq:to/EOF/;
         Sorry, TOML arrays can only contain one type.
 
-        Got: {$.list.perl}
+        Got: {$.array.perl}
         EOF
         $message.trim;
     }
