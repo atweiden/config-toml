@@ -265,9 +265,10 @@ class BadKeypath::ArrayNotAOH is Exception {*}
 
 class ParseFailed is Exception
 {
+    has Str $.content is required;
     method message() returns Str
     {
-        my Str $message = 'Sorry, parse failed';
+        my Str $message = "Invalid TOML:\n「$.content」";
     }
 }
 
@@ -277,9 +278,10 @@ class ParseFailed is Exception
 
 class ParsefileFailed is Exception
 {
+    has Str $.file is required;
     method message() returns Str
     {
-        my Str $message = 'Sorry, parsefile failed';
+        my Str $message = "Invalid TOML in file 「$.file」";
     }
 }
 
