@@ -49,4 +49,4 @@ sub to-toml(
     Config::TOML::Dumper.new.dump($container);
 }
 
-# vim: ft=perl6
+# vim: set filetype=perl6 foldmethod=marker foldlevel=0:

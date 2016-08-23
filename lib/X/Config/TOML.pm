@@ -350,4 +350,4 @@ class String::EscapeSequence is Exception
 
 # end X::Config::TOML::String::EscapeSequence }}}
 
-# vim: ft=perl6 fdm=marker fdl=0
+# vim: set filetype=perl6 foldmethod=marker foldlevel=0:
