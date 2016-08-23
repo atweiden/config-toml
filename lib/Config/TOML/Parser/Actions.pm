@@ -351,7 +351,7 @@ method date-time($/)
 
 method date:full-date ($/)
 {
-    make DateTime.new(|$<full-date>.made, :timezone($.date-local-offset));
+    make Date.new(|$<full-date>.made);
 }
 
 method date:date-time-omit-local-offset ($/)
