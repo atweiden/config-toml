@@ -6,12 +6,12 @@ unit module X::Config::TOML;
 class DuplicateKeys is Exception
 {
     has @.keys-seen is required;
-    has Str $.subject is required;
-    has Str $.text is required;
+    has Str:D $.subject is required;
+    has Str:D $.text is required;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, $.subject contains duplicate keys.
         {'-' x 72}
         {$.subject.tc}:
@@ -23,8 +23,8 @@ class DuplicateKeys is Exception
                 /(.*)/,
                 -> $/
                 {
-                    state Int $i = 1;
-                    my Str $replacement = "$i.「$0」 \n";
+                    state Int:D $i = 1;
+                    my Str:D $replacement = "$i.「$0」 \n";
                     $i++;
                     $replacement;
                 }
@@ -37,8 +37,8 @@ class DuplicateKeys is Exception
                 /(.*)/,
                 -> $/
                 {
-                    state Int $i = 1;
-                    my Str $replacement = "$i.「$0」 \n";
+                    state Int:D $i = 1;
+                    my Str:D $replacement = "$i.「$0」 \n";
                     $i++;
                     $replacement;
                 }
@@ -76,9 +76,9 @@ class KeypairLine::DuplicateKeys is Exception
     has Str $.keypair-line-text;
     has @.path;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, keypair line contains duplicate key.
         {'-' x 72}
         Keypair line:
@@ -99,9 +99,9 @@ class AOH is Exception
     has Str $.aoh-text;
     has @.path;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, arraytable keypath 「{@.path.join(', ')}」 trodden.
 
         In arraytable:
@@ -120,9 +120,9 @@ class AOH::OverwritesHOH is AOH
 {
     has Str $.aoh-header-text;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, arraytable 「$.aoh-header-text」 has been declared previously
         as regular table in TOML document.
 
@@ -142,9 +142,9 @@ class AOH::OverwritesKey is AOH
 {
     has Str $.aoh-header-text;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, arraytable 「$.aoh-header-text」 overwrites existing key in
         TOML document.
 
@@ -165,9 +165,9 @@ class HOH is Exception
     has Str $.hoh-text;
     has @.path;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, table keypath 「{@.path.join(', ')}」 trodden.
 
         In table:
@@ -186,9 +186,9 @@ class HOH::Seen is HOH
 {
     has Str $.hoh-header-text;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, table 「$.hoh-header-text」 has been declared previously in TOML document.
 
         In table:
@@ -211,9 +211,9 @@ class HOH::Seen::AOH is HOH::Seen {*}
 
 class HOH::Seen::Key is HOH
 {
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         Sorry, table keypath 「{@.path.join(', ')}」 overwrites existing key.
 
         In table:
@@ -232,9 +232,9 @@ class Keypath is Exception
 {
     has @.path;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $help-text = qq:to/EOF/;
+        my Str:D $help-text = qq:to/EOF/;
         「{@.path.join(', ')}」
         EOF
         $help-text.trim;
@@ -265,10 +265,10 @@ class BadKeypath::ArrayNotAOH is Exception {*}
 
 class ParseFailed is Exception
 {
-    has Str $.content is required;
-    method message() returns Str
+    has Str:D $.content is required;
+    method message() returns Str:D
     {
-        my Str $message = "Invalid TOML:\n「$.content」";
+        my Str:D $message = "Invalid TOML:\n「$.content」";
     }
 }
 
@@ -278,10 +278,10 @@ class ParseFailed is Exception
 
 class ParsefileFailed is Exception
 {
-    has Str $.file is required;
-    method message() returns Str
+    has Str:D $.file is required;
+    method message() returns Str:D
     {
-        my Str $message = "Invalid TOML in file 「$.file」";
+        my Str:D $message = "Invalid TOML in file 「$.file」";
     }
 }
 
@@ -292,9 +292,9 @@ class ParsefileFailed is Exception
 class Dumper::BadKey is Exception
 {
     has $.key is required;
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $message = 'Sorry, '
+        my Str:D $message = 'Sorry, '
             ~ $.key.^name ~ ' types cannot be represented as TOML keypair key';
     }
 }
@@ -306,9 +306,9 @@ class Dumper::BadKey is Exception
 class Dumper::BadValue is Exception
 {
     has $.value is required;
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $message = 'Sorry, ';
+        my Str:D $message = 'Sorry, ';
         $message ~= 'undefined ' unless $.value.defined;
         $message ~= $.value.^name;
         $message ~= ' types cannot be represented as TOML keypair value';
@@ -322,10 +322,10 @@ class Dumper::BadValue is Exception
 
 class Dumper::BadArray is Exception
 {
-    has Positional $.array is required;
-    method message() returns Str
+    has Positional:D $.array is required;
+    method message() returns Str:D
     {
-        my Str $message = qq:to/EOF/;
+        my Str:D $message = qq:to/EOF/;
         Sorry, invalid TOML array.
 
         Got: {$.array.perl}
@@ -340,11 +340,11 @@ class Dumper::BadArray is Exception
 
 class String::EscapeSequence is Exception
 {
-    has Str $.esc is required;
+    has Str:D $.esc is required;
 
-    method message() returns Str
+    method message() returns Str:D
     {
-        my Str $message = "Sorry, found bad string escape sequence 「$.esc」";
+        my Str:D $message = "Sorry, found bad string escape sequence 「$.esc」";
     }
 }
 
