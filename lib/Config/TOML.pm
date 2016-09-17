@@ -6,7 +6,7 @@ unit module Config::TOML;
 
 multi sub from-toml(
     Str:D $content,
-    *%opts (Int :$date-local-offset)
+    *%opts (Int :date-local-offset($))
 ) is export returns Hash:D
 {
     Config::TOML::Parser.parse($content, |%opts).made
@@ -15,7 +15,7 @@ multi sub from-toml(
 
 multi sub from-toml(
     Str:D :$file! where *.so,
-    *%opts (Int :$date-local-offset)
+    *%opts (Int :date-local-offset($))
 ) is export returns Hash
 {
     Config::TOML::Parser.parsefile($file, |%opts).made
@@ -26,23 +26,23 @@ sub to-toml(
     Associative:D $container,
     *%opts (
         # indent level of table keys relative to parent table (whitespace)
-        UInt :$indent-subkeys = 0,
+        UInt :indent-subkeys($) = 0,
         # indent level of subtables relative to parent table (whitespace)
-        UInt :$indent-subtables = 2,
+        UInt :indent-subtables($) = 2,
         # margin between tables (newlines)
-        UInt :$margin-between-tables = 1,
+        UInt :margin-between-tables($) = 1,
         # pad inline array/hash delimiters (`[`, `]`, `{`, `}`) with whitespace
-        Bool :$prefer-padded-delimiters = True,
+        Bool :prefer-padded-delimiters($) = True,
         # use string literals in place of basic strings whenever possible
-        Bool :$prefer-string-literals = True,
+        Bool :prefer-string-literals($) = True,
         # intersperse underlines in numbers for readability
-        Bool :$prefer-underlines-in-numbers = True,
+        Bool :prefer-underlines-in-numbers($) = True,
         # the threshold # elements at which to convert array to multiline array
-        UInt :$threshold-multiline-array = 5,
+        UInt :threshold-multiline-array($) = 5,
         # the threshold length at which to convert string to multiline string
-        UInt :$threshold-multiline-string = 72,
+        UInt :threshold-multiline-string($) = 72,
         # the threshold # digits at which to intersperse underlines in numbers
-        UInt :$threshold-underlines-in-numbers = 5
+        UInt :threshold-underlines-in-numbers($) = 5
     )
 ) is export returns Str:D
 {
