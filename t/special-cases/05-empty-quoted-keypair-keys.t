@@ -4,10 +4,9 @@ use Test;
 use Config::TOML::Parser::Actions;
 use Config::TOML::Parser::Grammar;
 
-plan 1;
+plan(1);
 
-subtest
-{
+subtest({
     my Str $toml = Q:to/EOF/;
     [ '' . "" . '' ]
     a = 1
@@ -15,7 +14,7 @@ subtest
     '' = 3
     EOF
 
-    my Config::TOML::Parser::Actions $actions .= new;
+    my Config::TOML::Parser::Actions $actions .= new();
     my $match-toml = Config::TOML::Parser::Grammar.parse($toml, :$actions);
 
     is(
@@ -31,41 +30,41 @@ subtest
         EOF
     );
     is(
-        $match-toml.made{''}{''}{''}{'a'},
+        $match-toml.made(){''}{''}{''}{'a'},
         1,
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{'a'} == 1
+        ┃             ┃  ∙ $match-toml.made(){''}{''}{''}{'a'} == 1
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made{''}{''}{''}{'b'},
+        $match-toml.made(){''}{''}{''}{'b'},
         2,
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{'b'} == 2
+        ┃             ┃  ∙ $match-toml.made(){''}{''}{''}{'b'} == 2
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made{''}{''}{''}{''},
+        $match-toml.made(){''}{''}{''}{''},
         3,
         q:to/EOF/
         ♪ [Is expected value?] - 4 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{''} == 3
+        ┃             ┃  ∙ $match-toml.made(){''}{''}{''}{''} == 3
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
-}
+});
 
 # vim: set filetype=perl6 foldmethod=marker foldlevel=0:
