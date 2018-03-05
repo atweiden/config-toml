@@ -10,18 +10,18 @@ multi sub from-toml(
     --> Hash:D
 ) is export
 {
-    Config::TOML::Parser.parse($content, |%opts).made
-        or die X::Config::TOML::ParseFailed.new(:$content);
+    Config::TOML::Parser.parse($content, |%opts).made()
+        or die(X::Config::TOML::ParseFailed.new(:$content));
 }
 
 multi sub from-toml(
-    Str:D :$file! where *.so,
+    Str:D :$file! where *.so(),
     *%opts (Int :date-local-offset($))
     --> Hash
 ) is export
 {
-    Config::TOML::Parser.parsefile($file, |%opts).made
-        or die X::Config::TOML::ParsefileFailed.new(:$file);
+    Config::TOML::Parser.parsefile($file, |%opts).made()
+        or die(X::Config::TOML::ParsefileFailed.new(:$file));
 }
 
 sub to-toml(
@@ -49,7 +49,7 @@ sub to-toml(
     --> Str:D
 ) is export
 {
-    Config::TOML::Dumper.new.dump($container);
+    Config::TOML::Dumper.new().dump($container);
 }
 
 # vim: set filetype=perl6 foldmethod=marker foldlevel=0:

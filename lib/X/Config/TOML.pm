@@ -11,38 +11,40 @@ class DuplicateKeys is Exception
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, $.subject contains duplicate keys.
         {'-' x 72}
-        {$.subject.tc}:
+        {$.subject.tc()}:
         $.text
         {'-' x 72}
         Keys seen:
         {
-            @.keys-seen.sort».subst(
-                /(.*)/,
-                -> $/
-                {
-                    state Int:D $i = 1;
-                    my Str:D $replacement = "$i.「$0」 \n";
-                    $i++;
-                    $replacement;
-                }
-            );
+            @.keys-seen.sort().hyper().map({
+                .subst(
+                    /(.*)/,
+                    -> $/ {
+                        state Int:D $i = 1;
+                        my Str:D $replacement = "$i.「$0」 \n";
+                        $i++;
+                        $replacement;
+                    }
+                )
+            });
         }
         {'-' x 72}
         Keys seen (unique):
         {
-            @.keys-seen.unique.sort».subst(
-                /(.*)/,
-                -> $/
-                {
-                    state Int:D $i = 1;
-                    my Str:D $replacement = "$i.「$0」 \n";
-                    $i++;
-                    $replacement;
-                }
-            );
+            @.keys-seen.unique().sort().hyper().map({
+                .subst(
+                    /(.*)/,
+                    -> $/ {
+                        state Int:D $i = 1;
+                        my Str:D $replacement = "$i.「$0」 \n";
+                        $i++;
+                        $replacement;
+                    }
+                )
+            });
         }
         EOF
     }
@@ -77,7 +79,7 @@ class KeypairLine::DuplicateKeys is Exception
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, keypair line contains duplicate key.
         {'-' x 72}
         Keypair line:
@@ -99,7 +101,7 @@ class AOH is Exception
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, arraytable keypath 「{@.path.join(', ')}」 trodden.
 
         In arraytable:
@@ -119,7 +121,7 @@ class AOH::OverwritesHOH is AOH
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, arraytable 「$.aoh-header-text」 has been declared previously
         as regular table in TOML document.
 
@@ -140,7 +142,7 @@ class AOH::OverwritesKey is AOH
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, arraytable 「$.aoh-header-text」 overwrites existing key in
         TOML document.
 
@@ -162,7 +164,7 @@ class HOH is Exception
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, table keypath 「{@.path.join(', ')}」 trodden.
 
         In table:
@@ -182,7 +184,7 @@ class HOH::Seen is HOH
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, table 「$.hoh-header-text」 has been declared previously in TOML document.
 
         In table:
@@ -206,7 +208,7 @@ class HOH::Seen::Key is HOH
 {
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, table keypath 「{@.path.join(', ')}」 overwrites existing key.
 
         In table:
@@ -226,7 +228,7 @@ class Keypath is Exception
 
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         「{@.path.join(', ')}」
         EOF
     }
@@ -286,7 +288,7 @@ class Dumper::BadKey is Exception
     method message(--> Str:D)
     {
         'Sorry, '
-            ~ $.key.^name
+            ~ $.key.^name()
             ~ ' types cannot be represented as TOML keypair key';
     }
 }
@@ -301,8 +303,8 @@ class Dumper::BadValue is Exception
     method message(--> Str:D)
     {
         my Str:D $message = 'Sorry, ';
-        $message ~= 'undefined ' unless $.value.defined;
-        $message ~= $.value.^name;
+        $message ~= 'undefined ' unless $.value.defined();
+        $message ~= $.value.^name();
         $message ~= ' types cannot be represented as TOML keypair value';
         $message;
     }
@@ -317,10 +319,10 @@ class Dumper::BadArray is Exception
     has Positional:D $.array is required;
     method message(--> Str:D)
     {
-        qq:to/EOF/.trim;
+        qq:to/EOF/.trim();
         Sorry, invalid TOML array.
 
-        Got: {$.array.perl}
+        Got: {$.array.perl()}
         EOF
     }
 }

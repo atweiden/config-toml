@@ -317,7 +317,7 @@ subtest({
     EOF
     is(
         $match-document.made()<string><literal><winpath2>,
-        $winpath2.trim,
+        $winpath2.trim(),
         q:to/EOF/
         ♪ [Is expected value?] - 24 of 128
         ┏━━━━━━━━━━━━━┓
