@@ -315,13 +315,7 @@ method time-numoffset($/ --> Nil)
 {
     my Int:D $multiplier = $<plus-or-minus>.made eq '+' ?? 1 !! -1;
     make(
-        Int(
-            (
-                ($multiplier * $<time-hour>.made * 60) + $<time-minute>.made
-            )
-            *
-            60
-        )
+        Int((($multiplier * $<time-hour>.made * 60) + $<time-minute>.made) * 60)
     );
 }
 
