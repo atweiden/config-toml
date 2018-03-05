@@ -87,7 +87,7 @@ method string-basic-char:escape-sequence ($/ --> Nil)
 
 method string-basic-text($/ --> Nil)
 {
-    make(@<string-basic-char>.hyper().map({ .made() }).join());
+    make(@<string-basic-char>.map({ .made() }).join());
 }
 
 multi method string-basic($/ where $<string-basic-text>.so() --> Nil)
@@ -133,7 +133,7 @@ multi method string-basic-multiline-char:escape-sequence (
 
 method string-basic-multiline-text($/ --> Nil)
 {
-    make(@<string-basic-multiline-char>.hyper().map({ .made() }).join());
+    make(@<string-basic-multiline-char>.map({ .made() }).join());
 }
 
 multi method string-basic-multiline(
@@ -164,7 +164,7 @@ method string-literal-char:backslash ($/ --> Nil)
 
 method string-literal-text($/ --> Nil)
 {
-    make(@<string-literal-char>.hyper().map({ .made() }).join());
+    make(@<string-literal-char>.map({ .made() }).join());
 }
 
 multi method string-literal($/ where $<string-literal-text>.so() --> Nil)
@@ -189,7 +189,7 @@ method string-literal-multiline-char:backslash ($/ --> Nil)
 
 method string-literal-multiline-text($/ --> Nil)
 {
-    make(@<string-literal-multiline-char>.hyper().map({ .made() }).join());
+    make(@<string-literal-multiline-char>.map({ .made() }).join());
 }
 
 multi method string-literal-multiline(
@@ -421,37 +421,37 @@ method date:date-time ($/ --> Nil)
 
 method array-elements:strings ($/ --> Nil)
 {
-    make(@<string>.hyper().map({ .made() }).Array());
+    make(@<string>.map({ .made() }).Array());
 }
 
 method array-elements:integers ($/ --> Nil)
 {
-    make(@<integer>.hyper().map({ .made() }).Array());
+    make(@<integer>.map({ .made() }).Array());
 }
 
 method array-elements:floats ($/ --> Nil)
 {
-    make(@<float>.hyper().map({ .made() }).Array());
+    make(@<float>.map({ .made() }).Array());
 }
 
 method array-elements:booleans ($/ --> Nil)
 {
-    make(@<boolean>.hyper().map({ .made() }).Array());
+    make(@<boolean>.map({ .made() }).Array());
 }
 
 method array-elements:dates ($/ --> Nil)
 {
-    make(@<date>.hyper().map({ .made() }).Array());
+    make(@<date>.map({ .made() }).Array());
 }
 
 method array-elements:arrays ($/ --> Nil)
 {
-    make(@<array>.hyper().map({ .made() }).Array());
+    make(@<array>.map({ .made() }).Array());
 }
 
 method array-elements:table-inlines ($/ --> Nil)
 {
-    make(@<table-inline>.hyper().map({ .made() }).Array());
+    make(@<table-inline>.map({ .made() }).Array());
 }
 
 multi method array($/ where $<array-elements>.so() --> Nil)
@@ -531,9 +531,7 @@ method table-inline-keypairs($/ --> Nil)
     # by duplicate keys
     {
         my Str:D @keys-seen =
-            |@<keypair>.hyper().map({ .made() })
-                       .map({ .keys() })
-                       .flat();
+            |@<keypair>.map({ .made() }).map({ .keys() }).flat();
         unless @keys-seen.elems() == @keys-seen.unique().elems()
         {
             die(
@@ -547,7 +545,7 @@ method table-inline-keypairs($/ --> Nil)
     }
 
     my %h;
-    @<keypair>.hyper().map({ .made() }).map({ %h{.keys()[0]} = .values()[0] });
+    @<keypair>.map({ .made() }).map({ %h{.keys()[0]} = .values()[0] });
     make(%h);
 }
 
@@ -601,7 +599,7 @@ method segment:keypair-line ($/ --> Nil)
 
 method table-header-text($/ --> Nil)
 {
-    make(@<keypair-key>.hyper().map({ .made() }));
+    make(@<keypair-key>.map({ .made() }).Array());
 }
 
 method hoh-header($/ --> Nil)
@@ -642,7 +640,7 @@ method table:hoh ($/ --> Nil)
         );
     }
 
-    my @keypairs = @<keypair-line>.hyper().map({ .made() }).flat();
+    my @keypairs = @<keypair-line>.map({ .made() }).flat();
     {
         CATCH
         {
@@ -753,7 +751,7 @@ method table:aoh ($/ --> Nil)
     }
 
     my %h;
-    my @keypairs = @<keypair-line>.hyper().map({ .made() }).flat();
+    my @keypairs = @<keypair-line>.map({ .made() }).flat();
     if @keypairs
     {
         # verify keypair lines do not contain duplicate keys

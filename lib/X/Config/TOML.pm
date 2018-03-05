@@ -19,7 +19,7 @@ class DuplicateKeys is Exception
         {'-' x 72}
         Keys seen:
         {
-            @.keys-seen.sort().hyper().map({
+            @.keys-seen.sort().map({
                 .subst(
                     /(.*)/,
                     -> $/ {
@@ -34,7 +34,7 @@ class DuplicateKeys is Exception
         {'-' x 72}
         Keys seen (unique):
         {
-            @.keys-seen.unique().sort().hyper().map({
+            @.keys-seen.unique().sort().map({
                 .subst(
                     /(.*)/,
                     -> $/ {
