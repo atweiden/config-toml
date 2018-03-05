@@ -25,182 +25,204 @@ has Int:D $.date-local-offset = $*TZ;
 
 # --- string basic grammar-actions {{{
 
-method string-basic-char:common ($/)
+method string-basic-char:common ($/ --> Nil)
 {
     make(~$/);
 }
 
-method string-basic-char:tab ($/)
+method string-basic-char:tab ($/ --> Nil)
 {
     make(~$/);
 }
 
-method escape:sym<b>($/)
+method escape:sym<b>($/ --> Nil)
 {
     make("\b");
 }
 
-method escape:sym<t>($/)
+method escape:sym<t>($/ --> Nil)
 {
     make("\t");
 }
 
-method escape:sym<n>($/)
+method escape:sym<n>($/ --> Nil)
 {
     make("\n");
 }
 
-method escape:sym<f>($/)
+method escape:sym<f>($/ --> Nil)
 {
     make("\f");
 }
 
-method escape:sym<r>($/)
+method escape:sym<r>($/ --> Nil)
 {
     make("\r");
 }
 
-method escape:sym<quote>($/)
+method escape:sym<quote>($/ --> Nil)
 {
     make("\"");
 }
 
-method escape:sym<backslash>($/)
+method escape:sym<backslash>($/ --> Nil)
 {
     make('\\');
 }
 
-method escape:sym<u>($/)
+method escape:sym<u>($/ --> Nil)
 {
     make(chr(:16(@<hex>.join())));
 }
 
-method escape:sym<U>($/)
+method escape:sym<U>($/ --> Nil)
 {
     make(chr(:16(@<hex>.join())));
 }
 
-method string-basic-char:escape-sequence ($/)
+method string-basic-char:escape-sequence ($/ --> Nil)
 {
     make($<escape>.made());
 }
 
-method string-basic-text($/)
+method string-basic-text($/ --> Nil)
 {
     make(@<string-basic-char>.hyper().map({ .made() }).join());
 }
 
-method string-basic($/)
+multi method string-basic($/ where $<string-basic-text>.so() --> Nil)
 {
-    make($<string-basic-text> ?? $<string-basic-text>.made() !! "");
+    make($<string-basic-text>.made());
 }
 
-method string-basic-multiline-char:common ($/)
+multi method string-basic($/ --> Nil)
 {
-    make(~$/);
+    make('');
 }
 
-method string-basic-multiline-char:tab ($/)
-{
-    make(~$/);
-}
-
-method string-basic-multiline-char:newline ($/)
+method string-basic-multiline-char:common ($/ --> Nil)
 {
     make(~$/);
 }
 
-method string-basic-multiline-char:escape-sequence ($/)
+method string-basic-multiline-char:tab ($/ --> Nil)
 {
-    if $<escape>
-    {
-        make($<escape>.made());
-    }
-    elsif $<ws-remover>
-    {
-        make("");
-    }
+    make(~$/);
 }
 
-method string-basic-multiline-text($/)
+method string-basic-multiline-char:newline ($/ --> Nil)
+{
+    make(~$/);
+}
+
+multi method string-basic-multiline-char:escape-sequence (
+    $/ where $<escape>.so()
+    --> Nil
+)
+{
+    make($<escape>.made());
+}
+
+multi method string-basic-multiline-char:escape-sequence (
+    $/ where $<ws-remover>.so()
+    --> Nil
+)
+{
+    make('');
+}
+
+method string-basic-multiline-text($/ --> Nil)
 {
     make(@<string-basic-multiline-char>.hyper().map({ .made() }).join());
 }
 
-method string-basic-multiline($/)
+multi method string-basic-multiline(
+    $/ where $<string-basic-multiline-text>.so()
+    --> Nil
+)
 {
-    make(
-        $<string-basic-multiline-text>
-            ?? $<string-basic-multiline-text>.made()
-            !! ""
-    );
+    make($<string-basic-multiline-text>.made());
+}
+
+multi method string-basic-multiline($/ --> Nil)
+{
+    make('');
 }
 
 # --- end string basic grammar-actions }}}
 # --- string literal grammar-actions {{{
 
-method string-literal-char:common ($/)
+method string-literal-char:common ($/ --> Nil)
 {
     make(~$/);
 }
 
-method string-literal-char:backslash ($/)
+method string-literal-char:backslash ($/ --> Nil)
 {
     make('\\');
 }
 
-method string-literal-text($/)
+method string-literal-text($/ --> Nil)
 {
     make(@<string-literal-char>.hyper().map({ .made() }).join());
 }
 
-method string-literal($/)
+multi method string-literal($/ where $<string-literal-text>.so() --> Nil)
 {
-    make($<string-literal-text> ?? $<string-literal-text>.made() !! "");
+    make($<string-literal-text>.made());
 }
 
-method string-literal-multiline-char:common ($/)
+multi method string-literal($/ --> Nil)
+{
+    make('');
+}
+
+method string-literal-multiline-char:common ($/ --> Nil)
 {
     make(~$/);
 }
 
-method string-literal-multiline-char:backslash ($/)
+method string-literal-multiline-char:backslash ($/ --> Nil)
 {
     make('\\');
 }
 
-method string-literal-multiline-text($/)
+method string-literal-multiline-text($/ --> Nil)
 {
     make(@<string-literal-multiline-char>.hyper().map({ .made() }).join());
 }
 
-method string-literal-multiline($/)
+multi method string-literal-multiline(
+    $/ where $<string-literal-multiline-text>.so()
+    --> Nil
+)
 {
-    make(
-        $<string-literal-multiline-text>
-            ?? $<string-literal-multiline-text>.made()
-            !! ""
-    );
+    make($<string-literal-multiline-text>.made());
+}
+
+multi method string-literal-multiline($/ --> Nil)
+{
+    make('');
 }
 
 # --- end string literal grammar-actions }}}
 
-method string:basic ($/)
+method string:basic ($/ --> Nil)
 {
     make($<string-basic>.made());
 }
 
-method string:basic-multi ($/)
+method string:basic-multi ($/ --> Nil)
 {
     make($<string-basic-multiline>.made());
 }
 
-method string:literal ($/)
+method string:literal ($/ --> Nil)
 {
     make($<string-literal>.made());
 }
 
-method string:literal-multi ($/)
+method string:literal-multi ($/ --> Nil)
 {
     make($<string-literal-multiline>.made());
 }
@@ -208,47 +230,45 @@ method string:literal-multi ($/)
 # end string grammar-actions }}}
 # number grammar-actions {{{
 
-method integer($/)
+method integer($/ --> Nil)
 {
     make(Int(+$/));
 }
 
-method float($/)
+method float($/ --> Nil)
 {
     make(+$/);
 }
 
-method plus-or-minus:sym<+>($/)
+method plus-or-minus:sym<+>($/ --> Nil)
 {
     make(~$/);
 }
 
-method plus-or-minus:sym<->($/)
+method plus-or-minus:sym<->($/ --> Nil)
 {
     make(~$/);
 }
 
-method number($/)
+multi method number($/ where $<integer>.so() --> Nil)
 {
-    if $<integer>
-    {
-        make($<integer>.made());
-    }
-    elsif $<float>
-    {
-        make($<float>.made());
-    }
+    make($<integer>.made());
+}
+
+multi method number($/ where $<float>.so() --> Nil)
+{
+    make($<float>.made());
 }
 
 # end number grammar-actions }}}
 # boolean grammar-actions {{{
 
-method boolean:sym<true>($/)
+method boolean:sym<true>($/ --> Nil)
 {
     make(True);
 }
 
-method boolean:sym<false>($/)
+method boolean:sym<false>($/ --> Nil)
 {
     make(False);
 }
@@ -256,42 +276,42 @@ method boolean:sym<false>($/)
 # end boolean grammar-actions }}}
 # datetime grammar-actions {{{
 
-method date-fullyear($/)
+method date-fullyear($/ --> Nil)
 {
     make(Int(+$/));
 }
 
-method date-month($/)
+method date-month($/ --> Nil)
 {
     make(Int(+$/));
 }
 
-method date-mday($/)
+method date-mday($/ --> Nil)
 {
     make(Int(+$/));
 }
 
-method time-hour($/)
+method time-hour($/ --> Nil)
 {
     make(Int(+$/));
 }
 
-method time-minute($/)
+method time-minute($/ --> Nil)
 {
     make(Int(+$/));
 }
 
-method time-second($/)
+method time-second($/ --> Nil)
 {
     make(Rat(+$/));
 }
 
-method time-secfrac($/)
+method time-secfrac($/ --> Nil)
 {
     make(Rat(+$/));
 }
 
-method time-numoffset($/)
+method time-numoffset($/ --> Nil)
 {
     my Int:D $multiplier = $<plus-or-minus>.made() eq '+' ?? 1 !! -1;
     make(
@@ -305,12 +325,17 @@ method time-numoffset($/)
     );
 }
 
-method time-offset($/)
+multi method time-offset($/ where $<time-numoffset>.so() --> Nil)
 {
-    make($<time-numoffset> ?? Int($<time-numoffset>.made()) !! 0);
+    make(Int($<time-numoffset>.made()));
 }
 
-method partial-time($/)
+multi method time-offset($/ --> Nil)
+{
+    make(0);
+}
+
+method partial-time($/ --> Nil)
 {
     my Rat:D $second = Rat($<time-second>.made());
     $second += Rat($<time-secfrac>.made()) if $<time-secfrac>;
@@ -323,7 +348,7 @@ method partial-time($/)
     );
 }
 
-method full-date($/)
+method full-date($/ --> Nil)
 {
     make(
         %(
@@ -334,7 +359,7 @@ method full-date($/)
     );
 }
 
-method full-time($/)
+method full-time($/ --> Nil)
 {
     make(
         %(
@@ -346,7 +371,7 @@ method full-time($/)
     );
 }
 
-method date-time-omit-local-offset($/)
+method date-time-omit-local-offset($/ --> Nil)
 {
     make(
         %(
@@ -361,7 +386,7 @@ method date-time-omit-local-offset($/)
     );
 }
 
-method date-time($/)
+method date-time($/ --> Nil)
 {
     make(
         %(
@@ -376,17 +401,17 @@ method date-time($/)
     );
 }
 
-method date:full-date ($/)
+method date:full-date ($/ --> Nil)
 {
     make(Date.new(|$<full-date>.made()));
 }
 
-method date:date-time-omit-local-offset ($/)
+method date:date-time-omit-local-offset ($/ --> Nil)
 {
     make(DateTime.new(|$<date-time-omit-local-offset>.made()));
 }
 
-method date:date-time ($/)
+method date:date-time ($/ --> Nil)
 {
     make(DateTime.new(|$<date-time>.made()));
 }
@@ -394,105 +419,110 @@ method date:date-time ($/)
 # end datetime grammar-actions }}}
 # array grammar-actions {{{
 
-method array-elements:strings ($/)
+method array-elements:strings ($/ --> Nil)
 {
     make(@<string>.hyper().map({ .made() }).Array());
 }
 
-method array-elements:integers ($/)
+method array-elements:integers ($/ --> Nil)
 {
     make(@<integer>.hyper().map({ .made() }).Array());
 }
 
-method array-elements:floats ($/)
+method array-elements:floats ($/ --> Nil)
 {
     make(@<float>.hyper().map({ .made() }).Array());
 }
 
-method array-elements:booleans ($/)
+method array-elements:booleans ($/ --> Nil)
 {
     make(@<boolean>.hyper().map({ .made() }).Array());
 }
 
-method array-elements:dates ($/)
+method array-elements:dates ($/ --> Nil)
 {
     make(@<date>.hyper().map({ .made() }).Array());
 }
 
-method array-elements:arrays ($/)
+method array-elements:arrays ($/ --> Nil)
 {
     make(@<array>.hyper().map({ .made() }).Array());
 }
 
-method array-elements:table-inlines ($/)
+method array-elements:table-inlines ($/ --> Nil)
 {
     make(@<table-inline>.hyper().map({ .made() }).Array());
 }
 
-method array($/)
+multi method array($/ where $<array-elements>.so() --> Nil)
 {
-    make($<array-elements> ?? $<array-elements>.made() !! []);
+    make($<array-elements>.made());
+}
+
+multi method array($/ --> Nil)
+{
+    make([]);
 }
 
 # end array grammar-actions }}}
 # table grammar-actions {{{
 
-method keypair-key:bare ($/)
+method keypair-key:bare ($/ --> Nil)
 {
     make(~$/);
 }
 
-method keypair-key-string:basic ($/)
+method keypair-key-string:basic ($/ --> Nil)
 {
     make($<string-basic>.made());
 }
 
-method keypair-key-string:literal ($/)
+method keypair-key-string:literal ($/ --> Nil)
 {
     make($<string-literal>.made());
 }
 
-method keypair-key:quoted ($/)
+method keypair-key:quoted ($/ --> Nil)
 {
     make($<keypair-key-string>.made());
 }
 
-method keypair-value:string ($/)
+method keypair-value:string ($/ --> Nil)
 {
     make($<string>.made());
 }
 
-method keypair-value:number ($/)
+method keypair-value:number ($/ --> Nil)
 {
     make($<number>.made());
 }
 
-method keypair-value:boolean ($/)
+method keypair-value:boolean ($/ --> Nil)
 {
     make($<boolean>.made());
 }
 
-method keypair-value:date ($/)
+method keypair-value:date ($/ --> Nil)
 {
     make($<date>.made());
 }
 
-method keypair-value:array ($/)
+method keypair-value:array ($/ --> Nil)
 {
     make($<array>.made());
 }
 
-method keypair-value:table-inline ($/)
+method keypair-value:table-inline ($/ --> Nil)
 {
     make($<table-inline>.made());
 }
 
-method keypair($/)
+method keypair($/ --> Nil)
 {
     make(Str($<keypair-key>.made()) => $<keypair-value>.made());
 }
 
-method table-inline-keypairs($/)
+method table-inline-keypairs($/ --> Nil)
 {
     # verify inline table does not contain duplicate keys
     #
@@ -521,30 +551,28 @@ method table-inline-keypairs($/)
     make(%h);
 }
 
-method table-inline($/)
+# inline table contains keypairs
+multi method table-inline($/ where $<table-inline-keypairs>.so() --> Nil)
 {
-    # did inline table contain keypairs?
-    if $<table-inline-keypairs>
-    {
-        make($<table-inline-keypairs>.made());
-    }
-    else
-    {
-        # empty inline table
-        make({});
-    }
+    make($<table-inline-keypairs>.made());
+}
+
+# inline table is empty
+multi method table-inline($/ --> Nil)
+{
+    make({});
 }
 
 # end table grammar-actions }}}
 # document grammar-actions {{{
 
-method keypair-line($/)
+method keypair-line($/ --> Nil)
 {
     make($<keypair>.made());
 }
 
 # this segment represents keypairs not belonging to any table
-method segment:keypair-line ($/)
+method segment:keypair-line ($/ --> Nil)
 {
     my @path = $<keypair-line>.made().keys()[0];
     my $value = $<keypair-line>.made().values()[0];
@@ -571,17 +599,17 @@ method segment:keypair-line ($/)
     %!keys-seen{$@path}++;
 }
 
-method table-header-text($/)
+method table-header-text($/ --> Nil)
 {
     make(@<keypair-key>.hyper().map({ .made() }));
 }
 
-method hoh-header($/)
+method hoh-header($/ --> Nil)
 {
     make($<table-header-text>.made());
 }
 
-method table:hoh ($/)
+method table:hoh ($/ --> Nil)
 {
     my @base-path = pwd(%!toml, :steps($<hoh-header>.made()));
     my Str:D $hoh-text = ~$/;
@@ -654,8 +682,7 @@ method table:hoh ($/)
                 }
             }
 
-            for @keypairs -> %keypair
-            {
+            @keypairs.map(-> %keypair {
                 my @path = |@base-path, %keypair.keys()[0];
                 my $value = %keypair.values()[0];
                 Crane.exists(%!toml, :@path)
@@ -667,7 +694,7 @@ method table:hoh ($/)
                        )
                     !! Crane.set(%!toml, :@path, :$value);
                 %!keys-seen{$@path}++;
-            }
+            });
         }
         else
         {
@@ -685,12 +712,12 @@ method table:hoh ($/)
     %!hoh-seen{$@base-path}++;
 }
 
-method aoh-header($/)
+method aoh-header($/ --> Nil)
 {
     make($<table-header-text>.made());
 }
 
-method table:aoh ($/)
+method table:aoh ($/ --> Nil)
 {
     my @path = pwd(%!toml, :steps($<aoh-header>.made()));
     my Str:D $aoh-header-text = ~$<aoh-header>;
@@ -749,7 +776,7 @@ method table:aoh ($/)
     Crane.set(%!toml, :path(|@path, *-0), :value(%h));
 }
 
-method TOP($/)
+method TOP($/ --> Nil)
 {
     make(%!toml);
 }
