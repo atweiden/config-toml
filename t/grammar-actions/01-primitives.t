@@ -97,7 +97,7 @@ subtest({
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 4 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-str1.made ~~ $match-str2.made
+        ┃             ┃  ∙ $match-str1.made() ~~ $match-str2.made()
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -110,7 +110,7 @@ subtest({
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 5 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-str1.made ~~ $match-str3.made
+        ┃             ┃  ∙ $match-str1.made() ~~ $match-str3.made()
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -123,7 +123,7 @@ subtest({
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 6 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-str2.made ~~ $match-str3.made
+        ┃             ┃  ∙ $match-str2.made() ~~ $match-str3.made()
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -198,7 +198,7 @@ subtest({
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 9 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-str4.made ~~ $match-str5.made
+        ┃             ┃  ∙ $match-str4.made() ~~ $match-str5.made()
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -328,7 +328,7 @@ subtest({
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 13 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $openssl-pem-perl ~~ $match-openssl-pem-toml.made
+        ┃             ┃  ∙ $openssl-pem-perl ~~ $match-openssl-pem-toml.made()
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -341,7 +341,7 @@ subtest({
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 14 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $ssh-ed25519-perl ~~ $match-ssh-ed25519-toml.made
+        ┃             ┃  ∙ $ssh-ed25519-perl ~~ $match-ssh-ed25519-toml.made()
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -355,7 +355,7 @@ subtest({
         ♪ [Byte-for-byte string equivalency] - 15 of 93
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $ssh-ed25519-pub-perl ~~
-        ┃   Success   ┃        $match-ssh-ed25519-pub-toml.made
+        ┃   Success   ┃        $match-ssh-ed25519-pub-toml.made()
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -666,7 +666,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 34 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int1.made == 99
+        ┃             ┃  ∙ $match-int1.made() == 99
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -678,7 +678,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 35 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int2.made == 42
+        ┃             ┃  ∙ $match-int2.made() == 42
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -690,7 +690,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 36 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int3.made == 0
+        ┃             ┃  ∙ $match-int3.made() == 0
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -702,7 +702,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 37 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int4.made == -17
+        ┃             ┃  ∙ $match-int4.made() == -17
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -714,7 +714,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 38 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int5.made == 1000
+        ┃             ┃  ∙ $match-int5.made() == 1000
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -726,7 +726,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 39 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int6.made == 5349221
+        ┃             ┃  ∙ $match-int6.made() == 5349221
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -738,7 +738,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 40 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int7.made == 12345
+        ┃             ┃  ∙ $match-int7.made() == 12345
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -750,7 +750,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 41 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int8.made == -9223372036854775808
+        ┃             ┃  ∙ $match-int8.made() == -9223372036854775808
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -762,7 +762,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected integer value?] - 42 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-int9.made == 9223372036854775807
+        ┃             ┃  ∙ $match-int9.made() == 9223372036854775807
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1084,7 +1084,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 61 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float1.made == 1.0
+        ┃             ┃  ∙ $match-float1.made() == 1.0
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1096,7 +1096,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 62 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float2.made == 3.1415
+        ┃             ┃  ∙ $match-float2.made() == 3.1415
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1108,7 +1108,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 63 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float3.made == -0.01
+        ┃             ┃  ∙ $match-float3.made() == -0.01
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1120,7 +1120,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 64 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float4.made == 5e22
+        ┃             ┃  ∙ $match-float4.made() == 5e22
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1132,7 +1132,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 65 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float5.made == 1e6
+        ┃             ┃  ∙ $match-float5.made() == 1e6
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1144,7 +1144,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 66 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float6.made == -2E-2
+        ┃             ┃  ∙ $match-float6.made() == -2E-2
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1156,7 +1156,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 67 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float7.made == 6.626e-34
+        ┃             ┃  ∙ $match-float7.made() == 6.626e-34
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1168,7 +1168,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 68 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float8.made == 9224617.445991228313
+        ┃             ┃  ∙ $match-float8.made() == 9224617.445991228313
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1180,7 +1180,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected float value?] - 69 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-float9.made == 1e1000
+        ┃             ┃  ∙ $match-float9.made() == 1e1000
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1267,7 +1267,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected boolean value?] - 74 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-bool1.made ~~ True
+        ┃             ┃  ∙ $match-bool1.made() ~~ True
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1279,7 +1279,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected boolean value?] - 75 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-bool2.made ~~ False
+        ┃             ┃  ∙ $match-bool2.made() ~~ False
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1490,7 +1490,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected datetime value?] - 88 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-date-time1.made
+        ┃             ┃  ∙ $match-date-time1.made()
         ┃   Success   ┃        ~~ '1979-05-27T07:32:00Z'
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1502,7 +1502,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected datetime value?] - 89 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-date-time2.made
+        ┃             ┃  ∙ $match-date-time2.made()
         ┃   Success   ┃        ~~ '1979-05-27T00:32:00-07:00'
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1514,7 +1514,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected datetime value?] - 90 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-date-time3.made
+        ┃             ┃  ∙ $match-date-time3.made()
         ┃   Success   ┃        ~~ '1979-05-27T00:32:00.999999-07:00'
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1526,7 +1526,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected datetime value?] - 91 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-date-time4.made
+        ┃             ┃  ∙ $match-date-time4.made()
         ┃   Success   ┃        ~~ '1979-05-27T07:32:00Z'
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1538,7 +1538,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected datetime value?] - 92 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-date-time5.made
+        ┃             ┃  ∙ $match-date-time5.made()
         ┃   Success   ┃        ~~ '1979-05-27T00:32:00.999999Z'
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1550,7 +1550,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected full date value?] - 93 of 93
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-full-date1.made ~~ '1979-05-27'
+        ┃             ┃  ∙ $match-full-date1.made() ~~ '1979-05-27'
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

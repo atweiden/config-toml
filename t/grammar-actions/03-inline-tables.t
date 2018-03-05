@@ -187,7 +187,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected inline table value?] - 3 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-inline-table-difficult.made
+        ┃             ┃  ∙ $match-commented-inline-table-difficult.made()
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

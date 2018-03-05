@@ -149,7 +149,7 @@ subtest({
             }
         };
 
-    my Str $expected = q:to/EOF/.trim;
+    my Str $expected = q:to/EOF/.trim();
     ["".""]
     "" = "empty"
     [[""."an empty quoted".arraytable."".""]]
