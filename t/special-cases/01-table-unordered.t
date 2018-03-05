@@ -36,36 +36,36 @@ subtest({
     );
 
     is(
-        $match-toml.made()<table><sub1><item>,
+        $match-toml.made<table><sub1><item>,
         "ok",
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<table><sub1><item> ~~ "ok"
+        ┃             ┃  ∙ $match-toml.made<table><sub1><item> ~~ "ok"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<table><item>,
+        $match-toml.made<table><item>,
         "ok",
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<table><item> ~~ "ok"
+        ┃             ┃  ∙ $match-toml.made<table><item> ~~ "ok"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<table><sub2><item>,
+        $match-toml.made<table><sub2><item>,
         "ok",
         q:to/EOF/
         ♪ [Is expected value?] - 4 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<table><sub2><item> ~~ "ok"
+        ┃             ┃  ∙ $match-toml.made<table><sub2><item> ~~ "ok"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

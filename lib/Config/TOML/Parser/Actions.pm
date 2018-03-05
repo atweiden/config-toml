@@ -72,27 +72,27 @@ method escape:sym<backslash>($/ --> Nil)
 
 method escape:sym<u>($/ --> Nil)
 {
-    make(chr(:16(@<hex>.join())));
+    make(chr(:16(@<hex>.join)));
 }
 
 method escape:sym<U>($/ --> Nil)
 {
-    make(chr(:16(@<hex>.join())));
+    make(chr(:16(@<hex>.join)));
 }
 
 method string-basic-char:escape-sequence ($/ --> Nil)
 {
-    make($<escape>.made());
+    make($<escape>.made);
 }
 
 method string-basic-text($/ --> Nil)
 {
-    make(@<string-basic-char>.hyper().map({ .made() }).join());
+    make(@<string-basic-char>.hyper.map({ .made }).join);
 }
 
-multi method string-basic($/ where $<string-basic-text>.so() --> Nil)
+multi method string-basic($/ where $<string-basic-text>.so --> Nil)
 {
-    make($<string-basic-text>.made());
+    make($<string-basic-text>.made);
 }
 
 multi method string-basic($/ --> Nil)
@@ -116,15 +116,15 @@ method string-basic-multiline-char:newline ($/ --> Nil)
 }
 
 multi method string-basic-multiline-char:escape-sequence (
-    $/ where $<escape>.so()
+    $/ where $<escape>.so
     --> Nil
 )
 {
-    make($<escape>.made());
+    make($<escape>.made);
 }
 
 multi method string-basic-multiline-char:escape-sequence (
-    $/ where $<ws-remover>.so()
+    $/ where $<ws-remover>.so
     --> Nil
 )
 {
@@ -133,15 +133,15 @@ multi method string-basic-multiline-char:escape-sequence (
 
 method string-basic-multiline-text($/ --> Nil)
 {
-    make(@<string-basic-multiline-char>.hyper().map({ .made() }).join());
+    make(@<string-basic-multiline-char>.hyper.map({ .made }).join);
 }
 
 multi method string-basic-multiline(
-    $/ where $<string-basic-multiline-text>.so()
+    $/ where $<string-basic-multiline-text>.so
     --> Nil
 )
 {
-    make($<string-basic-multiline-text>.made());
+    make($<string-basic-multiline-text>.made);
 }
 
 multi method string-basic-multiline($/ --> Nil)
@@ -164,12 +164,12 @@ method string-literal-char:backslash ($/ --> Nil)
 
 method string-literal-text($/ --> Nil)
 {
-    make(@<string-literal-char>.hyper().map({ .made() }).join());
+    make(@<string-literal-char>.hyper.map({ .made }).join);
 }
 
-multi method string-literal($/ where $<string-literal-text>.so() --> Nil)
+multi method string-literal($/ where $<string-literal-text>.so --> Nil)
 {
-    make($<string-literal-text>.made());
+    make($<string-literal-text>.made);
 }
 
 multi method string-literal($/ --> Nil)
@@ -189,15 +189,15 @@ method string-literal-multiline-char:backslash ($/ --> Nil)
 
 method string-literal-multiline-text($/ --> Nil)
 {
-    make(@<string-literal-multiline-char>.hyper().map({ .made() }).join());
+    make(@<string-literal-multiline-char>.hyper.map({ .made }).join);
 }
 
 multi method string-literal-multiline(
-    $/ where $<string-literal-multiline-text>.so()
+    $/ where $<string-literal-multiline-text>.so
     --> Nil
 )
 {
-    make($<string-literal-multiline-text>.made());
+    make($<string-literal-multiline-text>.made);
 }
 
 multi method string-literal-multiline($/ --> Nil)
@@ -209,22 +209,22 @@ multi method string-literal-multiline($/ --> Nil)
 
 method string:basic ($/ --> Nil)
 {
-    make($<string-basic>.made());
+    make($<string-basic>.made);
 }
 
 method string:basic-multi ($/ --> Nil)
 {
-    make($<string-basic-multiline>.made());
+    make($<string-basic-multiline>.made);
 }
 
 method string:literal ($/ --> Nil)
 {
-    make($<string-literal>.made());
+    make($<string-literal>.made);
 }
 
 method string:literal-multi ($/ --> Nil)
 {
-    make($<string-literal-multiline>.made());
+    make($<string-literal-multiline>.made);
 }
 
 # end string grammar-actions }}}
@@ -250,14 +250,14 @@ method plus-or-minus:sym<->($/ --> Nil)
     make(~$/);
 }
 
-multi method number($/ where $<integer>.so() --> Nil)
+multi method number($/ where $<integer>.so --> Nil)
 {
-    make($<integer>.made());
+    make($<integer>.made);
 }
 
-multi method number($/ where $<float>.so() --> Nil)
+multi method number($/ where $<float>.so --> Nil)
 {
-    make($<float>.made());
+    make($<float>.made);
 }
 
 # end number grammar-actions }}}
@@ -313,11 +313,11 @@ method time-secfrac($/ --> Nil)
 
 method time-numoffset($/ --> Nil)
 {
-    my Int:D $multiplier = $<plus-or-minus>.made() eq '+' ?? 1 !! -1;
+    my Int:D $multiplier = $<plus-or-minus>.made eq '+' ?? 1 !! -1;
     make(
         Int(
             (
-                ($multiplier * $<time-hour>.made() * 60) + $<time-minute>.made()
+                ($multiplier * $<time-hour>.made * 60) + $<time-minute>.made
             )
             *
             60
@@ -325,9 +325,9 @@ method time-numoffset($/ --> Nil)
     );
 }
 
-multi method time-offset($/ where $<time-numoffset>.so() --> Nil)
+multi method time-offset($/ where $<time-numoffset>.so --> Nil)
 {
-    make(Int($<time-numoffset>.made()));
+    make(Int($<time-numoffset>.made));
 }
 
 multi method time-offset($/ --> Nil)
@@ -337,12 +337,12 @@ multi method time-offset($/ --> Nil)
 
 method partial-time($/ --> Nil)
 {
-    my Rat:D $second = Rat($<time-second>.made());
-    $second += Rat($<time-secfrac>.made()) if $<time-secfrac>;
+    my Rat:D $second = Rat($<time-second>.made);
+    $second += Rat($<time-secfrac>.made) if $<time-secfrac>;
     make(
         %(
-            :hour(Int($<time-hour>.made())),
-            :minute(Int($<time-minute>.made())),
+            :hour(Int($<time-hour>.made)),
+            :minute(Int($<time-minute>.made)),
             :$second
         )
     );
@@ -352,9 +352,9 @@ method full-date($/ --> Nil)
 {
     make(
         %(
-            :year(Int($<date-fullyear>.made())),
-            :month(Int($<date-month>.made())),
-            :day(Int($<date-mday>.made()))
+            :year(Int($<date-fullyear>.made)),
+            :month(Int($<date-month>.made)),
+            :day(Int($<date-mday>.made))
         )
     );
 }
@@ -363,10 +363,10 @@ method full-time($/ --> Nil)
 {
     make(
         %(
-            :hour(Int($<partial-time>.made()<hour>)),
-            :minute(Int($<partial-time>.made()<minute>)),
-            :second(Rat($<partial-time>.made()<second>)),
-            :timezone(Int($<time-offset>.made()))
+            :hour(Int($<partial-time>.made<hour>)),
+            :minute(Int($<partial-time>.made<minute>)),
+            :second(Rat($<partial-time>.made<second>)),
+            :timezone(Int($<time-offset>.made))
         )
     );
 }
@@ -375,12 +375,12 @@ method date-time-omit-local-offset($/ --> Nil)
 {
     make(
         %(
-            :year(Int($<full-date>.made()<year>)),
-            :month(Int($<full-date>.made()<month>)),
-            :day(Int($<full-date>.made()<day>)),
-            :hour(Int($<partial-time>.made()<hour>)),
-            :minute(Int($<partial-time>.made()<minute>)),
-            :second(Rat($<partial-time>.made()<second>)),
+            :year(Int($<full-date>.made<year>)),
+            :month(Int($<full-date>.made<month>)),
+            :day(Int($<full-date>.made<day>)),
+            :hour(Int($<partial-time>.made<hour>)),
+            :minute(Int($<partial-time>.made<minute>)),
+            :second(Rat($<partial-time>.made<second>)),
             :timezone($.date-local-offset)
         )
     );
@@ -390,30 +390,30 @@ method date-time($/ --> Nil)
 {
     make(
         %(
-            :year(Int($<full-date>.made()<year>)),
-            :month(Int($<full-date>.made()<month>)),
-            :day(Int($<full-date>.made()<day>)),
-            :hour(Int($<full-time>.made()<hour>)),
-            :minute(Int($<full-time>.made()<minute>)),
-            :second(Rat($<full-time>.made()<second>)),
-            :timezone(Int($<full-time>.made()<timezone>))
+            :year(Int($<full-date>.made<year>)),
+            :month(Int($<full-date>.made<month>)),
+            :day(Int($<full-date>.made<day>)),
+            :hour(Int($<full-time>.made<hour>)),
+            :minute(Int($<full-time>.made<minute>)),
+            :second(Rat($<full-time>.made<second>)),
+            :timezone(Int($<full-time>.made<timezone>))
         )
     );
 }
 
 method date:full-date ($/ --> Nil)
 {
-    make(Date.new(|$<full-date>.made()));
+    make(Date.new(|$<full-date>.made));
 }
 
 method date:date-time-omit-local-offset ($/ --> Nil)
 {
-    make(DateTime.new(|$<date-time-omit-local-offset>.made()));
+    make(DateTime.new(|$<date-time-omit-local-offset>.made));
 }
 
 method date:date-time ($/ --> Nil)
 {
-    make(DateTime.new(|$<date-time>.made()));
+    make(DateTime.new(|$<date-time>.made));
 }
 
 # end datetime grammar-actions }}}
@@ -421,42 +421,42 @@ method date:date-time ($/ --> Nil)
 
 method array-elements:strings ($/ --> Nil)
 {
-    make(@<string>.hyper().map({ .made() }).Array());
+    make(@<string>.hyper.map({ .made }).Array);
 }
 
 method array-elements:integers ($/ --> Nil)
 {
-    make(@<integer>.hyper().map({ .made() }).Array());
+    make(@<integer>.hyper.map({ .made }).Array);
 }
 
 method array-elements:floats ($/ --> Nil)
 {
-    make(@<float>.hyper().map({ .made() }).Array());
+    make(@<float>.hyper.map({ .made }).Array);
 }
 
 method array-elements:booleans ($/ --> Nil)
 {
-    make(@<boolean>.hyper().map({ .made() }).Array());
+    make(@<boolean>.hyper.map({ .made }).Array);
 }
 
 method array-elements:dates ($/ --> Nil)
 {
-    make(@<date>.hyper().map({ .made() }).Array());
+    make(@<date>.hyper.map({ .made }).Array);
 }
 
 method array-elements:arrays ($/ --> Nil)
 {
-    make(@<array>.hyper().map({ .made() }).Array());
+    make(@<array>.hyper.map({ .made }).Array);
 }
 
 method array-elements:table-inlines ($/ --> Nil)
 {
-    make(@<table-inline>.hyper().map({ .made() }).Array());
+    make(@<table-inline>.hyper.map({ .made }).Array);
 }
 
-multi method array($/ where $<array-elements>.so() --> Nil)
+multi method array($/ where $<array-elements>.so --> Nil)
 {
-    make($<array-elements>.made());
+    make($<array-elements>.made);
 }
 
 multi method array($/ --> Nil)
@@ -474,52 +474,52 @@ method keypair-key:bare ($/ --> Nil)
 
 method keypair-key-string:basic ($/ --> Nil)
 {
-    make($<string-basic>.made());
+    make($<string-basic>.made);
 }
 
 method keypair-key-string:literal ($/ --> Nil)
 {
-    make($<string-literal>.made());
+    make($<string-literal>.made);
 }
 
 method keypair-key:quoted ($/ --> Nil)
 {
-    make($<keypair-key-string>.made());
+    make($<keypair-key-string>.made);
 }
 
 method keypair-value:string ($/ --> Nil)
 {
-    make($<string>.made());
+    make($<string>.made);
 }
 
 method keypair-value:number ($/ --> Nil)
 {
-    make($<number>.made());
+    make($<number>.made);
 }
 
 method keypair-value:boolean ($/ --> Nil)
 {
-    make($<boolean>.made());
+    make($<boolean>.made);
 }
 
 method keypair-value:date ($/ --> Nil)
 {
-    make($<date>.made());
+    make($<date>.made);
 }
 
 method keypair-value:array ($/ --> Nil)
 {
-    make($<array>.made());
+    make($<array>.made);
 }
 
 method keypair-value:table-inline ($/ --> Nil)
 {
-    make($<table-inline>.made());
+    make($<table-inline>.made);
 }
 
 method keypair($/ --> Nil)
 {
-    make(Str($<keypair-key>.made()) => $<keypair-value>.made());
+    make(Str($<keypair-key>.made) => $<keypair-value>.made);
 }
 
 method table-inline-keypairs($/ --> Nil)
@@ -531,10 +531,10 @@ method table-inline-keypairs($/ --> Nil)
     # by duplicate keys
     {
         my Str:D @keys-seen =
-            |@<keypair>.hyper().map({ .made() })
-                       .map({ .keys() })
-                       .flat();
-        unless @keys-seen.elems() == @keys-seen.unique().elems()
+            |@<keypair>.hyper.map({ .made })
+                       .map({ .keys })
+                       .flat;
+        unless @keys-seen.elems == @keys-seen.unique.elems
         {
             die(
                 X::Config::TOML::InlineTable::DuplicateKeys.new(
@@ -547,14 +547,14 @@ method table-inline-keypairs($/ --> Nil)
     }
 
     my %h;
-    @<keypair>.hyper().map({ .made() }).map({ %h{.keys()[0]} = .values()[0] });
+    @<keypair>.hyper.map({ .made }).map({ %h{.keys[0]} = .values[0] });
     make(%h);
 }
 
 # inline table contains keypairs
-multi method table-inline($/ where $<table-inline-keypairs>.so() --> Nil)
+multi method table-inline($/ where $<table-inline-keypairs>.so --> Nil)
 {
-    make($<table-inline-keypairs>.made());
+    make($<table-inline-keypairs>.made);
 }
 
 # inline table is empty
@@ -568,14 +568,14 @@ multi method table-inline($/ --> Nil)
 
 method keypair-line($/ --> Nil)
 {
-    make($<keypair>.made());
+    make($<keypair>.made);
 }
 
 # this segment represents keypairs not belonging to any table
 method segment:keypair-line ($/ --> Nil)
 {
-    my @path = $<keypair-line>.made().keys()[0];
-    my $value = $<keypair-line>.made().values()[0];
+    my @path = $<keypair-line>.made.keys[0];
+    my $value = $<keypair-line>.made.values[0];
 
     if seen(%!keys-seen, :@path)
     {
@@ -601,17 +601,17 @@ method segment:keypair-line ($/ --> Nil)
 
 method table-header-text($/ --> Nil)
 {
-    make(@<keypair-key>.hyper().map({ .made() }).Array());
+    make(@<keypair-key>.hyper.map({ .made }).Array);
 }
 
 method hoh-header($/ --> Nil)
 {
-    make($<table-header-text>.made());
+    make($<table-header-text>.made);
 }
 
 method table:hoh ($/ --> Nil)
 {
-    my @base-path = pwd(%!toml, :steps($<hoh-header>.made()));
+    my @base-path = pwd(%!toml, :steps($<hoh-header>.made));
     my Str:D $hoh-text = ~$/;
 
     if seen(%!keys-seen, :path(@base-path))
@@ -623,7 +623,7 @@ method table:hoh ($/ --> Nil)
             )
         );
     }
-    if %!aoh-seen.grep({.keys()[0] eqv $@base-path}).elems() > 0
+    if %!aoh-seen.grep({.keys[0] eqv $@base-path}).elems > 0
     {
         die(
             X::Config::TOML::HOH::Seen::AOH.new(
@@ -632,7 +632,7 @@ method table:hoh ($/ --> Nil)
             )
         );
     }
-    if %!hoh-seen.grep({.keys()[0] eqv $@base-path}).elems() > 0
+    if %!hoh-seen.grep({.keys[0] eqv $@base-path}).elems > 0
     {
         die(
             X::Config::TOML::HOH::Seen.new(
@@ -642,7 +642,7 @@ method table:hoh ($/ --> Nil)
         );
     }
 
-    my @keypairs = @<keypair-line>.hyper().map({ .made() }).flat();
+    my @keypairs = @<keypair-line>.hyper.map({ .made }).flat;
     {
         CATCH
         {
@@ -652,7 +652,7 @@ method table:hoh ($/ --> Nil)
                 {
                     Type (\w+) does not support associative indexing
                 }
-                if .payload() ~~ &exception-associative-indexing
+                if .payload ~~ &exception-associative-indexing
                 {
                     die(
                         X::Config::TOML::HOH::Seen::Key.new(
@@ -669,8 +669,8 @@ method table:hoh ($/ --> Nil)
         {
             # verify keypairs do not contain duplicate keys
             {
-                my Str:D @keys-seen = |@keypairs.map({ .keys() }).flat();
-                unless @keys-seen.elems() == @keys-seen.unique().elems()
+                my Str:D @keys-seen = |@keypairs.map({ .keys }).flat;
+                unless @keys-seen.elems == @keys-seen.unique.elems
                 {
                     die(
                         X::Config::TOML::HOH::DuplicateKeys.new(
@@ -683,8 +683,8 @@ method table:hoh ($/ --> Nil)
             }
 
             @keypairs.map(-> %keypair {
-                my @path = |@base-path, %keypair.keys()[0];
-                my $value = %keypair.values()[0];
+                my @path = |@base-path, %keypair.keys[0];
+                my $value = %keypair.values[0];
                 Crane.exists(%!toml, :@path)
                     ?? die(
                            X::Config::TOML::HOH::Seen::Key.new(
@@ -714,12 +714,12 @@ method table:hoh ($/ --> Nil)
 
 method aoh-header($/ --> Nil)
 {
-    make($<table-header-text>.made());
+    make($<table-header-text>.made);
 }
 
 method table:aoh ($/ --> Nil)
 {
-    my @path = pwd(%!toml, :steps($<aoh-header>.made()));
+    my @path = pwd(%!toml, :steps($<aoh-header>.made));
     my Str:D $aoh-header-text = ~$<aoh-header>;
     my Str:D $aoh-text = ~$/;
 
@@ -733,7 +733,7 @@ method table:aoh ($/ --> Nil)
             )
         );
     }
-    if %!hoh-seen.grep({.keys()[0] eqv $@path}).elems() > 0
+    if %!hoh-seen.grep({.keys[0] eqv $@path}).elems > 0
     {
         die(
             X::Config::TOML::AOH::OverwritesHOH.new(
@@ -744,7 +744,7 @@ method table:aoh ($/ --> Nil)
         );
     }
 
-    unless %!aoh-seen.grep({.keys()[0] eqv $@path}).elems() > 0
+    unless %!aoh-seen.grep({.keys[0] eqv $@path}).elems > 0
     {
         Crane.exists(%!toml, :@path)
             ?? die(X::Config::TOML::Keypath::AOH.new(:$aoh-text, :@path))
@@ -753,13 +753,13 @@ method table:aoh ($/ --> Nil)
     }
 
     my %h;
-    my @keypairs = @<keypair-line>.hyper().map({ .made() }).flat();
+    my @keypairs = @<keypair-line>.hyper.map({ .made }).flat;
     if @keypairs
     {
         # verify keypair lines do not contain duplicate keys
         {
-            my Str:D @keys-seen = |@keypairs.map({ .keys() }).flat();
-            unless @keys-seen.elems() == @keys-seen.unique().elems()
+            my Str:D @keys-seen = |@keypairs.map({ .keys }).flat;
+            unless @keys-seen.elems == @keys-seen.unique.elems
             {
                 die(
                     X::Config::TOML::AOH::DuplicateKeys.new(
@@ -771,7 +771,7 @@ method table:aoh ($/ --> Nil)
             }
         }
 
-        @keypairs.map({ %h{.keys()[0]} = .values()[0] });
+        @keypairs.map({ %h{.keys[0]} = .values[0] });
     }
     Crane.set(%!toml, :path(|@path, *-0), :value(%h));
 }
@@ -787,7 +787,7 @@ method TOP($/ --> Nil)
 
 # given TOML hash and keypath, print working directory including
 # arraytable indices
-multi sub pwd(Associative:D $container, :@steps where *.elems() > 0 --> Array:D)
+multi sub pwd(Associative:D $container, :@steps where *.elems > 0 --> Array:D)
 {
     my @steps-taken;
     my $root := $container;
@@ -796,27 +796,27 @@ multi sub pwd(Associative:D $container, :@steps where *.elems() > 0 --> Array:D)
     @steps-taken;
 }
 
-multi sub pwd(Associative:D $container, :@steps where *.elems() == 0 --> Array:D)
+multi sub pwd(Associative:D $container, :@steps where *.elems == 0 --> Array:D)
 {
     my @steps-taken;
 }
 
-multi sub pwd(Positional:D $container, :@steps where *.elems() > 0 --> Array:D)
+multi sub pwd(Positional:D $container, :@steps where *.elems > 0 --> Array:D)
 {
     my @steps-taken;
     my $root := $container;
-    my Int:D $index = $container.end();
+    my Int:D $index = $container.end;
     $root := $root[$index];
     push(@steps-taken, $index, |pwd($root, :@steps));
     @steps-taken;
 }
 
-multi sub pwd(Positional:D $container, :@steps where *.elems() == 0 --> Array:D)
+multi sub pwd(Positional:D $container, :@steps where *.elems == 0 --> Array:D)
 {
     my @steps-taken;
 }
 
-multi sub pwd($container, :@steps where *.elems() > 0 --> Array:D)
+multi sub pwd($container, :@steps where *.elems > 0 --> Array:D)
 {
     my @steps-taken;
     my $root := $container;
@@ -825,23 +825,23 @@ multi sub pwd($container, :@steps where *.elems() > 0 --> Array:D)
     @steps-taken;
 }
 
-multi sub pwd($container, :@steps where *.elems() == 0 --> Array:D)
+multi sub pwd($container, :@steps where *.elems == 0 --> Array:D)
 {
     my @steps-taken;
 }
 
-multi sub seen(Bool:D %h, :@path! where *.elems() > 1 --> Bool:D)
+multi sub seen(Bool:D %h, :@path! where *.elems > 1 --> Bool:D)
 {
-    %h.grep({.keys()[0] eqv $@path}).elems() > 0
-        || seen(%h, :path(@path[0..^*-1].Array()));
+    %h.grep({.keys[0] eqv $@path}).elems > 0
+        || seen(%h, :path(@path[0..^*-1].Array));
 }
 
-multi sub seen(Bool:D %h, :@path! where *.elems() > 0 --> Bool:D)
+multi sub seen(Bool:D %h, :@path! where *.elems > 0 --> Bool:D)
 {
-    %h.grep({.keys()[0] eqv $@path}).elems() > 0;
+    %h.grep({.keys[0] eqv $@path}).elems > 0;
 }
 
-multi sub seen(Bool:D %h, :@path! where *.elems() == 0 --> Bool:D)
+multi sub seen(Bool:D %h, :@path! where *.elems == 0 --> Bool:D)
 {
     False;
 }

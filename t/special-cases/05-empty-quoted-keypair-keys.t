@@ -30,36 +30,36 @@ subtest({
         EOF
     );
     is(
-        $match-toml.made(){''}{''}{''}{'a'},
+        $match-toml.made{''}{''}{''}{'a'},
         1,
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made(){''}{''}{''}{'a'} == 1
+        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{'a'} == 1
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made(){''}{''}{''}{'b'},
+        $match-toml.made{''}{''}{''}{'b'},
         2,
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made(){''}{''}{''}{'b'} == 2
+        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{'b'} == 2
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made(){''}{''}{''}{''},
+        $match-toml.made{''}{''}{''}{''},
         3,
         q:to/EOF/
         ♪ [Is expected value?] - 4 of 4
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made(){''}{''}{''}{''} == 3
+        ┃             ┃  ∙ $match-toml.made{''}{''}{''}{''} == 3
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

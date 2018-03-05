@@ -31,24 +31,24 @@ subtest({
         EOF
     );
     is(
-        $match-toml.made()<j><ʞ><l><key2>,
+        $match-toml.made<j><ʞ><l><key2>,
         'value',
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<j><ʞ><l><key2> eq 'value'
+        ┃             ┃  ∙ $match-toml.made<j><ʞ><l><key2> eq 'value'
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<j><ʞ><l>{'quoted "value"'},
+        $match-toml.made<j><ʞ><l>{'quoted "value"'},
         'value',
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<j><ʞ><l>{'quoted "value"'} eq 'value'
+        ┃             ┃  ∙ $match-toml.made<j><ʞ><l>{'quoted "value"'} eq 'value'
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

@@ -33,19 +33,19 @@ subtest({
 # string grammar tests {{{
 
 subtest({
-    my Str $string-basic = Q:to/EOF/.trim();
+    my Str $string-basic = Q:to/EOF/.trim;
     "I'm a string with backslashes (\\). \"You can quote me\". Name\tJosh\nLocation\tSF.\\"
     EOF
 
-    my Str $string-basic-backslash = Q:to/EOF/.trim();
+    my Str $string-basic-backslash = Q:to/EOF/.trim;
     "I'm a string ending with a backslash followed by a whitespace\\ "
     EOF
 
-    my Str $string-basic-empty = Q:to/EOF/.trim();
+    my Str $string-basic-empty = Q:to/EOF/.trim;
     ""
     EOF
 
-    my Str $string-basic-multiline = Q:to/EOF/.trim();
+    my Str $string-basic-multiline = Q:to/EOF/.trim;
     """\
     asdf	<-- tab
     \"\"\"
@@ -54,15 +54,15 @@ subtest({
     """
     EOF
 
-    my Str $string-literal = Q:to/EOF/.trim();
+    my Str $string-literal = Q:to/EOF/.trim;
     '\\\Server\X\admin$\system32\\\\\\'
     EOF
 
-    my Str $string-literal-empty = Q:to/EOF/.trim();
+    my Str $string-literal-empty = Q:to/EOF/.trim;
     ''
     EOF
 
-    my Str $string-literal-multiline = Q:to/EOF/.trim();
+    my Str $string-literal-multiline = Q:to/EOF/.trim;
     '''\
     asdf		<-- two tabs
     \'\'\'

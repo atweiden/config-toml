@@ -8,7 +8,7 @@ plan(1);
 # commented inline table grammar tests {{{
 
 subtest({
-    my Str $commented-inline-table-difficult = Q:to/EOF/.trim();
+    my Str $commented-inline-table-difficult = Q:to/EOF/.trim;
     {# this is ok 1
         # this is ok 2
         # this is ok 3

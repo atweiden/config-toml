@@ -7,7 +7,7 @@ plan(3);
 
 # check keys for validity
 subtest({
-    my Int %g{Buf} = Buf.new() => 1;
+    my Int %g{Buf} = Buf.new => 1;
     throws-like(
         { to-toml(%g) },
         X::Config::TOML::Dumper::BadKey,
@@ -165,8 +165,8 @@ subtest({
 
     # Dates and DateTimes may be mixed in the same array
     my $d = Date.new(now);
-    my $dt1 = DateTime.now();
-    my $dt2 = DateTime.now();
+    my $dt1 = DateTime.now;
+    my $dt2 = DateTime.now;
     my @c-valid = $d, $dt1, $dt2;
     my @c-invalid = $d, $dt1, $dt2, 'hello';
     %valid<valid> = @c-valid;

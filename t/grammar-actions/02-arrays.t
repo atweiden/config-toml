@@ -14,17 +14,17 @@ subtest({
     my Str $empty-array-spaces = '[   ]';
     my Str $empty-array-tab = '[	]';
     my Str $empty-array-tabs = '[			]';
-    my Str $empty-array-newline = Q:to/EOF/.trim();
+    my Str $empty-array-newline = Q:to/EOF/.trim;
     [
     ]
     EOF
-    my Str $empty-array-newlines = Q:to/EOF/.trim();
+    my Str $empty-array-newlines = Q:to/EOF/.trim;
     [
 
 
     ]
     EOF
-    my Str $empty-array-newlines-tabbed = Q:to/EOF/.trim();
+    my Str $empty-array-newlines-tabbed = Q:to/EOF/.trim;
     [
 
 
@@ -179,96 +179,96 @@ subtest({
     );
 
     is(
-        $match-empty-array.made().WHAT,
+        $match-empty-array.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 9 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-space.made().WHAT,
+        $match-empty-array-space.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 10 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-space.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array-space.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-spaces.made().WHAT,
+        $match-empty-array-spaces.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 11 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-spaces.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array-spaces.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-tab.made().WHAT,
+        $match-empty-array-tab.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 12 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-tab.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array-tab.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-tabs.made().WHAT,
+        $match-empty-array-tabs.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 13 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-tabs.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array-tabs.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-newline.made().WHAT,
+        $match-empty-array-newline.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 14 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-newline.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array-newline.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-newlines.made().WHAT,
+        $match-empty-array-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 15 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-newlines.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-empty-array-newlines.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-newlines-tabbed.made().WHAT,
+        $match-empty-array-newlines-tabbed.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 16 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-newlines-tabbed.made().WHAT
+        ┃             ┃  ∙ $match-empty-array-newlines-tabbed.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -276,96 +276,96 @@ subtest({
     );
 
     is(
-        $match-empty-array.made(),
+        $match-empty-array.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 17 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-space.made(),
+        $match-empty-array-space.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 18 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-space.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array-space.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-spaces.made(),
+        $match-empty-array-spaces.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 19 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-spaces.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array-spaces.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-tab.made(),
+        $match-empty-array-tab.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 20 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-tab.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array-tab.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-tabs.made(),
+        $match-empty-array-tabs.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 21 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-tabs.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array-tabs.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-newline.made(),
+        $match-empty-array-newline.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 22 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-newline.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array-newline.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-newlines.made(),
+        $match-empty-array-newlines.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 23 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-newlines.made() ~~ []
+        ┃             ┃  ∙ $match-empty-array-newlines.made ~~ []
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-empty-array-newlines-tabbed.made(),
+        $match-empty-array-newlines-tabbed.made,
         [],
         q:to/EOF/
         ♪ [Is expected array value?] - 24 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-empty-array-newlines-tabbed.made()
+        ┃             ┃  ∙ $match-empty-array-newlines-tabbed.made
         ┃   Success   ┃        ~~ []
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -377,11 +377,11 @@ subtest({
 # array of strings grammar-actions tests {{{
 
 subtest({
-    my Str $array-of-basic-strings = Q:to/EOF/.trim();
+    my Str $array-of-basic-strings = Q:to/EOF/.trim;
     ["red", "maroon", "crimson"]
     EOF
 
-    my Str $array-of-basic-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-basic-strings-newlines = Q:to/EOF/.trim;
     [
         "red",
         "maroon",
@@ -389,19 +389,19 @@ subtest({
     ]
     EOF
 
-    my Str $array-of-basic-empty-strings = Q:to/EOF/.trim();
+    my Str $array-of-basic-empty-strings = Q:to/EOF/.trim;
     ["", " ", "		"]
     EOF
 
-    my Str $array-of-basic-multiline-string = Q:to/EOF/.trim();
+    my Str $array-of-basic-multiline-string = Q:to/EOF/.trim;
     ["""red""",]
     EOF
 
-    my Str $array-of-basic-multiline-strings = Q:to/EOF/.trim();
+    my Str $array-of-basic-multiline-strings = Q:to/EOF/.trim;
     ["""red""", """maroon""", """crimson"""]
     EOF
 
-    my Str $array-of-basic-multiline-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-basic-multiline-strings-newlines = Q:to/EOF/.trim;
     [
         """
         red \
@@ -415,11 +415,11 @@ subtest({
         """, """ brown tan\n auburn""", ]
     EOF
 
-    my Str $array-of-literal-strings = Q:to/EOF/.trim();
+    my Str $array-of-literal-strings = Q:to/EOF/.trim;
     ['red', 'maroon', 'crimson']
     EOF
 
-    my Str $array-of-literal-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-literal-strings-newlines = Q:to/EOF/.trim;
     [
         'red',
         'maroon',
@@ -427,19 +427,19 @@ subtest({
     ]
     EOF
 
-    my Str $array-of-literal-empty-strings = Q:to/EOF/.trim();
+    my Str $array-of-literal-empty-strings = Q:to/EOF/.trim;
     ['', ' ', '		']
     EOF
 
-    my Str $array-of-literal-multiline-string = Q:to/EOF/.trim();
+    my Str $array-of-literal-multiline-string = Q:to/EOF/.trim;
     ['''red''',]
     EOF
 
-    my Str $array-of-literal-multiline-strings = Q:to/EOF/.trim();
+    my Str $array-of-literal-multiline-strings = Q:to/EOF/.trim;
     ['''red''', '''maroon''', '''crimson''']
     EOF
 
-    my Str $array-of-literal-multiline-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-literal-multiline-strings-newlines = Q:to/EOF/.trim;
     [
         '''
         red \
@@ -453,15 +453,15 @@ subtest({
         ''', ''' brown tan auburn''', ]
     EOF
 
-    my Str $array-of-mixed-strings = Q:to/EOF/.trim();
+    my Str $array-of-mixed-strings = Q:to/EOF/.trim;
     [ "first", 'second', """third""", '''fourth''', "", '', ]
     EOF
 
-    my Str $array-of-difficult-strings = q:to/EOF/.trim();
+    my Str $array-of-difficult-strings = q:to/EOF/.trim;
     [ "] ", " # ", '\ ', '\', '''\ ''', '''\''']
     EOF
 
-    my Str $array-of-difficult-strings-leading-commas = q:to/EOF/.trim();
+    my Str $array-of-difficult-strings-leading-commas = q:to/EOF/.trim;
     [
         "] "
         , " # "
@@ -779,241 +779,241 @@ subtest({
     );
 
     is(
-        $match-array-of-basic-strings.made().WHAT,
+        $match-array-of-basic-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 40 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-basic-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-strings-newlines.made().WHAT,
+        $match-array-of-basic-strings-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 41 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-strings-newlines.made().WHAT
+        ┃             ┃  ∙ $match-array-of-basic-strings-newlines.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-empty-strings.made().WHAT,
+        $match-array-of-basic-empty-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 42 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-empty-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-basic-empty-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-multiline-string.made().WHAT,
+        $match-array-of-basic-multiline-string.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 43 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-multiline-string.made().WHAT
+        ┃             ┃  ∙ $match-array-of-basic-multiline-string.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-multiline-strings.made().WHAT,
+        $match-array-of-basic-multiline-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 44 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-multiline-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-basic-multiline-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-multiline-strings-newlines.made().WHAT,
+        $match-array-of-basic-multiline-strings-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 45 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-basic-multiline-strings-newlines
-        ┃   Success   ┃        .made()
+        ┃   Success   ┃        .made
         ┃             ┃        .WHAT ~~ Array
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-strings.made().WHAT,
+        $match-array-of-literal-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 46 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-literal-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-literal-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-strings-newlines.made().WHAT,
+        $match-array-of-literal-strings-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 47 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-strings-newlines
-        ┃   Success   ┃        .made()
+        ┃   Success   ┃        .made
         ┃             ┃        .WHAT ~~ Array
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-empty-strings.made().WHAT,
+        $match-array-of-literal-empty-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 48 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-literal-empty-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-literal-empty-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-multiline-string.made().WHAT,
+        $match-array-of-literal-multiline-string.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 49 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-multiline-string
-        ┃   Success   ┃        .made()
+        ┃   Success   ┃        .made
         ┃             ┃        .WHAT ~~ Array
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-multiline-strings.made().WHAT,
+        $match-array-of-literal-multiline-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 50 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-multiline-strings
-        ┃   Success   ┃        .made()
+        ┃   Success   ┃        .made
         ┃             ┃        .WHAT ~~ Array
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-multiline-strings-newlines.made().WHAT,
+        $match-array-of-literal-multiline-strings-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 51 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-multiline-strings-newlines
-        ┃   Success   ┃        .made()
+        ┃   Success   ┃        .made
         ┃             ┃        .WHAT ~~ Array
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-mixed-strings.made().WHAT,
+        $match-array-of-mixed-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 52 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-mixed-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-mixed-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-difficult-strings.made().WHAT,
+        $match-array-of-difficult-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 53 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-difficult-strings.made().WHAT
+        ┃             ┃  ∙ $match-array-of-difficult-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-difficult-strings-leading-commas.made().WHAT,
+        $match-array-of-difficult-strings-leading-commas.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 54 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-difficult-strings-leading-commas
-        ┃   Success   ┃        .made()
+        ┃   Success   ┃        .made
         ┃             ┃        .WHAT ~~ Array
         ┗━━━━━━━━━━━━━┛
         EOF
     );
 
     is(
-        $match-array-of-basic-strings.made(),
+        $match-array-of-basic-strings.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
         ♪ [Is expected array value?] - 55 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-strings.made()
+        ┃             ┃  ∙ $match-array-of-basic-strings.made
         ┃   Success   ┃        ~~ ["red", "maroon", "crimson"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-strings-newlines.made(),
+        $match-array-of-basic-strings-newlines.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
         ♪ [Is expected array value?] - 56 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-strings-newlines.made()
+        ┃             ┃  ∙ $match-array-of-basic-strings-newlines.made
         ┃   Success   ┃        ~~ ["red", "maroon", "crimson"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-empty-strings.made(),
+        $match-array-of-basic-empty-strings.made,
         ["", " ", "\t\t"],
         q:to/EOF/
         ♪ [Is expected array value?] - 57 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-empty-strings.made()
+        ┃             ┃  ∙ $match-array-of-basic-empty-strings.made
         ┃   Success   ┃        ~~ ["", " ", "\t\t"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-multiline-string.made(),
+        $match-array-of-basic-multiline-string.made,
         ["red"],
         q:to/EOF/
         ♪ [Is expected array value?] - 58 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-multiline-string.made()
+        ┃             ┃  ∙ $match-array-of-basic-multiline-string.made
         ┃   Success   ┃        ~~ ["red"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-basic-multiline-strings.made(),
+        $match-array-of-basic-multiline-strings.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
         ♪ [Is expected array value?] - 59 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-basic-multiline-strings.made()
+        ┃             ┃  ∙ $match-array-of-basic-multiline-strings.made
         ┃   Success   ┃        ~~ ["red", "maroon", "crimson"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1023,7 +1023,7 @@ subtest({
     # parse heredocs like Perl6, leading spaces on the outside edges of
     # multiline string delimiters are preserved
     is(
-        $match-array-of-basic-multiline-strings-newlines.made(),
+        $match-array-of-basic-multiline-strings-newlines.made,
         [
             "    red maroon \ncrimson\n    ",
             "    blue\n    aqua\n    turquoise\n    ",
@@ -1033,73 +1033,73 @@ subtest({
         ♪ [Is expected array value?] - 60 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-basic-multiline-strings-newlines
-        ┃   Success   ┃        .made() ~~ [ ... ]
+        ┃   Success   ┃        .made ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-strings.made(),
+        $match-array-of-literal-strings.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
         ♪ [Is expected array value?] - 61 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-literal-strings.made()
+        ┃             ┃  ∙ $match-array-of-literal-strings.made
         ┃   Success   ┃        ~~ ["red", "maroon", "crimson"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-strings-newlines.made(),
+        $match-array-of-literal-strings-newlines.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
         ♪ [Is expected array value?] - 62 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-strings-newlines
-        ┃   Success   ┃        .made() ~~ ["red", "maroon", "crimson"]
+        ┃   Success   ┃        .made ~~ ["red", "maroon", "crimson"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-empty-strings.made(),
+        $match-array-of-literal-empty-strings.made,
         ["", " ", "\t\t"],
         q:to/EOF/
         ♪ [Is expected array value?] - 63 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-literal-empty-strings.made()
+        ┃             ┃  ∙ $match-array-of-literal-empty-strings.made
         ┃   Success   ┃        ~~ ["", " ", "\t\t"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-multiline-string.made(),
+        $match-array-of-literal-multiline-string.made,
         ["red"],
         q:to/EOF/
         ♪ [Is expected array value?] - 64 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-multiline-string
-        ┃   Success   ┃        .made() ~~ ["red"]
+        ┃   Success   ┃        .made ~~ ["red"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-multiline-strings.made(),
+        $match-array-of-literal-multiline-strings.made,
         ["red", "maroon", "crimson"],
         q:to/EOF/
         ♪ [Is expected array value?] - 65 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-multiline-strings
-        ┃   Success   ┃        .made() ~~ ["red", "maroon", "crimson"]
+        ┃   Success   ┃        .made ~~ ["red", "maroon", "crimson"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-literal-multiline-strings-newlines.made(),
+        $match-array-of-literal-multiline-strings-newlines.made,
         [
             "    red \\\n    maroon \\\n    crimson\n    ",
             "    blue\n    aqua\n    turquoise\n    ",
@@ -1109,43 +1109,43 @@ subtest({
         ♪ [Is expected array value?] - 66 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-literal-multiline-strings-newlines
-        ┃   Success   ┃        .made() ~~ [ ... ]
+        ┃   Success   ┃        .made ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-mixed-strings.made(),
+        $match-array-of-mixed-strings.made,
         ["first", "second", "third", "fourth", "", ""],
         q:to/EOF/
         ♪ [Is expected array value?] - 67 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-mixed-strings.made()
+        ┃             ┃  ∙ $match-array-of-mixed-strings.made
         ┃   Success   ┃        ~~ ["first", "second", "third", "fourth", "", ""]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-difficult-strings.made(),
+        $match-array-of-difficult-strings.made,
         ["] ", " # ", "\\ ", "\\", "\\ ", "\\"],
         q:to/EOF/
         ♪ [Is expected array value?] - 68 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-difficult-strings.made()
+        ┃             ┃  ∙ $match-array-of-difficult-strings.made
         ┃   Success   ┃        ~~ ["] ", " # ", "\\ ", "\\", "\\ ", "\\"]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-difficult-strings-leading-commas.made(),
+        $match-array-of-difficult-strings-leading-commas.made,
         ["] ", " # ", "\\ ", "\\", "\\ ", "\\"],
         q:to/EOF/
         ♪ [Is expected array value?] - 69 of 123
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-array-of-difficult-strings-leading-commas
-        ┃   Success   ┃        .made() ~~
+        ┃   Success   ┃        .made ~~
         ┃             ┃             ["] ", " # ", "\\ ", "\\", "\\ ", "\\"]
         ┗━━━━━━━━━━━━━┛
         EOF
@@ -1157,7 +1157,7 @@ subtest({
 
 subtest({
     my Str $array-of-integers = '[ 8001, 8001, 8002 ]';
-    my Str $array-of-integers-newlines = Q:to/EOF/.trim();
+    my Str $array-of-integers-newlines = Q:to/EOF/.trim;
     [
         +99,
         42,
@@ -1209,24 +1209,24 @@ subtest({
     );
 
     is(
-        $match-array-of-integers.made().WHAT,
+        $match-array-of-integers.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 72 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-integers.made().WHAT
+        ┃             ┃  ∙ $match-array-of-integers.made.WHAT
         ┃   Success   ┃        ~~ Array[Int]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-integers-newlines.made().WHAT,
+        $match-array-of-integers-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 73 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-integers-newlines.made().WHAT
+        ┃             ┃  ∙ $match-array-of-integers-newlines.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1234,24 +1234,24 @@ subtest({
     );
 
     is(
-        $match-array-of-integers.made(),
+        $match-array-of-integers.made,
         [8001, 8001, 8002],
         q:to/EOF/
         ♪ [Is expected array value?] - 74 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-integers.made()
+        ┃             ┃  ∙ $match-array-of-integers.made
         ┃   Success   ┃        ~~ [8001, 8001, 8002]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-integers-newlines.made(),
+        $match-array-of-integers-newlines.made,
         [99, 42, 0, -17, 1000, 5349221, 12345],
         q:to/EOF/
         ♪ [Is expected array value?] - 75 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-integers-newlines.made()
+        ┃             ┃  ∙ $match-array-of-integers-newlines.made
         ┃   Success   ┃        ~~ [99, 42, 0, -17, 1000, 5349221, 12345]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1264,7 +1264,7 @@ subtest({
 
 subtest({
     my Str $array-of-floats = '[ 0.0, -1.1, +2.2, -3.3, +4.4, -5.5 ]';
-    my Str $array-of-floats-newlines = Q:to/EOF/.trim();
+    my Str $array-of-floats-newlines = Q:to/EOF/.trim;
     [
         +1.0,
         3.1415,
@@ -1318,24 +1318,24 @@ subtest({
     );
 
     is(
-        $match-array-of-floats.made().WHAT,
+        $match-array-of-floats.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 78 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-floats.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-floats.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-floats-newlines.made().WHAT,
+        $match-array-of-floats-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 79 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-floats-newlines.made().WHAT
+        ┃             ┃  ∙ $match-array-of-floats-newlines.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1343,19 +1343,19 @@ subtest({
     );
 
     is(
-        $match-array-of-floats.made(),
+        $match-array-of-floats.made,
         [0.0, -1.1, 2.2, -3.3, 4.4, -5.5],
         q:to/EOF/
         ♪ [Is expected array value?] - 80 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-floats.made()
+        ┃             ┃  ∙ $match-array-of-floats.made
         ┃   Success   ┃        ~~ [0.0, -1.1, 2.2, -3.3, 4.4, -5.5]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-floats-newlines.made(),
+        $match-array-of-floats-newlines.made,
         [
             1.0,
             3.1415,
@@ -1370,7 +1370,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected array value?] - 81 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-floats-newlines.made().WHAT
+        ┃             ┃  ∙ $match-array-of-floats-newlines.made.WHAT
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1383,7 +1383,7 @@ subtest({
 
 subtest({
     my Str $array-of-booleans = '[true,false]';
-    my Str $array-of-booleans-newlines = Q:to/EOF/.trim();
+    my Str $array-of-booleans-newlines = Q:to/EOF/.trim;
     [
         true
         , false
@@ -1430,24 +1430,24 @@ subtest({
     );
 
     is(
-        $match-array-of-booleans.made().WHAT,
+        $match-array-of-booleans.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 84 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-booleans.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-booleans.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-booleans-newlines.made().WHAT,
+        $match-array-of-booleans-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 85 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-booleans-newlines.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-booleans-newlines.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1455,24 +1455,24 @@ subtest({
     );
 
     is(
-        $match-array-of-booleans.made(),
+        $match-array-of-booleans.made,
         [True, False],
         q:to/EOF/
         ♪ [Is expected array value?] - 86 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-booleans.made() ~~ [True, False]
+        ┃             ┃  ∙ $match-array-of-booleans.made ~~ [True, False]
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-booleans-newlines.made(),
+        $match-array-of-booleans-newlines.made,
         [True, False],
         q:to/EOF/
         ♪ [Is expected array value?] - 87 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-booleans-newlines.made()
+        ┃             ┃  ∙ $match-array-of-booleans-newlines.made
         ┃   Success   ┃        ~~ [True, False]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1485,7 +1485,7 @@ subtest({
 
 subtest({
     my Str $array-of-date-times = '[1979-05-27T07:32:00Z,]';
-    my Str $array-of-date-times-newlines = Q:to/EOF/.trim();
+    my Str $array-of-date-times-newlines = Q:to/EOF/.trim;
     [
         1979-05-27T07:32:00Z,
         1979-05-27T00:32:00-07:00,
@@ -1540,24 +1540,24 @@ subtest({
     );
 
     is(
-        $match-array-of-date-times.made().WHAT,
+        $match-array-of-date-times.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 90 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-date-times.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-date-times.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-date-times-newlines.made().WHAT,
+        $match-array-of-date-times-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 91 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-date-times-newlines.made().WHAT
+        ┃             ┃  ∙ $match-array-of-date-times-newlines.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1565,19 +1565,19 @@ subtest({
     );
 
     is(
-        $match-array-of-date-times.made(),
+        $match-array-of-date-times.made,
         ['1979-05-27T07:32:00Z'],
         q:to/EOF/
         ♪ [Is expected array value?] - 92 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-date-times.made() ~~ [ ... ]
+        ┃             ┃  ∙ $match-array-of-date-times.made ~~ [ ... ]
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-date-times-newlines.made(),
+        $match-array-of-date-times-newlines.made,
         [
             '1979-05-27T07:32:00Z',
             '1979-05-27T00:32:00-07:00',
@@ -1589,7 +1589,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected array value?] - 93 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-date-times-newlines.made()
+        ┃             ┃  ∙ $match-array-of-date-times-newlines.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1602,7 +1602,7 @@ subtest({
 
 subtest({
     my Str $array-of-arrays = '[ [ 1, 2 ], [-3e1_000, +4.56, 5.0] ]';
-    my Str $array-of-arrays-newlines = Q:to/EOF/.trim();
+    my Str $array-of-arrays-newlines = Q:to/EOF/.trim;
     [
         [ [ 1, 2 ], [3, 4, 5] ],
         [
@@ -1645,7 +1645,7 @@ subtest({
     ]
     EOF
 
-    my Str $array-of-empty-arrays = Q:to/EOF/.trim();
+    my Str $array-of-empty-arrays = Q:to/EOF/.trim;
     [[[[[]]]]]
     EOF
 
@@ -1713,36 +1713,36 @@ subtest({
     );
 
     is(
-        $match-array-of-arrays.made().WHAT,
+        $match-array-of-arrays.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 97 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-arrays.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-arrays.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-arrays-newlines.made().WHAT,
+        $match-array-of-arrays-newlines.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 98 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-arrays-newlines.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-arrays-newlines.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-empty-arrays.made().WHAT,
+        $match-array-of-empty-arrays.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 99 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-empty-arrays.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-empty-arrays.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1750,19 +1750,19 @@ subtest({
     );
 
     is(
-        $match-array-of-arrays.made(),
+        $match-array-of-arrays.made,
         [[1, 2], [-Inf, 4.56, 5.0]],
         q:to/EOF/
         ♪ [Is expected array value?] - 100 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-arrays.made() ~~ [ ... ]
+        ┃             ┃  ∙ $match-array-of-arrays.made ~~ [ ... ]
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-arrays-newlines.made(),
+        $match-array-of-arrays-newlines.made,
         [
             [[1, 2], [3, 4, 5]],
             [[1, 2], ["a", "b", "c"]],
@@ -1777,19 +1777,19 @@ subtest({
         q:to/EOF/
         ♪ [Is expected array value?] - 101 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-arrays-newlines.made() ~~ [ ... ]
+        ┃             ┃  ∙ $match-array-of-arrays-newlines.made ~~ [ ... ]
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-array-of-empty-arrays.made(),
+        $match-array-of-empty-arrays.made,
         [[[[[]]]]],
         q:to/EOF/
         ♪ [Is expected array value?] - 102 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-empty-arrays.made() ~~ [ ... ]
+        ┃             ┃  ∙ $match-array-of-empty-arrays.made ~~ [ ... ]
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1801,7 +1801,7 @@ subtest({
 # array of inline tables grammar-actions tests {{{
 
 subtest({
-    my Str $array-of-inline-tables = Q:to/EOF/.trim();
+    my Str $array-of-inline-tables = Q:to/EOF/.trim;
     [ { x = 1, y = 2, z = 3 },
       { x = 7, y = 8, z = 9 },
       { x = 2, y = 4, z = 8 } ]
@@ -1829,12 +1829,12 @@ subtest({
     );
 
     is(
-        $match-array-of-inline-tables.made().WHAT,
+        $match-array-of-inline-tables.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 104 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-inline-tables.made().WHAT ~~ Array
+        ┃             ┃  ∙ $match-array-of-inline-tables.made.WHAT ~~ Array
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1842,7 +1842,7 @@ subtest({
     );
 
     is(
-        $match-array-of-inline-tables.made(),
+        $match-array-of-inline-tables.made,
         [
             %( x => 1, y => 2, z => 3 ),
             %( x => 7, y => 8, z => 9 ),
@@ -1851,7 +1851,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected array value?] - 105 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-array-of-inline-tables.made() ~~ [ ... ]
+        ┃             ┃  ∙ $match-array-of-inline-tables.made ~~ [ ... ]
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -1863,7 +1863,7 @@ subtest({
 # commented array grammar-actions tests {{{
 
 subtest({
-    my Str $commented-array-of-mixed-strings = Q:to/EOF/.trim();
+    my Str $commented-array-of-mixed-strings = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         'a', # this is ok
@@ -1876,7 +1876,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-integers = Q:to/EOF/.trim();
+    my Str $commented-array-of-integers = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         1, # this is ok
@@ -1888,7 +1888,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-floats = Q:to/EOF/.trim();
+    my Str $commented-array-of-floats = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         +1.1, # this is ok
@@ -1900,7 +1900,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-booleans = Q:to/EOF/.trim();
+    my Str $commented-array-of-booleans = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         true, # this is ok
@@ -1912,7 +1912,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-date-times = Q:to/EOF/.trim();
+    my Str $commented-array-of-date-times = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         1979-05-27T07:32:00Z, # this is ok
@@ -1927,7 +1927,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-arrays = Q:to/EOF/.trim();
+    my Str $commented-array-of-arrays = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         [ [ 1, 2 ], [3, 4, 5] ], # this is ok
@@ -2109,72 +2109,72 @@ subtest({
     );
 
     is(
-        $match-commented-array-of-mixed-strings.made().WHAT,
+        $match-commented-array-of-mixed-strings.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 112 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-mixed-strings.made().WHAT
+        ┃             ┃  ∙ $match-commented-array-of-mixed-strings.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-integers.made().WHAT,
+        $match-commented-array-of-integers.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 113 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-integers.made().WHAT
+        ┃             ┃  ∙ $match-commented-array-of-integers.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-floats.made().WHAT,
+        $match-commented-array-of-floats.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 114 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-floats.made().WHAT
+        ┃             ┃  ∙ $match-commented-array-of-floats.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-booleans.made().WHAT,
+        $match-commented-array-of-booleans.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 115 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-booleans.made().WHAT
+        ┃             ┃  ∙ $match-commented-array-of-booleans.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-date-times.made().WHAT,
+        $match-commented-array-of-date-times.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 116 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-date-times.made().WHAT
+        ┃             ┃  ∙ $match-commented-array-of-date-times.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-arrays.made().WHAT,
+        $match-commented-array-of-arrays.made.WHAT,
         Array,
         q:to/EOF/
         ♪ [Is array?] - 117 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-arrays.made().WHAT
+        ┃             ┃  ∙ $match-commented-array-of-arrays.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -2182,55 +2182,55 @@ subtest({
     );
 
     is(
-        $match-commented-array-of-mixed-strings.made(),
+        $match-commented-array-of-mixed-strings.made,
         ["a", "b", "c", "d"],
         q:to/EOF/
         ♪ [Is expected array value?] - 118 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-mixed-strings.made()
+        ┃             ┃  ∙ $match-commented-array-of-mixed-strings.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-integers.made(),
+        $match-commented-array-of-integers.made,
         [1, 2, 3],
         q:to/EOF/
         ♪ [Is expected array value?] - 119 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-integers.made()
+        ┃             ┃  ∙ $match-commented-array-of-integers.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-floats.made(),
+        $match-commented-array-of-floats.made,
         [1.1, -2e1000, 0.0000001],
         q:to/EOF/
         ♪ [Is expected array value?] - 120 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-floats.made()
+        ┃             ┃  ∙ $match-commented-array-of-floats.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-booleans.made(),
+        $match-commented-array-of-booleans.made,
         [True, False, True],
         q:to/EOF/
         ♪ [Is expected array value?] - 121 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-booleans.made()
+        ┃             ┃  ∙ $match-commented-array-of-booleans.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-date-times.made(),
+        $match-commented-array-of-date-times.made,
         [
             '1979-05-27T07:32:00Z',
             '1979-05-27T00:32:00-07:00',
@@ -2242,14 +2242,14 @@ subtest({
         q:to/EOF/
         ♪ [Is expected array value?] - 122 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-date-times.made()
+        ┃             ┃  ∙ $match-commented-array-of-date-times.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-commented-array-of-arrays.made(),
+        $match-commented-array-of-arrays.made,
         [
             [
                 [1, 2],
@@ -2270,7 +2270,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected array value?] - 123 of 123
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-array-of-arrays.made()
+        ┃             ┃  ∙ $match-commented-array-of-arrays.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

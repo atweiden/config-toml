@@ -13,17 +13,17 @@ subtest({
     my Str $empty-array-spaces = '[   ]';
     my Str $empty-array-tab = '[	]';
     my Str $empty-array-tabs = '[			]';
-    my Str $empty-array-newline = Q:to/EOF/.trim();
+    my Str $empty-array-newline = Q:to/EOF/.trim;
     [
     ]
     EOF
-    my Str $empty-array-newlines = Q:to/EOF/.trim();
+    my Str $empty-array-newlines = Q:to/EOF/.trim;
     [
 
 
     ]
     EOF
-    my Str $empty-array-newlines-tabbed = Q:to/EOF/.trim();
+    my Str $empty-array-newlines-tabbed = Q:to/EOF/.trim;
     [
 
 
@@ -180,11 +180,11 @@ subtest({
 # array of strings grammar tests {{{
 
 subtest({
-    my Str $array-of-basic-strings = Q:to/EOF/.trim();
+    my Str $array-of-basic-strings = Q:to/EOF/.trim;
     ["red", "maroon", "crimson"]
     EOF
 
-    my Str $array-of-basic-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-basic-strings-newlines = Q:to/EOF/.trim;
     [
         "red",
         "maroon",
@@ -192,19 +192,19 @@ subtest({
     ]
     EOF
 
-    my Str $array-of-basic-empty-strings = Q:to/EOF/.trim();
+    my Str $array-of-basic-empty-strings = Q:to/EOF/.trim;
     ["", " ", "		"]
     EOF
 
-    my Str $array-of-basic-multiline-string = Q:to/EOF/.trim();
+    my Str $array-of-basic-multiline-string = Q:to/EOF/.trim;
     ["""red""",]
     EOF
 
-    my Str $array-of-basic-multiline-strings = Q:to/EOF/.trim();
+    my Str $array-of-basic-multiline-strings = Q:to/EOF/.trim;
     ["""red""", """maroon""", """crimson"""]
     EOF
 
-    my Str $array-of-basic-multiline-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-basic-multiline-strings-newlines = Q:to/EOF/.trim;
     [
         """
         red \
@@ -218,11 +218,11 @@ subtest({
         """, """ brown tan\n auburn""", ]
     EOF
 
-    my Str $array-of-literal-strings = Q:to/EOF/.trim();
+    my Str $array-of-literal-strings = Q:to/EOF/.trim;
     ['red', 'maroon', 'crimson']
     EOF
 
-    my Str $array-of-literal-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-literal-strings-newlines = Q:to/EOF/.trim;
     [
         'red',
         'maroon',
@@ -230,19 +230,19 @@ subtest({
     ]
     EOF
 
-    my Str $array-of-literal-empty-strings = Q:to/EOF/.trim();
+    my Str $array-of-literal-empty-strings = Q:to/EOF/.trim;
     ['', ' ', '		']
     EOF
 
-    my Str $array-of-literal-multiline-string = Q:to/EOF/.trim();
+    my Str $array-of-literal-multiline-string = Q:to/EOF/.trim;
     ['''red''',]
     EOF
 
-    my Str $array-of-literal-multiline-strings = Q:to/EOF/.trim();
+    my Str $array-of-literal-multiline-strings = Q:to/EOF/.trim;
     ['''red''', '''maroon''', '''crimson''']
     EOF
 
-    my Str $array-of-literal-multiline-strings-newlines = Q:to/EOF/.trim();
+    my Str $array-of-literal-multiline-strings-newlines = Q:to/EOF/.trim;
     [
         '''
         red \
@@ -256,15 +256,15 @@ subtest({
         ''', ''' brown tan auburn''', ]
     EOF
 
-    my Str $array-of-mixed-strings = Q:to/EOF/.trim();
+    my Str $array-of-mixed-strings = Q:to/EOF/.trim;
     [ "first", 'second', """third""", '''fourth''', "", '', ]
     EOF
 
-    my Str $array-of-difficult-strings = q:to/EOF/.trim();
+    my Str $array-of-difficult-strings = q:to/EOF/.trim;
     [ "] ", " # ", '\ ', '\', '''\ ''', '''\''']
     EOF
 
-    my Str $array-of-difficult-strings-leading-commas = q:to/EOF/.trim();
+    my Str $array-of-difficult-strings-leading-commas = q:to/EOF/.trim;
     [
         "] "
         , " # "
@@ -585,7 +585,7 @@ subtest({
 
 subtest({
     my Str $array-of-integers = '[ 8001, 8001, 8002 ]';
-    my Str $array-of-integers-newlines = Q:to/EOF/.trim();
+    my Str $array-of-integers-newlines = Q:to/EOF/.trim;
     [
         +99,
         42,
@@ -640,7 +640,7 @@ subtest({
 
 subtest({
     my Str $array-of-floats = '[ 0.0, -1.1, +2.2, -3.3, +4.4, -5.5 ]';
-    my Str $array-of-floats-newlines = Q:to/EOF/.trim();
+    my Str $array-of-floats-newlines = Q:to/EOF/.trim;
     [
         +1.0,
         3.1415,
@@ -697,7 +697,7 @@ subtest({
 
 subtest({
     my Str $array-of-booleans = '[true,false]';
-    my Str $array-of-booleans-newlines = Q:to/EOF/.trim();
+    my Str $array-of-booleans-newlines = Q:to/EOF/.trim;
     [
         true
         , false
@@ -747,7 +747,7 @@ subtest({
 
 subtest({
     my Str $array-of-date-times = '[1979-05-27T07:32:00Z,]';
-    my Str $array-of-date-times-newlines = Q:to/EOF/.trim();
+    my Str $array-of-date-times-newlines = Q:to/EOF/.trim;
     [
         1979-05-27T07:32:00Z,
         1979-05-27T00:32:00-07:00,
@@ -801,7 +801,7 @@ subtest({
 
 subtest({
     my Str $array-of-arrays = '[ [ 1, 2 ], [-3e1_000, +4.56, 5.0] ]';
-    my Str $array-of-arrays-newlines = Q:to/EOF/.trim();
+    my Str $array-of-arrays-newlines = Q:to/EOF/.trim;
     [
         [ [ 1, 2 ], [3, 4, 5] ],
         [
@@ -844,7 +844,7 @@ subtest({
     ]
     EOF
 
-    my Str $array-of-empty-arrays = Q:to/EOF/.trim();
+    my Str $array-of-empty-arrays = Q:to/EOF/.trim;
     [[[[[]]]]]
     EOF
 
@@ -914,7 +914,7 @@ subtest({
 # array of inline tables grammar tests {{{
 
 subtest({
-    my Str $array-of-inline-tables = Q:to/EOF/.trim();
+    my Str $array-of-inline-tables = Q:to/EOF/.trim;
     [ { x = 1, y = 2, z = 3 },
       { x = 7, y = 8, z = 9 },
       { x = 2, y = 4, z = 8 } ]
@@ -944,7 +944,7 @@ subtest({
 # commented array grammar tests {{{
 
 subtest({
-    my Str $commented-array-of-mixed-strings = Q:to/EOF/.trim();
+    my Str $commented-array-of-mixed-strings = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         'a', # this is ok
@@ -957,7 +957,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-integers = Q:to/EOF/.trim();
+    my Str $commented-array-of-integers = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         1, # this is ok
@@ -969,7 +969,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-floats = Q:to/EOF/.trim();
+    my Str $commented-array-of-floats = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         +1.1, # this is ok
@@ -981,7 +981,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-booleans = Q:to/EOF/.trim();
+    my Str $commented-array-of-booleans = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         true, # this is ok
@@ -993,7 +993,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-date-times = Q:to/EOF/.trim();
+    my Str $commented-array-of-date-times = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         1979-05-27T07:32:00Z, # this is ok
@@ -1008,7 +1008,7 @@ subtest({
     ]
     EOF
 
-    my Str $commented-array-of-arrays = Q:to/EOF/.trim();
+    my Str $commented-array-of-arrays = Q:to/EOF/.trim;
     [# this is ok
         # this is ok
         [ [ 1, 2 ], [3, 4, 5] ], # this is ok

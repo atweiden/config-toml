@@ -41,72 +41,72 @@ subtest({
     );
 
     is(
-        $match-toml.made()<Person>[0]<name>,
+        $match-toml.made<Person>[0]<name>,
         "LJ",
         q:to/EOF/
         ♪ [Is expected value?] - 2 of 7
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<Person>[0]<name> ~~ "LJ"
+        ┃             ┃  ∙ $match-toml.made<Person>[0]<name> ~~ "LJ"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<Person>[0]<Demographics><agegroup>,
+        $match-toml.made<Person>[0]<Demographics><agegroup>,
         "18..25",
         q:to/EOF/
         ♪ [Is expected value?] - 3 of 7
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<Person>[0]<Demographics><agegroup>
+        ┃             ┃  ∙ $match-toml.made<Person>[0]<Demographics><agegroup>
         ┃   Success   ┃        ~~ "18..25"
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<Person>[0]<Demographics><region>,
+        $match-toml.made<Person>[0]<Demographics><region>,
         "US",
         q:to/EOF/
         ♪ [Is expected value?] - 4 of 7
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<Person>[0]<Demographics><region>
+        ┃             ┃  ∙ $match-toml.made<Person>[0]<Demographics><region>
         ┃   Success   ┃        ~~ "US"
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<Person>[1]<name>,
+        $match-toml.made<Person>[1]<name>,
         "Sam",
         q:to/EOF/
         ♪ [Is expected value?] - 5 of 7
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<Person>[1]<name> ~~ "Sam"
+        ┃             ┃  ∙ $match-toml.made<Person>[1]<name> ~~ "Sam"
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<Person>[1]<Demographics><agegroup>,
+        $match-toml.made<Person>[1]<Demographics><agegroup>,
         "13..18",
         q:to/EOF/
         ♪ [Is expected value?] - 6 of 7
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<Person>[1]<Demographics><agegroup>
+        ┃             ┃  ∙ $match-toml.made<Person>[1]<Demographics><agegroup>
         ┃   Success   ┃        ~~ "13..18"
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
         EOF
     );
     is(
-        $match-toml.made()<Person>[1]<Demographics><region>,
+        $match-toml.made<Person>[1]<Demographics><region>,
         "MX",
         q:to/EOF/
         ♪ [Is expected value?] - 7 of 7
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-toml.made()<Person>[1]<Demographics><region>
+        ┃             ┃  ∙ $match-toml.made<Person>[1]<Demographics><region>
         ┃   Success   ┃        ~~ "MX"
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

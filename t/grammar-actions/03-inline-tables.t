@@ -9,7 +9,7 @@ plan(1);
 # commented inline table grammar tests {{{
 
 subtest({
-    my Str $commented-inline-table-difficult = Q:to/EOF/.trim();
+    my Str $commented-inline-table-difficult = Q:to/EOF/.trim;
     {# this is ok 1
         # this is ok 2
         # this is ok 3
@@ -144,12 +144,12 @@ subtest({
     );
 
     is(
-        $match-commented-inline-table-difficult.made().WHAT,
+        $match-commented-inline-table-difficult.made.WHAT,
         Hash,
         q:to/EOF/
         ♪ [Is inline table?] - 2 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-inline-table-difficult.made().WHAT
+        ┃             ┃  ∙ $match-commented-inline-table-difficult.made.WHAT
         ┃   Success   ┃        ~~ Array
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -157,7 +157,7 @@ subtest({
     );
 
     is(
-        $match-commented-inline-table-difficult.made(),
+        $match-commented-inline-table-difficult.made,
         {
             :array_of_arrays(
                 [
@@ -187,7 +187,7 @@ subtest({
         q:to/EOF/
         ♪ [Is expected inline table value?] - 3 of 3
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $match-commented-inline-table-difficult.made()
+        ┃             ┃  ∙ $match-commented-inline-table-difficult.made
         ┃   Success   ┃        ~~ [ ... ]
         ┃             ┃
         ┗━━━━━━━━━━━━━┛

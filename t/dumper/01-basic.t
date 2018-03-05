@@ -48,7 +48,7 @@ subtest({
         }),
         :i<irene>;
 
-    my Str $expected = q:to/EOF/.trim();
+    my Str $expected = q:to/EOF/.trim;
     i = "irene"
     [a.b]
     c = [ 1, 2, 3 ]
@@ -117,7 +117,7 @@ subtest({
         'this is an arraytable header' => [ {:arraytable}, {:!table} ],
         'which way to the Sun?' => 'up';
 
-    my Str $expected = q:to/EOF/.trim();
+    my Str $expected = q:to/EOF/.trim;
     "which way to the Sun?" = "up"
     ["hello world"."again and again"."and again"]
     yes = true
@@ -149,7 +149,7 @@ subtest({
             }
         };
 
-    my Str $expected = q:to/EOF/.trim();
+    my Str $expected = q:to/EOF/.trim;
     ["".""]
     "" = "empty"
     [[""."an empty quoted".arraytable."".""]]
