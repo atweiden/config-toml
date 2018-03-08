@@ -814,7 +814,7 @@ multi sub pwd($container, :@steps where *.elems > 0 --> Array:D)
 {
     my @steps-taken;
     my $root := $container;
-    $root := $root{@steps[0]};
+    $root := try { $root{@steps[0]} };
     push(@steps-taken, @steps[0], |pwd($root, :steps(@steps[1..*])));
     @steps-taken;
 }
