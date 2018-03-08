@@ -539,7 +539,7 @@ method table-inline-keypairs($/ --> Nil)
         X::Config::TOML::InlineTable::DuplicateKeys
     );
 
-    my %h = @keypair.map({ .keys[0] => .values[0] });
+    my %h = @keypair.map({ .keys.first => .values.first });
     make(%h);
 }
 
@@ -566,8 +566,8 @@ method keypair-line($/ --> Nil)
 # this segment represents keypairs not belonging to any table
 method segment:keypair-line ($/ --> Nil)
 {
-    my @path = $<keypair-line>.made.keys[0];
-    my $value = $<keypair-line>.made.values[0];
+    my @path = $<keypair-line>.made.keys.first;
+    my $value = $<keypair-line>.made.values.first;
 
     my Str:D $keypair-line-text = ~$/;
     my X::Config::TOML::KeypairLine::DuplicateKeys $exception .=
@@ -606,12 +606,12 @@ method table:hoh ($/ --> Nil)
     my X::Config::TOML::HOH::Seen::AOH $exception-hoh-seen-aoh .=
         new(:$hoh-header-text, :$hoh-text);
     die($exception-hoh-seen-aoh)
-        if %!aoh-seen.grep({.keys[0] eqv $@base-path}).elems > 0;
+        if %!aoh-seen.grep({.keys.first eqv $@base-path}).elems > 0;
 
     my X::Config::TOML::HOH::Seen $exception-hoh-seen .=
         new(:$hoh-header-text, :$hoh-text);
     die($exception-hoh-seen)
-        if %!hoh-seen.grep({.keys[0] eqv $@base-path}).elems > 0;
+        if %!hoh-seen.grep({.keys.first eqv $@base-path}).elems > 0;
 
     CATCH
     {
@@ -637,8 +637,8 @@ multi method mktable-hoh(@base-path, $hoh-text, :@keypairs! where *.so --> Nil)
     );
 
     @keypairs.map(-> %keypair {
-        my @path = |@base-path, %keypair.keys[0];
-        my $value = %keypair.values[0];
+        my @path = |@base-path, %keypair.keys.first;
+        my $value = %keypair.values.first;
         my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
             new(:$hoh-text, :@path);
         die($exception-hoh-seen-key) if Crane.exists(%!toml, :@path);
@@ -678,7 +678,7 @@ method table:aoh ($/ --> Nil)
     my X::Config::TOML::AOH::OverwritesHOH $exception-aoh-overwrites-hoh .=
         new(:$aoh-header-text, :$aoh-text, :@path);
     die($exception-aoh-overwrites-hoh)
-        if %!hoh-seen.grep({.keys[0] eqv $@path}).elems > 0;
+        if %!hoh-seen.grep({.keys.first eqv $@path}).elems > 0;
 
     self.mktable-aoh(@path, $aoh-text, :@keypairs);
 }
@@ -687,7 +687,7 @@ multi method mktable-aoh(@path, $aoh-text, :@keypairs! where *.so --> Nil)
 {
     # initialize empty array if array does not yet exist
     self!mktable-aoh-init(@path, $aoh-text)
-        unless %!aoh-seen.grep({.keys[0] eqv $@path}).elems > 0;
+        unless %!aoh-seen.grep({.keys.first eqv $@path}).elems > 0;
 
     # verify keypair lines do not contain duplicate keys
     verify-no-duplicate-keys(
@@ -698,7 +698,7 @@ multi method mktable-aoh(@path, $aoh-text, :@keypairs! where *.so --> Nil)
     );
 
     # create hash table with keypairs
-    my %value = @keypairs.map({ .keys[0] => .values[0] });
+    my %value = @keypairs.map({ .keys.first => .values.first });
     Crane.set(%!toml, :path(|@path, *-0), :%value);
 }
 
@@ -706,7 +706,7 @@ multi method mktable-aoh(@path, $aoh-text, :@keypairs --> Nil)
 {
     # initialize empty array if array does not yet exist
     self!mktable-aoh-init(@path, $aoh-text)
-        unless %!aoh-seen.grep({.keys[0] eqv $@path}).elems > 0;
+        unless %!aoh-seen.grep({.keys.first eqv $@path}).elems > 0;
 
     # create hash table without keypairs
     Crane.set(%!toml, :path(|@path, *-0), :value({}));
@@ -782,13 +782,13 @@ multi sub pwd($container, :@steps where *.elems == 0 --> Array:D)
 
 multi sub seen(Bool:D %h, :@path! where *.elems > 1 --> Bool:D)
 {
-    %h.grep({.keys[0] eqv $@path}).elems > 0
+    %h.grep({.keys.first eqv $@path}).elems > 0
         || seen(%h, :path(@path[0..^*-1].Array));
 }
 
 multi sub seen(Bool:D %h, :@path! where *.elems > 0 --> Bool:D)
 {
-    %h.grep({.keys[0] eqv $@path}).elems > 0;
+    %h.grep({.keys.first eqv $@path}).elems > 0;
 }
 
 multi sub seen(Bool:D %h, :@path! where *.elems == 0 --> Bool:D)
