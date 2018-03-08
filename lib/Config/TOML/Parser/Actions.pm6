@@ -415,37 +415,44 @@ method date:date-time ($/ --> Nil)
 
 method array-elements:strings ($/ --> Nil)
 {
-    make(@<string>.hyper.map({ .made }).Array);
+    my @made = @<string>.hyper.map({ .made });
+    make(@made);
 }
 
 method array-elements:integers ($/ --> Nil)
 {
-    make(@<integer>.hyper.map({ .made }).Array);
+    my @made = @<integer>.hyper.map({ .made });
+    make(@made);
 }
 
 method array-elements:floats ($/ --> Nil)
 {
-    make(@<float>.hyper.map({ .made }).Array);
+    my @made = @<float>.hyper.map({ .made });
+    make(@made);
 }
 
 method array-elements:booleans ($/ --> Nil)
 {
-    make(@<boolean>.hyper.map({ .made }).Array);
+    my @made = @<boolean>.hyper.map({ .made });
+    make(@made);
 }
 
 method array-elements:dates ($/ --> Nil)
 {
-    make(@<date>.hyper.map({ .made }).Array);
+    my @made = @<date>.hyper.map({ .made });
+    make(@made);
 }
 
 method array-elements:arrays ($/ --> Nil)
 {
-    make(@<array>.hyper.map({ .made }).Array);
+    my @made = @<array>.hyper.map({ .made });
+    make(@made);
 }
 
 method array-elements:table-inlines ($/ --> Nil)
 {
-    make(@<table-inline>.hyper.map({ .made }).Array);
+    my @made = @<table-inline>.hyper.map({ .made });
+    make(@made);
 }
 
 multi method array($/ where $<array-elements>.so --> Nil)
@@ -595,7 +602,8 @@ method segment:keypair-line ($/ --> Nil)
 
 method table-header-text($/ --> Nil)
 {
-    make(@<keypair-key>.hyper.map({ .made }).Array);
+    my @made = @<keypair-key>.hyper.map({ .made });
+    make(@made);
 }
 
 method hoh-header($/ --> Nil)
