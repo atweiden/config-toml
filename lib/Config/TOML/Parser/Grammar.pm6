@@ -238,10 +238,9 @@ token string-literal-multiline-char:backslash
 # end string grammar }}}
 # number grammar {{{
 
-token number
-{
-    <float> | <integer>
-}
+proto token number {*}
+token number:float { <float> }
+token number:integer { <integer> }
 
 token integer
 {

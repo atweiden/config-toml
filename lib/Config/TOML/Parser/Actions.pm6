@@ -250,14 +250,14 @@ method plus-or-minus:sym<->($/ --> Nil)
     make(~$/);
 }
 
-multi method number($/ where $<integer>.so --> Nil)
-{
-    make($<integer>.made);
-}
-
-multi method number($/ where $<float>.so --> Nil)
+method number:float ($/ --> Nil)
 {
     make($<float>.made);
+}
+
+method number:integer ($/ --> Nil)
+{
+    make($<integer>.made);
 }
 
 # end number grammar-actions }}}
