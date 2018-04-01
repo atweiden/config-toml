@@ -143,12 +143,12 @@ token string-basic-multiline-char:newline
 
 token string-basic-multiline-char:escape-sequence
 {
-    # backslash followed by either a valid TOML escape code or linebreak,
-    # else error
+    # backslash followed by either a valid TOML escape code or linebreak
+    # with optional leading horizontal whitespace, else error
     \\
     [
         [
-            <escape> | $$ <ws-remover>
+            <escape> | \h* $$ <ws-remover>
         ]
 
         ||
