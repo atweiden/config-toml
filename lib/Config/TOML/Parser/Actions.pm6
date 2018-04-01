@@ -606,12 +606,12 @@ method table:hoh ($/ --> Nil)
         or die($exception-hoh-seen-key);
 
     my X::Config::TOML::HOH::Seen::AOH $exception-hoh-seen-aoh .=
-        new(:$hoh-header-text, :$hoh-text);
+        new(:$hoh-header-text, :$hoh-text, :path(@base-path));
     %!aoh-seen.grep({.keys.first eqv $@base-path}).elems == 0
         or die($exception-hoh-seen-aoh);
 
     my X::Config::TOML::HOH::Seen $exception-hoh-seen .=
-        new(:$hoh-header-text, :$hoh-text);
+        new(:$hoh-header-text, :$hoh-text, :path(@base-path));
     %!hoh-seen.grep({.keys.first eqv $@base-path}).elems == 0
         or die($exception-hoh-seen);
 
