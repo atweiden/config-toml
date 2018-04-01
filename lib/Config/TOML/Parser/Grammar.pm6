@@ -306,6 +306,11 @@ token boolean:sym<false> { <sym> }
 #     date2 = 1979-05-27T00:32:00-07:00
 #     date3 = 1979-05-27T00:32:00.999999-07:00
 #
+# For the sake of readability, you may replace the T delimiter between
+# date and time with a space (as permitted by RFC 3339 section 5.6).
+#
+#     date1 = 1979-05-27 07:32:00Z
+#
 # You may omit the local offset and let the parser or host application
 # decide that information. A good default is to use the host machine's
 # local offset.
@@ -403,12 +408,12 @@ token full-time
 
 token date-time
 {
-    <full-date> <[Tt]> <full-time>
+    <full-date> <[Tt\h]> <full-time>
 }
 
 token date-time-omit-local-offset
 {
-    <full-date> <[Tt]> <partial-time>
+    <full-date> <[Tt\h]> <partial-time>
 }
 
 # end datetime grammar }}}
