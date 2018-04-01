@@ -344,6 +344,12 @@ token date:full-date
     <full-date>
 }
 
+# HH:MM:SS
+token date:partial-time
+{
+    <partial-time>
+}
+
 token date-fullyear
 {
     \d ** 4

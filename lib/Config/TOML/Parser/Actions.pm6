@@ -410,6 +410,11 @@ method date:date-time ($/ --> Nil)
     make(DateTime.new(|$<date-time>.made));
 }
 
+method date:partial-time ($/ --> Nil)
+{
+    make($<partial-time>.made);
+}
+
 # end datetime grammar-actions }}}
 # array grammar-actions {{{
 
