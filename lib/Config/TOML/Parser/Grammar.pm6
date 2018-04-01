@@ -47,8 +47,8 @@ proto token string-basic-char {*}
 token string-basic-char:common
 {
     # anything but linebreaks, double-quotes, backslashes and control
-    # characters (U+0000 to U+001F)
-    <+[\N] -[\" \\] -[\x00..\x1F]>
+    # characters (U+0000 to U+001F, U+007F)
+    <+[\N] -[\" \\] -[\x00..\x1F] -[\x7F]>
 }
 
 token string-basic-char:tab
@@ -127,8 +127,8 @@ proto token string-basic-multiline-char {*}
 token string-basic-multiline-char:common
 {
     # anything but delimiters ("""), backslashes and control characters
-    # (U+0000 to U+001F)
-    <-string-basic-multiline-delimiter -[\\] -[\x00..\x1F]>
+    # (U+0000 to U+001F, U+007F)
+    <-string-basic-multiline-delimiter -[\\] -[\x00..\x1F] -[\x7F]>
 }
 
 token string-basic-multiline-char:tab
