@@ -241,6 +241,8 @@ token string-literal-multiline-char:backslash
 proto token number {*}
 token number:float { <float> }
 token number:integer { <integer> }
+token number:inf { <inf> }
+token number:nan { <nan> }
 
 token integer
 {
@@ -285,6 +287,18 @@ token float
 token exponent-part
 {
     <[Ee]> <integer-part=.integer>
+}
+
+# infinity
+token inf
+{
+    <plus-or-minus>? inf
+}
+
+# not a number
+token nan
+{
+    <plus-or-minus>? nan
 }
 
 # end number grammar }}}

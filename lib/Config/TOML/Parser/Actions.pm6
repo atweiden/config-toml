@@ -240,6 +240,22 @@ method float($/ --> Nil)
     make(+$/);
 }
 
+multi method inf($/ where $<plus-or-minus>.so --> Nil)
+{
+    my Int:D $multiplier = $<plus-or-minus>.made eq '+' ?? 1 !! -1;
+    make(Inf * $multiplier);
+}
+
+multi method inf($/ --> Nil)
+{
+    make(Inf);
+}
+
+method nan($/ --> Nil)
+{
+    make(NaN);
+}
+
 method plus-or-minus:sym<+>($/ --> Nil)
 {
     make(~$/);
@@ -258,6 +274,16 @@ method number:float ($/ --> Nil)
 method number:integer ($/ --> Nil)
 {
     make($<integer>.made);
+}
+
+method number:inf ($/ --> Nil)
+{
+    make($<inf>.made);
+}
+
+method number:nan ($/ --> Nil)
+{
+    make($<nan>.made);
 }
 
 # end number grammar-actions }}}
