@@ -230,30 +230,30 @@ method string:literal-multi ($/ --> Nil)
 # end string grammar-actions }}}
 # number grammar-actions {{{
 
-method integer($/ --> Nil)
-{
-    make(Int(+$/));
-}
-
 method float($/ --> Nil)
 {
     make(+$/);
 }
 
-multi method inf($/ where $<plus-or-minus>.so --> Nil)
+multi method float-inf($/ where $<plus-or-minus>.so --> Nil)
 {
     my Int:D $multiplier = $<plus-or-minus>.made eq '+' ?? 1 !! -1;
     make(Inf * $multiplier);
 }
 
-multi method inf($/ --> Nil)
+multi method float-inf($/ --> Nil)
 {
     make(Inf);
 }
 
-method nan($/ --> Nil)
+method float-nan($/ --> Nil)
 {
     make(NaN);
+}
+
+method integer($/ --> Nil)
+{
+    make(Int(+$/));
 }
 
 method plus-or-minus:sym<+>($/ --> Nil)
@@ -271,19 +271,19 @@ method number:float ($/ --> Nil)
     make($<float>.made);
 }
 
+method number:float-inf ($/ --> Nil)
+{
+    make($<float-inf>.made);
+}
+
+method number:float-nan ($/ --> Nil)
+{
+    make($<float-nan>.made);
+}
+
 method number:integer ($/ --> Nil)
 {
     make($<integer>.made);
-}
-
-method number:inf ($/ --> Nil)
-{
-    make($<inf>.made);
-}
-
-method number:nan ($/ --> Nil)
-{
-    make($<nan>.made);
 }
 
 # end number grammar-actions }}}

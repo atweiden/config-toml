@@ -240,9 +240,35 @@ token string-literal-multiline-char:backslash
 
 proto token number {*}
 token number:float { <float> }
+token number:float-inf { <float-inf> }
+token number:float-nan { <float-nan> }
 token number:integer { <integer> }
-token number:inf { <inf> }
-token number:nan { <nan> }
+
+token float
+{
+    <integer-part=.integer>
+    [
+        '.' <fractional-part=.digits> <exponent-part>?
+        | <exponent-part>
+    ]
+}
+
+token exponent-part
+{
+    <[Ee]> <integer-part=.integer>
+}
+
+# infinity
+token float-inf
+{
+    <plus-or-minus>? inf
+}
+
+# not a number
+token float-nan
+{
+    <plus-or-minus>? nan
+}
 
 token integer
 {
@@ -273,32 +299,6 @@ token digits
     # readability. Each underscore must be surrounded by at least
     # one digit.
     \d+ '_' <.digits>
-}
-
-token float
-{
-    <integer-part=.integer>
-    [
-        '.' <fractional-part=.digits> <exponent-part>?
-        | <exponent-part>
-    ]
-}
-
-token exponent-part
-{
-    <[Ee]> <integer-part=.integer>
-}
-
-# infinity
-token inf
-{
-    <plus-or-minus>? inf
-}
-
-# not a number
-token nan
-{
-    <plus-or-minus>? nan
 }
 
 # end number grammar }}}

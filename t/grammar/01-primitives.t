@@ -260,32 +260,32 @@ subtest({
     my $match-float-inf =
         Config::TOML::Parser::Grammar.parse(
             $float-inf,
-            :rule<inf>
+            :rule<float-inf>
         );
     my $match-float-inf-plus =
         Config::TOML::Parser::Grammar.parse(
             $float-inf-plus,
-            :rule<inf>
+            :rule<float-inf>
         );
     my $match-float-inf-minus =
         Config::TOML::Parser::Grammar.parse(
             $float-inf-minus,
-            :rule<inf>
+            :rule<float-inf>
         );
     my $match-float-nan =
         Config::TOML::Parser::Grammar.parse(
             $float-nan,
-            :rule<nan>
+            :rule<float-nan>
         );
     my $match-float-nan-plus =
         Config::TOML::Parser::Grammar.parse(
             $float-nan-plus,
-            :rule<nan>
+            :rule<float-nan>
         );
     my $match-float-nan-minus =
         Config::TOML::Parser::Grammar.parse(
             $float-nan-minus,
-            :rule<nan>
+            :rule<float-nan>
         );
 
     is(
@@ -364,7 +364,7 @@ subtest({
         $match-float-inf.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($float-inf, :rule<inf>)] - 15 of 40
+        ♪ [Grammar.parse($float-inf, :rule<float-inf>)] - 15 of 40
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal inf successfully
         ┃   Success   ┃
@@ -376,7 +376,7 @@ subtest({
         $match-float-inf-plus.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($float-inf-plus, :rule<inf>)] - 16 of 40
+        ♪ [Grammar.parse($float-inf-plus, :rule<float-inf>)] - 16 of 40
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal inf successfully
         ┃   Success   ┃
@@ -388,7 +388,7 @@ subtest({
         $match-float-inf-minus.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($float-inf-minus, :rule<inf>)] - 17 of 40
+        ♪ [Grammar.parse($float-inf-minus, :rule<float-inf>)] - 17 of 40
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal inf successfully
         ┃   Success   ┃
@@ -400,7 +400,7 @@ subtest({
         $match-float-nan.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($float-nan, :rule<nan>)] - 18 of 40
+        ♪ [Grammar.parse($float-nan, :rule<float-nan>)] - 18 of 40
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal nan successfully
         ┃   Success   ┃
@@ -412,7 +412,7 @@ subtest({
         $match-float-nan-plus.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($float-nan-plus, :rule<nan>)] - 19 of 40
+        ♪ [Grammar.parse($float-nan-plus, :rule<float-nan>)] - 19 of 40
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal nan successfully
         ┃   Success   ┃
@@ -424,7 +424,7 @@ subtest({
         $match-float-nan-minus.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($float-nan-minus, :rule<nan>)] - 20 of 40
+        ♪ [Grammar.parse($float-nan-minus, :rule<float-nan>)] - 20 of 40
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses string literal nan successfully
         ┃   Success   ┃
