@@ -142,7 +142,8 @@ token string-basic-multiline-char:escape-sequence
     \\
     [
         [
-            <escape> | \h* $$ <ws-remover>
+            | <escape>
+            | \h* $$ <ws-remover>
         ]
 
         ||
@@ -244,7 +245,7 @@ token float
 {
     <integer-part=.integer>
     [
-        '.' <fractional-part=.digits> <exponent-part>?
+        | '.' <fractional-part=.digits> <exponent-part>?
         | <exponent-part>
     ]
 }
@@ -423,17 +424,21 @@ token date-fullyear
 
 token date-month
 {
-    0 <[1..9]> | 1 <[0..2]>
+    | 0 <[1..9]>
+    | 1 <[0..2]>
 }
 
 token date-mday
 {
-    0 <[1..9]> | <[1..2]> \d | 3 <[0..1]>
+    | 0 <[1..9]>
+    | <[1..2]> \d
+    | 3 <[0..1]>
 }
 
 token time-hour
 {
-    <[0..1]> \d | 2 <[0..3]>
+    | <[0..1]> \d
+    | 2 <[0..3]>
 }
 
 token time-minute
@@ -445,7 +450,8 @@ token time-minute
 # months in which a leap second occurs.
 token time-second
 {
-    <[0..5]> \d | 60
+    | <[0..5]> \d
+    | 60
 }
 
 token time-secfrac
@@ -460,7 +466,8 @@ token time-numoffset
 
 token time-offset
 {
-    <[Zz]> | <time-numoffset>
+    | <[Zz]>
+    | <time-numoffset>
 }
 
 token partial-time
@@ -637,7 +644,12 @@ token table:hoh
 {
     ^^ \h* <hoh-header> \h* <.comment>? $$
     [
-        \n [ <keypair-line> | <.comment-line> | <.blank-line> ]
+        \n
+        [
+            | <keypair-line>
+            | <.comment-line>
+            | <.blank-line>
+        ]
     ]*
 }
 
@@ -646,7 +658,12 @@ token table:aoh
 {
     ^^ \h* <aoh-header> \h* <.comment>? $$
     [
-        \n [ <keypair-line> | <.comment-line> | <.blank-line> ]
+        \n
+        [
+            | <keypair-line>
+            | <.comment-line>
+            | <.blank-line>
+        ]
     ]*
 }
 
