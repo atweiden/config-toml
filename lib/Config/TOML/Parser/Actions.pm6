@@ -256,6 +256,21 @@ method integer($/ --> Nil)
     make(Int(+$/));
 }
 
+method integer-bin($/ --> Nil)
+{
+    make(Int(+$/));
+}
+
+method integer-hex($/ --> Nil)
+{
+    make(Int(+$/));
+}
+
+method integer-oct($/ --> Nil)
+{
+    make(Int(+$/));
+}
+
 method plus-or-minus:sym<+>($/ --> Nil)
 {
     make(~$/);
@@ -284,6 +299,21 @@ method number:float-nan ($/ --> Nil)
 method number:integer ($/ --> Nil)
 {
     make($<integer>.made);
+}
+
+method number:integer-bin ($/ --> Nil)
+{
+    make($<integer-bin>.made);
+}
+
+method number:integer-hex ($/ --> Nil)
+{
+    make($<integer-hex>.made);
+}
+
+method number:integer-oct ($/ --> Nil)
+{
+    make($<integer-oct>.made);
 }
 
 # end number grammar-actions }}}
