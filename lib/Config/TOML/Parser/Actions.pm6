@@ -529,24 +529,40 @@ multi method array($/ --> Nil)
 # end array grammar-actions }}}
 # table grammar-actions {{{
 
-method keypair-key:bare ($/ --> Nil)
+method keypair-key-dotted($/ --> Nil)
+{
+    my @made = @<keypair-key-single>.hyper.map({ .made });
+    make(@made);
+}
+
+method keypair-key-single:bare ($/ --> Nil)
 {
     make(~$/);
 }
 
-method keypair-key-string:basic ($/ --> Nil)
+method keypair-key-single-string:basic ($/ --> Nil)
 {
     make($<string-basic>.made);
 }
 
-method keypair-key-string:literal ($/ --> Nil)
+method keypair-key-single-string:literal ($/ --> Nil)
 {
     make($<string-literal>.made);
 }
 
-method keypair-key:quoted ($/ --> Nil)
+method keypair-key-single:quoted ($/ --> Nil)
 {
-    make($<keypair-key-string>.made);
+    make($<keypair-key-single-string>.made);
+}
+
+method keypair-key:dotted ($/ --> Nil)
+{
+    make($<keypair-key-dotted>.made);
+}
+
+method keypair-key:single ($/ --> Nil)
+{
+    make($<keypair-key-single>.made);
 }
 
 method keypair-value:string ($/ --> Nil)
@@ -581,7 +597,9 @@ method keypair-value:table-inline ($/ --> Nil)
 
 method keypair($/ --> Nil)
 {
-    make(Str($<keypair-key>.made) => $<keypair-value>.made);
+    my %h;
+    Crane.in(%h, |$<keypair-key>.made) = $<keypair-value>.made;
+    make(%h);
 }
 
 method table-inline-keypairs($/ --> Nil)
@@ -645,7 +663,7 @@ method segment:keypair-line ($/ --> Nil)
 
 method table-header-text($/ --> Nil)
 {
-    my @made = @<keypair-key>.hyper.map({ .made });
+    my @made = @<keypair-key-single>.hyper.map({ .made });
     make(@made);
 }
 

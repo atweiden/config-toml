@@ -599,14 +599,23 @@ token keypair
 }
 
 proto token keypair-key {*}
-token keypair-key:bare { <+alnum +[-]>+ }
-token keypair-key:quoted { <keypair-key-string> }
+token keypair-key:dotted { <keypair-key-dotted> }
+token keypair-key:single { <keypair-key-single> }
+
+token keypair-key-dotted
+{
+    <keypair-key-single> [ '.' <keypair-key-single> ]*
+}
+
+proto token keypair-key-single {*}
+token keypair-key-single:bare { <+alnum +[-]>+ }
+token keypair-key-single:quoted { <keypair-key-single-string> }
 
 # quoted keys follow the exact same rules as either basic strings or
 # literal strings
-proto token keypair-key-string {*}
-token keypair-key-string:basic { <string-basic> }
-token keypair-key-string:literal { <string-literal> }
+proto token keypair-key-single-string {*}
+token keypair-key-single-string:basic { <string-basic> }
+token keypair-key-single-string:literal { <string-literal> }
 
 proto token keypair-value {*}
 token keypair-value:string { <string> }
@@ -681,7 +690,7 @@ token aoh-header
 
 token table-header-text
 {
-    <keypair-key> [ \h* '.' \h* <keypair-key> ]*
+    <keypair-key-single> [ \h* '.' \h* <keypair-key-single> ]*
 }
 
 proto token segment {*}
