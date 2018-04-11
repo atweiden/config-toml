@@ -1,19 +1,6 @@
 use v6;
-use Crane;
-use X::Config::TOML;
+use Config::TOML::Parser::ParseTree;
 unit class Config::TOML::Parser::Actions;
-
-# TOML document
-has %!toml;
-
-# TOML arraytable tracker, records arraytables seen
-has Bool:D %!aoh-seen{Array:D};
-
-# TOML table tracker, records tables seen
-has Bool:D %!hoh-seen{Array:D};
-
-# TOML key tracker, records keypair keys seen
-has Bool:D %!keys-seen{Array:D};
 
 # DateTime offset for when the local offset is omitted in TOML dates,
 # see: https://github.com/toml-lang/toml#datetime
@@ -209,22 +196,26 @@ multi method string-literal-multiline($/ --> Nil)
 
 method string:basic ($/ --> Nil)
 {
-    make($<string-basic>.made);
+    my Str:D $made = $<string-basic>.made;
+    make(TOMLString['Basic'].new(:$made));
 }
 
 method string:basic-multi ($/ --> Nil)
 {
-    make($<string-basic-multiline>.made);
+    my Str:D $made = $<string-basic-multiline>.made;
+    make(TOMLString['Basic', 'Multiline'].new(:$made));
 }
 
 method string:literal ($/ --> Nil)
 {
-    make($<string-literal>.made);
+    my Str:D $made = $<string-literal>.made;
+    make(TOMLString['Literal'].new(:$made));
 }
 
 method string:literal-multi ($/ --> Nil)
 {
-    make($<string-literal-multiline>.made);
+    my Str:D $made = $<string-literal-multiline>.made;
+    make(TOMLString['Literal', 'Multiline'].new(:$made));
 }
 
 # end string grammar-actions }}}
@@ -232,43 +223,51 @@ method string:literal-multi ($/ --> Nil)
 
 method float($/ --> Nil)
 {
-    make(+$/);
+    my $made = +$/;
+    make(TOMLFloat['Common'].new(:$made));
 }
 
 multi method float-inf($/ where $<plus-or-minus>.so --> Nil)
 {
     my Int:D $multiplier = $<plus-or-minus>.made eq '+' ?? 1 !! -1;
-    make(Inf * $multiplier);
+    my $made = Inf * $multiplier;
+    make(TOMLFloat['Inf'].new(:$made));
 }
 
 multi method float-inf($/ --> Nil)
 {
-    make(Inf);
+    my $made = Inf;
+    make(TOMLFloat['Inf'].new(:$made));
 }
 
 method float-nan($/ --> Nil)
 {
-    make(NaN);
+    my $made = NaN;
+    make(TOMLFloat['NaN'].new(:$made));
 }
 
 method integer($/ --> Nil)
 {
-    make(Int(+$/));
+    my Int:D $made = Int(+$/);
+    make(TOMLInteger['Common'].new(:$made));
 }
 
 method integer-bin($/ --> Nil)
 {
-    make(Int(+$/));
+    my Int:D $made = Int(+$/);
+    make(TOMLInteger['Binary'].new(:$made));
 }
 
 method integer-hex($/ --> Nil)
 {
-    make(Int(+$/));
+    my Int:D $made = Int(+$/);
+    make(TOMLInteger['Hexadecimal'].new(:$made));
 }
 
 method integer-oct($/ --> Nil)
 {
-    make(Int(+$/));
+    my Int:D $made = Int(+$/);
+    make(TOMLInteger['Octal'].new(:$made));
 }
 
 method plus-or-minus:sym<+>($/ --> Nil)
@@ -283,37 +282,44 @@ method plus-or-minus:sym<->($/ --> Nil)
 
 method number:float ($/ --> Nil)
 {
-    make($<float>.made);
+    my TOMLFloat['Common'] $made = $<float>.made;
+    make(TOMLNumber['Float'].new(:$made));
 }
 
 method number:float-inf ($/ --> Nil)
 {
-    make($<float-inf>.made);
+    my TOMLFloat['Inf'] $made = $<float-inf>.made;
+    make(TOMLNumber['Float'].new(:$made));
 }
 
 method number:float-nan ($/ --> Nil)
 {
-    make($<float-nan>.made);
+    my TOMLFloat['NaN'] $made = $<float-nan>.made;
+    make(TOMLNumber['Float'].new(:$made));
 }
 
 method number:integer ($/ --> Nil)
 {
-    make($<integer>.made);
+    my TOMLInteger['Common'] $made = $<integer>.made;
+    make(TOMLNumber['Integer'].new(:$made));
 }
 
 method number:integer-bin ($/ --> Nil)
 {
-    make($<integer-bin>.made);
+    my TOMLInteger['Binary'] $made = $<integer-bin>.made;
+    make(TOMLNumber['Integer'].new(:$made));
 }
 
 method number:integer-hex ($/ --> Nil)
 {
-    make($<integer-hex>.made);
+    my TOMLInteger['Hexadecimal'] $made = $<integer-hex>.made;
+    make(TOMLNumber['Integer'].new(:$made));
 }
 
 method number:integer-oct ($/ --> Nil)
 {
-    make($<integer-oct>.made);
+    my TOMLInteger['Octal'] $made = $<integer-oct>.made;
+    make(TOMLNumber['Integer'].new(:$made));
 }
 
 # end number grammar-actions }}}
@@ -321,12 +327,14 @@ method number:integer-oct ($/ --> Nil)
 
 method boolean:sym<true>($/ --> Nil)
 {
-    make(True);
+    my Bool:D $made = True;
+    make(TOMLBoolean['True'].new(:$made));
 }
 
 method boolean:sym<false>($/ --> Nil)
 {
-    make(False);
+    my Bool:D $made = False;
+    make(TOMLBoolean['False'].new(:$made));
 }
 
 # end boolean grammar-actions }}}
@@ -453,22 +461,26 @@ method date-time($/ --> Nil)
 
 method date:full-date ($/ --> Nil)
 {
-    make(Date.new(|$<full-date>.made));
+    my Date:D $made = Date.new(|$<full-date>.made);
+    make(TOMLDate['FullDate'].new(:$made));
 }
 
 method date:date-time-omit-local-offset ($/ --> Nil)
 {
-    make(DateTime.new(|$<date-time-omit-local-offset>.made));
+    my Date:D $made = DateTime.new(|$<date-time-omit-local-offset>.made);
+    make(TOMLDate['DateTime', 'OmitLocalOffset'].new(:$made));
 }
 
 method date:date-time ($/ --> Nil)
 {
-    make(DateTime.new(|$<date-time>.made));
+    my DateTime:D $made = DateTime.new(|$<date-time>.made);
+    make(TOMLDate['DateTime'].new(:$made));
 }
 
 method date:partial-time ($/ --> Nil)
 {
-    make($<partial-time>.made);
+    my Hash:D $made = $<partial-time>.made;
+    make(TOMLDate['PartialTime'].new(:$made));
 }
 
 # end datetime grammar-actions }}}
@@ -476,54 +488,63 @@ method date:partial-time ($/ --> Nil)
 
 method array-elements:strings ($/ --> Nil)
 {
-    my @made = @<string>.hyper.map({ .made });
-    make(@made);
+    my TOMLString:D @made =
+        Array[TOMLString:D].new(@<string>.hyper.map({ .made }));
+    make(TOMLArrayElements['Strings'].new(:@made));
 }
 
 method array-elements:integers ($/ --> Nil)
 {
-    my @made = @<integer>.hyper.map({ .made });
-    make(@made);
+    my TOMLInteger:D @made =
+        Array[TOMLInteger:D].new(@<integer>.hyper.map({ .made }));
+    make(TOMLArrayElements['Integers'].new(:@made));
 }
 
 method array-elements:floats ($/ --> Nil)
 {
-    my @made = @<float>.hyper.map({ .made });
-    make(@made);
+    my TOMLFloat:D @made =
+        Array[TOMLFloat:D].new(@<float>.hyper.map({ .made }));
+    make(TOMLArrayElements['Floats'].new(:@made));
 }
 
 method array-elements:booleans ($/ --> Nil)
 {
-    my @made = @<boolean>.hyper.map({ .made });
-    make(@made);
+    my TOMLBoolean:D @made =
+        Array[TOMLBoolean:D].new(@<boolean>.hyper.map({ .made }));
+    make(TOMLArrayElements['Booleans'].new(:@made));
 }
 
 method array-elements:dates ($/ --> Nil)
 {
-    my @made = @<date>.hyper.map({ .made });
-    make(@made);
+    my TOMLDate:D @made =
+        Array[TOMLDate:D].new(@<date>.hyper.map({ .made }));
+    make(TOMLArrayElements['Dates'].new(:@made));
 }
 
 method array-elements:arrays ($/ --> Nil)
 {
-    my @made = @<array>.hyper.map({ .made });
-    make(@made);
+    my TOMLArray:D @made =
+        Array[TOMLArray:D].new(@<array>.hyper.map({ .made }));
+    make(TOMLArrayElements['Arrays'].new(:@made));
 }
 
 method array-elements:table-inlines ($/ --> Nil)
 {
-    my @made = @<table-inline>.hyper.map({ .made });
-    make(@made);
+    my TOMLTableInline:D @made =
+        Array[TOMLTableInline:D].new(@<table-inline>.hyper.map({ .made }));
+    make(TOMLArrayElements['TableInlines'].new(:@made));
 }
 
 multi method array($/ where $<array-elements>.so --> Nil)
 {
-    make($<array-elements>.made);
+    my TOMLArrayElements:D $made = $<array-elements>.made;
+    make(TOMLArray.new(:$made));
 }
 
 multi method array($/ --> Nil)
 {
-    make([]);
+    my TOMLArrayElements['Empty'] $made .= new(:made([]));
+    make(TOMLArray.new(:$made));
 }
 
 # end array grammar-actions }}}
@@ -531,107 +552,119 @@ multi method array($/ --> Nil)
 
 method keypair-key-dotted($/ --> Nil)
 {
-    my @made = @<keypair-key-single>.hyper.map({ .made });
-    make(@made);
+    my TOMLKeypairKeySingle:D @made =
+        Array[TOMLKeypairKeySingle:D].new(
+            @<keypair-key-single>.hyper.map({ .made })
+        );
+    make(TOMLKeypairKeyDotted.new(:@made));
+}
+
+method keypair-key-single-bare($/ --> Nil)
+{
+    my Str:D $made = ~$/;
+    make(TOMLKeypairKeySingleBare.new(:$made));
 }
 
 method keypair-key-single:bare ($/ --> Nil)
 {
-    make(~$/);
+    my TOMLKeypairKeySingleBare:D $made = $<keypair-key-single-bare>.made;
+    make(TOMLKeypairKeySingle['Bare'].new(:$made));
 }
 
 method keypair-key-single-string:basic ($/ --> Nil)
 {
-    make($<string-basic>.made);
+    my TOMLString['Basic'] $made .= new(:made($<string-basic>.made));
+    make(TOMLKeypairKeySingleString['Basic'].new(:$made));
 }
 
 method keypair-key-single-string:literal ($/ --> Nil)
 {
-    make($<string-literal>.made);
+    my TOMLString['Literal'] $made .= new(:made($<string-literal>.made));
+    make(TOMLKeypairKeySingleString['Literal'].new(:$made));
 }
 
 method keypair-key-single:quoted ($/ --> Nil)
 {
-    make($<keypair-key-single-string>.made);
+    my TOMLKeypairKeySingleString:D $made = $<keypair-key-single-string>.made;
+    make(TOMLKeypairKeySingle['Quoted'].new(:$made));
 }
 
 method keypair-key:dotted ($/ --> Nil)
 {
-    make($<keypair-key-dotted>.made);
+    my TOMLKeypairKeyDotted:D $made = $<keypair-key-dotted>.made;
+    make(TOMLKeypairKey['Dotted'].new(:$made));
 }
 
 method keypair-key:single ($/ --> Nil)
 {
-    make($<keypair-key-single>.made);
+    my TOMLKeypairKeySingle:D $made = $<keypair-key-single>.made;
+    make(TOMLKeypairKey['Single'].new(:$made));
 }
 
 method keypair-value:string ($/ --> Nil)
 {
-    make($<string>.made);
+    my TOMLString:D $made = $<string>.made;
+    make(TOMLKeypairValue['String'].new(:$made));
 }
 
 method keypair-value:number ($/ --> Nil)
 {
-    make($<number>.made);
+    my TOMLNumber:D $made = $<number>.made;
+    make(TOMLKeypairValue['Number'].new(:$made));
 }
 
 method keypair-value:boolean ($/ --> Nil)
 {
-    make($<boolean>.made);
+    my TOMLBoolean:D $made = $<boolean>.made;
+    make(TOMLKeypairValue['Boolean'].new(:$made));
 }
 
 method keypair-value:date ($/ --> Nil)
 {
-    make($<date>.made);
+    my TOMLDate:D $made = $<date>.made;
+    make(TOMLKeypairValue['Date'].new(:$made));
 }
 
 method keypair-value:array ($/ --> Nil)
 {
-    make($<array>.made);
+    my TOMLArray:D $made = $<array>.made;
+    make(TOMLKeypairValue['Array'].new(:$made));
 }
 
 method keypair-value:table-inline ($/ --> Nil)
 {
-    make($<table-inline>.made);
+    my TOMLTableInline:D $made = $<table-inline>.made;
+    make(TOMLKeypairValue['TableInline'].new(:$made));
 }
 
 method keypair($/ --> Nil)
 {
-    my %h;
-    Crane.in(%h, |$<keypair-key>.made) = $<keypair-value>.made;
-    make(%h);
+    my TOMLKeypairKey:D $key = $<keypair-key>.made;
+    my TOMLKeypairValue:D $value = $<keypair-value>.made;
+    my TOMLKeypairValue:D %made{TOMLKeypairKey:D} = $key => $value;
+    make(TOMLKeypair.new(:%made));
 }
 
 method table-inline-keypairs($/ --> Nil)
 {
-    my @keypair = @<keypair>.hyper.map({ .made });
-
-    # verify inline table does not contain duplicate keys
-    #
-    # this is necessary to do early since keys are subsequently in this
-    # method being assigned in a hash and are at risk of being overwritten
-    # by duplicate keys
-    verify-no-duplicate-keys(
-        @keypair,
-        'inline table',
-        ~$/,
-        X::Config::TOML::InlineTable::DuplicateKeys
-    );
-
-    my %h = @keypair.map({ .keys.first => .values.first });
-    make(%h);
+    my TOMLKeypair:D @made =
+        Array[TOMLKeypair:D].new(@<keypair>.hyper.map({ .made }));
+    make(TOMLTableInlineKeypairs['Populated'].new(:@made));
 }
 
 # inline table contains keypairs
 multi method table-inline($/ where $<table-inline-keypairs>.so --> Nil)
 {
-    make($<table-inline-keypairs>.made);
+    my TOMLTableInlineKeypairs['Populated'] $made =
+        $<table-inline-keypairs>.made;
+    make(TOMLTableInline.new(:$made));
 }
 
 # inline table is empty
 multi method table-inline($/ --> Nil)
 {
-    make({});
+    my TOMLTableInlineKeypairs['Empty'] $made .= new(:made([]));
+    make(TOMLTableInline.new(:$made));
 }
 
 # end table grammar-actions }}}
@@ -639,266 +672,96 @@ multi method table-inline($/ --> Nil)
 
 method keypair-line($/ --> Nil)
 {
-    make($<keypair>.made);
-}
-
-# this segment represents keypairs not belonging to any table
-method segment:keypair-line ($/ --> Nil)
-{
-    my @path = $<keypair-line>.made.keys.first;
-    my $value = $<keypair-line>.made.values.first;
-
-    my Str:D $keypair-line-text = ~$/;
-    my X::Config::TOML::KeypairLine::DuplicateKeys $exception .=
-        new(:$keypair-line-text, :@path);
-
-    !seen(%!keys-seen, :@path)
-        or die($exception);
-    !Crane.exists(%!toml, :@path)
-        or die($exception);
-    Crane.set(%!toml, :@path, :$value);
-
-    %!keys-seen{$@path}++;
+    my TOMLKeypair:D $made = $<keypair>.made;
+    make(TOMLKeypairLine.new(:$made));
 }
 
 method table-header-text($/ --> Nil)
 {
-    my @made = @<keypair-key-single>.hyper.map({ .made });
-    make(@made);
+    my TOMLKeypairKeySingle:D @made =
+        Array[TOMLKeypairKeySingle:D].new(
+            @<keypair-key-single>.hyper.map({ .made })
+        );
+    make(TOMLTableHeaderText.new(:@made));
 }
 
 method hoh-header($/ --> Nil)
 {
-    make($<table-header-text>.made);
+    my TOMLTableHeaderText:D $made = $<table-header-text>.made;
+    make(TOMLHOHHeader.new(:$made));
 }
 
-method table:hoh ($/ --> Nil)
+multi method table:hoh ($/ where @<keypair-line>.so --> Nil)
 {
-    my @base-path = pwd(%!toml, :steps($<hoh-header>.made));
-    my Str:D $hoh-text = ~$/;
-    my Str:D $hoh-header-text = ~$<hoh-header>;
-    my @keypairs = @<keypair-line>.hyper.map({ .made }).flat;
-
-    my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
-        new(:$hoh-text, :path(@base-path));
-    !seen(%!keys-seen, :path(@base-path))
-        or die($exception-hoh-seen-key);
-
-    my X::Config::TOML::HOH::Seen::AOH $exception-hoh-seen-aoh .=
-        new(:$hoh-header-text, :$hoh-text, :path(@base-path));
-    %!aoh-seen.grep({ .keys.first eqv $@base-path }).elems == 0
-        or die($exception-hoh-seen-aoh);
-
-    my X::Config::TOML::HOH::Seen $exception-hoh-seen .=
-        new(:$hoh-header-text, :$hoh-text, :path(@base-path));
-    %!hoh-seen.grep({ .keys.first eqv $@base-path }).elems == 0
-        or die($exception-hoh-seen);
-
-    CATCH
-    {
-        when X::AdHoc
-        {
-            my rule exception-associative-indexing
-            { Type (\w+) does not support associative indexing }
-            .payload !~~ &exception-associative-indexing
-                or die($exception-hoh-seen-key);
-        }
-    }
-    self.mktable-hoh(@base-path, $hoh-text, :@keypairs);
+    my TOMLHOHHeader:D $key = $<hoh-header>.made;
+    my TOMLKeypairLine:D @made = @<keypair-line>.hyper.map({ .made });
+    my TOMLKeypairLines['Populated'] $value .= new(:@made);
+    my TOMLKeypairLines:D %made{TOMLHOHHeader:D} = $key => $value;
+    make(TOMLTable['HOH'].new(:%made));
 }
 
-multi method mktable-hoh(@base-path, $hoh-text, :@keypairs! where *.so --> Nil)
+multi method table:hoh ($/ --> Nil)
 {
-    # verify keypairs do not contain duplicate keys
-    verify-no-duplicate-keys(
-        @keypairs,
-        'table',
-        $hoh-text,
-        X::Config::TOML::HOH::DuplicateKeys
-    );
-
-    @keypairs.map(-> %keypair {
-        my @path = |@base-path, %keypair.keys.first;
-        my $value = %keypair.values.first;
-        my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
-            new(:$hoh-text, :@path);
-        !Crane.exists(%!toml, :@path)
-            or die($exception-hoh-seen-key);
-        Crane.set(%!toml, :@path, :$value);
-        %!keys-seen{$@path}++;
-    });
-
-    %!hoh-seen{$@base-path}++;
-}
-
-multi method mktable-hoh(@path, $hoh-text, :@keypairs --> Nil)
-{
-    my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
-        new(:$hoh-text, :@path);
-    !Crane.exists(%!toml, :@path)
-        or die($exception-hoh-seen-key);
-    Crane.set(%!toml, :@path, :value({}));
-    %!hoh-seen{$@path}++;
+    my TOMLHOHHeader:D $key = $<hoh-header>.made;
+    my TOMLKeypairLines['Empty'] $value .= new(:made([]));
+    my TOMLKeypairLines:D %made{TOMLHOHHeader:D} = $key => $value;
+    make(TOMLTable['HOH'].new(:%made));
 }
 
 method aoh-header($/ --> Nil)
 {
-    make($<table-header-text>.made);
+    my TOMLTableHeaderText:D $made = $<table-header-text>.made;
+    make(TOMLAOHHeader.new(:$made));
 }
 
-method table:aoh ($/ --> Nil)
+multi method table:aoh ($/ where @<keypair-line>.so --> Nil)
 {
-    my @path = pwd(%!toml, :steps($<aoh-header>.made));
-    my Str:D $aoh-header-text = ~$<aoh-header>;
-    my Str:D $aoh-text = ~$/;
-    my @keypairs = @<keypair-line>.hyper.map({ .made }).flat;
-
-    my X::Config::TOML::AOH::OverwritesKey $exception-aoh-overwrites-key .=
-        new(:$aoh-header-text, :$aoh-text, :@path);
-    !seen(%!keys-seen, :@path)
-        or die($exception-aoh-overwrites-key);
-
-    my X::Config::TOML::AOH::OverwritesHOH $exception-aoh-overwrites-hoh .=
-        new(:$aoh-header-text, :$aoh-text, :@path);
-    %!hoh-seen.grep({ .keys.first eqv $@path }).elems == 0
-        or die($exception-aoh-overwrites-hoh);
-
-    self.mktable-aoh(@path, $aoh-text, :@keypairs);
+    my TOMLAOHHeader:D $key = $<aoh-header>.made;
+    my TOMLKeypairLine:D @made = @<keypair-line>.hyper.map({ .made });
+    my TOMLKeypairLines['Populated'] $value .= new(:@made);
+    my TOMLKeypairLines:D %made{TOMLAOHHeader:D} = $key => $value;
+    make(TOMLTable['AOH'].new(:%made));
 }
 
-multi method mktable-aoh(@path, $aoh-text, :@keypairs! where *.so --> Nil)
+multi method table:aoh ($/ --> Nil)
 {
-    # initialize empty array if array does not yet exist
-    %!aoh-seen.grep({ .keys.first eqv $@path }).elems > 0
-        or self!mktable-aoh-init(@path, $aoh-text);
-
-    # verify keypair lines do not contain duplicate keys
-    verify-no-duplicate-keys(
-        @keypairs,
-        'array table',
-        $aoh-text,
-        X::Config::TOML::AOH::DuplicateKeys
-    );
-
-    # create hash table with keypairs
-    my %value = @keypairs.map({ .keys.first => .values.first });
-    Crane.set(%!toml, :path(|@path, *-0), :%value);
+    my TOMLAOHHeader:D $key = $<aoh-header>.made;
+    my TOMLKeypairLines['Empty'] $value .= new(:made([]));
+    my TOMLKeypairLines:D %made{TOMLAOHHeader:D} = $key => $value;
+    make(TOMLTable['AOH'].new(:%made));
 }
 
-multi method mktable-aoh(@path, $aoh-text, :@keypairs --> Nil)
+# this segment represents keypair lines not belonging to any table
+method segment:keypair-line ($/ --> Nil)
 {
-    # initialize empty array if array does not yet exist
-    %!aoh-seen.grep({ .keys.first eqv $@path }).elems > 0
-        or self!mktable-aoh-init(@path, $aoh-text);
-
-    # create hash table without keypairs
-    Crane.set(%!toml, :path(|@path, *-0), :value({}));
+    my TOMLKeypairLine:D $made = $<keypair-line>.made;
+    make(TOMLSegment['KeypairLine'].new(:$made));
 }
 
-method !mktable-aoh-init(@path, $aoh-text --> Nil)
+method segment:table ($/ --> Nil)
 {
-    my X::Config::TOML::Keypath::AOH $exception-keypath-aoh .=
-        new(:$aoh-text, :@path);
-    !Crane.exists(%!toml, :@path)
-        or die($exception-keypath-aoh);
-    Crane.set(%!toml, :@path, :value([]));
-    %!aoh-seen{$@path}++;
+    my TOMLTable:D $made = $<table>.made;
+    make(TOMLSegment['Table'].new(:$made));
+}
+
+multi method document($/ where @<segment>.so --> Nil)
+{
+    my TOMLSegment:D @made =
+        Array[TOMLSegment:D].new(@<segment>.hyper.map({ .made }).grep(*.so));
+    make(TOMLDocument['Populated'].new(:@made));
+}
+
+multi method document($/ --> Nil)
+{
+    make(TOMLDocument['Empty'].new(:made([])));
 }
 
 method TOP($/ --> Nil)
 {
-    make(%!toml);
+    my TOMLDocument:D $made = $<document>.made;
+    make(TOML.new(:$made));
 }
 
 # end document grammar-actions }}}
-
-# helper functions {{{
-
-# --- sub pwd {{{
-
-# given TOML hash and keypath, print working directory including
-# arraytable indices
-multi sub pwd(Associative:D $container, :@steps where *.elems > 0 --> Array:D)
-{
-    my @steps-taken;
-    my $root := $container;
-    $root := $root{@steps[0]};
-    push(@steps-taken, @steps[0], |pwd($root, :steps(@steps[1..*])));
-    @steps-taken;
-}
-
-multi sub pwd(Associative:D $container, :@steps where *.elems == 0 --> Array:D)
-{
-    my @steps-taken;
-}
-
-multi sub pwd(Positional:D $container, :@steps where *.elems > 0 --> Array:D)
-{
-    my @steps-taken;
-    my $root := $container;
-    my Int:D $index = $container.end;
-    $root := $root[$index];
-    push(@steps-taken, $index, |pwd($root, :@steps));
-    @steps-taken;
-}
-
-multi sub pwd(Positional:D $container, :@steps where *.elems == 0 --> Array:D)
-{
-    my @steps-taken;
-}
-
-multi sub pwd($container, :@steps where *.elems > 0 --> Array:D)
-{
-    my @steps-taken;
-    my $root := $container;
-    $root := try $root{@steps[0]};
-    push(@steps-taken, @steps[0], |pwd($root, :steps(@steps[1..*])));
-    @steps-taken;
-}
-
-multi sub pwd($container, :@steps where *.elems == 0 --> Array:D)
-{
-    my @steps-taken;
-}
-
-# --- end sub pwd }}}
-# --- sub seen {{{
-
-multi sub seen(Bool:D %h, :@path! where *.elems > 1 --> Bool:D)
-{
-    %h.grep({ .keys.first eqv $@path }).elems > 0
-        || seen(%h, :path(@path[0..^*-1].Array));
-}
-
-multi sub seen(Bool:D %h, :@path! where *.elems > 0 --> Bool:D)
-{
-    %h.grep({ .keys.first eqv $@path }).elems > 0;
-}
-
-multi sub seen(Bool:D %h, :@path! where *.elems == 0 --> Bool:D)
-{
-    False;
-}
-
-# --- end sub seen }}}
-# --- sub verify-no-duplicate-keys {{{
-
-sub verify-no-duplicate-keys(
-    @keypairs,
-    $subject,
-    $text,
-    Exception:U $exception-type
-    --> Nil
-)
-{
-    my Str:D @keys-seen = |@keypairs.map({ .keys }).flat;
-    my $exception = $exception-type.new(:@keys-seen, :$subject, :$text);
-    @keys-seen.elems == @keys-seen.unique.elems
-        or die($exception);
-}
-
-# --- end sub verify-no-duplicate-keys }}}
-
-# end helper functions }}}
 
 # vim: set filetype=perl6 foldmethod=marker foldlevel=0:

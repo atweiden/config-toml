@@ -608,8 +608,10 @@ token keypair-key-dotted
 }
 
 proto token keypair-key-single {*}
-token keypair-key-single:bare { <+alnum +[-]>+ }
+token keypair-key-single:bare { <keypair-key-single-bare> }
 token keypair-key-single:quoted { <keypair-key-single-string> }
+
+token keypair-key-single-bare { <+alnum +[-]>+ }
 
 # quoted keys follow the exact same rules as either basic strings or
 # literal strings
