@@ -412,7 +412,7 @@ token date:full-date
 }
 
 # HH:MM:SS
-token date:partial-time
+token time
 {
     <partial-time>
 }
@@ -554,6 +554,15 @@ token array-elements:dates
     ]*
 }
 
+token array-elements:times
+{
+    <time>
+    [
+        <.gap>* ',' <.gap>*
+        <time>
+    ]*
+}
+
 token array-elements:arrays
 {
     <array>
@@ -624,6 +633,7 @@ token keypair-value:string { <string> }
 token keypair-value:number { <number> }
 token keypair-value:boolean { <boolean> }
 token keypair-value:date { <date> }
+token keypair-value:time { <time> }
 token keypair-value:array { <array> }
 token keypair-value:table-inline { <table-inline> }
 
