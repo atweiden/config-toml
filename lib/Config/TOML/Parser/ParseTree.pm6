@@ -617,7 +617,7 @@ role TOMLSegment['Table']
     )
     {
         my Str:D @key = $.make.made.keys.first;
-        my Hash[Any:D,Array[Str:D]] @value = $.make.made.values.first;
+        my Hash[Any:D,Array[Str:D]] @value = |$.make.made.values.first;
         my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
 }
@@ -629,7 +629,7 @@ role TOMLDocument['Populated']
     method made(::?CLASS:D: --> Array[Hash[Any:D,Array[Str:D]]])
     {
         my Hash[Any:D,Array[Str:D]] @made =
-            Array[Hash[Any:D,Array[Str:D]]].new($.make.made);
+            Array[Hash[Any:D,Array[Str:D]]].new($.make.hyper.map({ .made }));
     }
 }
 
