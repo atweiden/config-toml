@@ -204,7 +204,7 @@ role TOMLTime
     also does Make[Hash:D];
     method made(::?CLASS:D: --> Hash:D)
     {
-        my %made = $.make.hash;
+        my %made = $.make;
     }
 }
 
@@ -313,7 +313,7 @@ role TOMLArray
     also does Make[TOMLArrayElements:D];
     method made(::?CLASS:D: --> Array:D)
     {
-        my @made = $.make.hyper.map({ .made });
+        my @made = $.make.made;
     }
 }
 
@@ -466,9 +466,9 @@ role TOMLKeypair
     also does Make[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]];
     method made(::?CLASS:D: --> Hash[Any:D,Array[Str:D]])
     {
-        my Any:D %made{Array[Str:D]} =
-            Array[Str:D].new(|$.make.keys.first.made) =>
-                $.make.values.first.made;
+        my Str:D @key = Array[Str:D].new(|$.make.keys.first.made);
+        my Any:D $value = $.make.values.first.made;
+        my Any:D %made{Array[Str:D]} = @key => $value;
     }
 }
 
@@ -566,11 +566,8 @@ role TOMLTable['HOH']
         --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
-        my Str:D @key = Array[Str:D].new(|$.make.keys.first.made);
-        my Hash[Any:D,Array[Str:D]] @value =
-            Array[Hash[Any:D,Array[Str:D]]].new(
-                $.make.values.first.hyper.map({ .made })
-            );
+        my Str:D @key = $.make.keys.first.made;
+        my Hash[Any:D,Array[Str:D]] @value = $.make.values.first.made;
         my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
 }
@@ -594,11 +591,8 @@ role TOMLTable['AOH']
         --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
-        my Str:D @key = Array[Str:D].new(|$.make.keys.first.made);
-        my Hash[Any:D,Array[Str:D]] @value =
-            Array[Hash[Any:D,Array[Str:D]]].new(
-                $.make.values.first.hyper.map({ .made })
-            );
+        my Str:D @key = $.make.keys.first.made;
+        my Hash[Any:D,Array[Str:D]] @value = $.make.values.first.made;
         my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
 }
@@ -622,8 +616,8 @@ role TOMLSegment['Table']
         --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
-        my Str:D @key = $.make.keys.first.made;
-        my Hash[Any:D,Array[Str:D]] @value = $.make.values.first.made;
+        my Str:D @key = $.make.made.keys.first;
+        my Hash[Any:D,Array[Str:D]] @value = $.make.made.values.first;
         my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
 }
