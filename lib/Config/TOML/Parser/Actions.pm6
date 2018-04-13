@@ -670,6 +670,19 @@ multi method table-inline($/ where $<table-inline-keypairs>.so --> Nil)
 {
     my TOMLTableInlineKeypairs['Populated'] $make =
         $<table-inline-keypairs>.made;
+
+    # check for duplicate keys
+    my @table-inline-keypair =
+        Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(|$make.made);
+    my TOMLKeypairKey:D @table-inline-key =
+        Array[TOMLKeypairKey:D].new(
+            @table-inline-keypair.hyper.map({
+                my TOMLKeypairKey:D $key = .keys.first;
+            })
+        );
+    my Bool:D $is-without-duplicate-keys =
+        is-without-duplicate-keys(@table-inline-key);
+
     make(TOMLTableInline.new(:$make));
 }
 
@@ -776,5 +789,140 @@ method TOP($/ --> Nil)
 }
 
 # end document grammar-actions }}}
+
+# helper {{{
+
+# --- sub is-without-duplicate-keys {{{
+
+multi sub is-without-duplicate-keys(TOMLKeypairKey:D @key --> Bool:D)
+{
+    my TOMLKeypairKey['Dotted'] @dotted = @key.grep(TOMLKeypairKey['Dotted']);
+    my TOMLKeypairKey['Single'] @single = @key.grep(TOMLKeypairKey['Single']);
+    my Array[TOMLKeypairKey:D] %key{TOMLKeypairKey:U} =
+        TOMLKeypairKey['Dotted'] => Array[TOMLKeypairKey:D].new(@dotted),
+        TOMLKeypairKey['Single'] => Array[TOMLKeypairKey:D].new(@single);
+    my Bool:D $is-without-duplicate-keys = is-without-duplicate-keys(%key);
+}
+
+multi sub is-without-duplicate-keys(%key --> Bool:D)
+{
+    my Array[Str:D] @dotted =
+        Array[Array[Str:D]].new(
+            %key{TOMLKeypairKey['Dotted']}.map({ Array[Str:D].new(.made) })
+        );
+
+    # transform single.made into Array[Str:D] from Str:D for comparison
+    my Array[Str:D] @single =
+        Array[Array[Str:D]].new(
+            %key{TOMLKeypairKey['Single']}.map({ Array[Str:D].new(.made) })
+        );
+
+    my Array[Str:D] @combined = |@dotted, |@single;
+    my Bool:D $is-without-duplicate-keys = is-path-clear(@combined);
+}
+
+# --- end sub is-without-duplicate-keys }}}
+# --- sub is-path-clear {{{
+
+multi sub is-path-clear(
+    Array[Str:D] @k
+    --> Bool:D
+)
+{
+    my Array[Str:D] @carry;
+    my Bool:D $clear = True;
+    my Bool:D $is-path-clear = is-path-clear($clear, @k, @carry);
+}
+
+# path not clear
+multi sub is-path-clear(
+    Bool:D $ where *.not,
+    Array[Str:D] @,
+    Array[Str:D] @
+    --> Bool:D
+)
+{
+    my Bool:D $is-path-clear = False;
+}
+
+# paths remain to be analyzed, and we've analyzed at least one
+multi sub is-path-clear(
+    Bool:D $ where *.so,
+    Array[Str:D] @ (Str:D @k, *@rest),
+    Array[Str:D] @seen (Str:D @, *@)
+    --> Bool:D
+)
+{
+    my Array[Str:D] @carry = @seen;
+    my Bool:D $clear = is-path-clear(@k, @seen);
+    push(@carry, @k);
+    my Array[Str:D] @r = @rest.map(-> Str:D @s { @s });
+    my Bool:D $is-path-clear = is-path-clear($clear, @r, @carry);
+}
+
+# paths remain to be analyzed, and we haven't analyzed any paths
+multi sub is-path-clear(
+    Bool:D $ where *.so,
+    Array[Str:D] @ (Str:D @k, *@rest),
+    Array[Str:D] @seen
+    --> Bool:D
+)
+{
+    my Array[Str:D] @carry = @seen;
+    my Bool:D $clear = True;
+    push(@carry, @k);
+    my Array[Str:D] @r = @rest.map(-> Str:D @s { @s });
+    my Bool:D $is-path-clear = is-path-clear($clear, @r, @carry);
+}
+
+# no more paths remain to be analyzed
+multi sub is-path-clear(
+    Bool:D $ where *.so,
+    Array[Str:D] @,
+    Array[Str:D] @
+    --> Bool:D
+)
+{
+    my Bool:D $is-path-clear = True;
+}
+
+# direct comparison of Array[Str:D] for each elem of Array[Array[Str:D]]
+multi sub is-path-clear(
+    Str:D @a,
+    Array[Str:D] @seen
+    --> Bool:D
+)
+{
+    my Array[Str:D] @b = gen-length-permutations(@a);
+    my Bool:D @is-path-clear =
+        @b.map(-> Str:D @c {
+            @seen.map(-> Str:D @d {
+                my Bool:D $is-path-clear = is-path-clear(@c, @d);
+            })
+        }).flat;
+    my Bool:D $is-path-clear = [&&] @is-path-clear;
+}
+
+# direct comparison of Array[Str:D] with Array[Str:D]
+multi sub is-path-clear(
+    Str:D @a,
+    Str:D @b
+    --> Bool:D
+)
+{
+    my Bool:D $is-path-clear = (@a eqv @b).not;
+}
+
+sub gen-length-permutations(Str:D @a --> Array[Array[Str:D]])
+{
+    my UInt:D $n = @a.end;
+    my Range $r = 0..$n;
+    my Array[Str:D] @permutation =
+        $r.map(-> UInt:D $n { my Str:D @p = @a[0..$n] });
+}
+
+# --- end sub is-path-clear }}}
+
+# end helper }}}
 
 # vim: set filetype=perl6 foldmethod=marker foldlevel=0:
