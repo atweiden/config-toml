@@ -816,13 +816,17 @@ multi sub is-without-duplicate-keys(%key --> Bool:D)
 {
     my Array[Str:D] @dotted =
         Array[Array[Str:D]].new(
-            %key{TOMLKeypairKey['Dotted']}.map({ Array[Str:D].new(.made) })
+            %key{TOMLKeypairKey['Dotted']}.hyper.map({
+                Array[Str:D].new(.made)
+            })
         );
 
     # transform single.made into Array[Str:D] from Str:D for comparison
     my Array[Str:D] @single =
         Array[Array[Str:D]].new(
-            %key{TOMLKeypairKey['Single']}.map({ Array[Str:D].new(.made) })
+            %key{TOMLKeypairKey['Single']}.hyper.map({
+                Array[Str:D].new(.made)
+            })
         );
 
     my Array[Str:D] @combined = |@dotted, |@single;
@@ -864,7 +868,7 @@ multi sub is-path-clear(
     my Array[Str:D] @carry = @seen;
     my Bool:D $clear = is-path-clear(@k, @seen);
     push(@carry, @k);
-    my Array[Str:D] @r = @rest.map(-> Str:D @s { @s });
+    my Array[Str:D] @r = @rest.hyper.map(-> Str:D @s { @s });
     my Bool:D $is-path-clear = is-path-clear($clear, @r, @carry);
 }
 
@@ -879,7 +883,7 @@ multi sub is-path-clear(
     my Array[Str:D] @carry = @seen;
     my Bool:D $clear = True;
     push(@carry, @k);
-    my Array[Str:D] @r = @rest.map(-> Str:D @s { @s });
+    my Array[Str:D] @r = @rest.hyper.map(-> Str:D @s { @s });
     my Bool:D $is-path-clear = is-path-clear($clear, @r, @carry);
 }
 
@@ -926,7 +930,7 @@ sub gen-length-permutations(Str:D @a --> Array[Array[Str:D]])
     my UInt:D $n = @a.end;
     my Range $r = 0..$n;
     my Array[Str:D] @permutation =
-        $r.map(-> UInt:D $n { my Str:D @p = @a[0..$n] });
+        $r.hyper.map(-> UInt:D $n { my Str:D @p = @a[0..$n] });
 }
 
 # --- end sub is-path-clear }}}
