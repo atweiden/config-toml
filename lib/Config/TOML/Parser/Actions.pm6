@@ -1,5 +1,6 @@
 use v6;
 use Config::TOML::Parser::ParseTree;
+use X::Config::TOML;
 unit class Config::TOML::Parser::Actions;
 
 # DateTime offset for when the local offset is omitted in TOML dates,
@@ -682,6 +683,13 @@ multi method table-inline($/ where $<table-inline-keypairs>.so --> Nil)
         );
     my Bool:D $is-without-duplicate-keys =
         is-without-duplicate-keys(@table-inline-key);
+    $is-without-duplicate-keys or do {
+        my Exception:U $exception-type =
+            X::Config::TOML::InlineTable::DuplicateKeys;
+        my Str:D $subject = 'inline table';
+        my Str:D $text = ~$/;
+        die($exception-type.new(:$subject, :$text));
+    }
 
     make(TOMLTableInline.new(:$make));
 }
