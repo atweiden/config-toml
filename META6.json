@@ -13,11 +13,13 @@
         "source"     : "https://github.com/atweiden/config-toml"
     },
     "provides" : {
-        "Config::TOML"                  : "lib/Config/TOML.pm6",
-        "Config::TOML::Dumper"          : "lib/Config/TOML/Dumper.pm6",
-        "Config::TOML::Parser"          : "lib/Config/TOML/Parser.pm6",
-        "Config::TOML::Parser::Actions" : "lib/Config/TOML/Parser/Actions.pm6",
-        "Config::TOML::Parser::Grammar" : "lib/Config/TOML/Parser/Grammar.pm6",
-        "X::Config::TOML"               : "lib/X/Config/TOML.pm6"
+        "Config::TOML"                    : "lib/Config/TOML.pm6",
+        "Config::TOML::Dumper"            : "lib/Config/TOML/Dumper.pm6",
+        "Config::TOML::Parser"            : "lib/Config/TOML/Parser.pm6",
+        "Config::TOML::Parser::Actions"   : "lib/Config/TOML/Parser/Actions.pm6",
+        "Config::TOML::Parser::Grammar"   : "lib/Config/TOML/Parser/Grammar.pm6",
+        "Config::TOML::Parser::ParseTree" : "lib/Config/TOML/Parser/ParseTree.pm6",
+        "Config::TOML::Remarshal"         : "lib/Config/TOML/Remarshal.pm6",
+        "X::Config::TOML"                 : "lib/X/Config/TOML.pm6"
     }
 }
