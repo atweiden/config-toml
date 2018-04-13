@@ -613,7 +613,7 @@ token keypair-key:single { <keypair-key-single> }
 
 token keypair-key-dotted
 {
-    <keypair-key-single> [ '.' <keypair-key-single> ]*
+    <keypair-key-single> [ '.' <keypair-key-single> ]+
 }
 
 proto token keypair-key-single {*}
