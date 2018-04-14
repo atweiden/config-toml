@@ -286,7 +286,7 @@ role TOMLDate['DateTime', 'OmitLocalOffset']
         my Str:D $second = $.make.second;
         my Str:D $s =
             sprintf(
-                Q{%s-%s-%sT%s:%s:%s},
+                Q{%04s-%02s-%02sT%02s:%02s:%02s},
                 $year,
                 $month,
                 $day,
@@ -308,10 +308,7 @@ role TOMLDate['FullDate']
     }
     method Str(::?CLASS:D: --> Str:D)
     {
-        my Str:D $year = $.make.year;
-        my Str:D $month = $.make.month;
-        my Str:D $day = $.make.day;
-        my Str:D $s = sprintf(Q{%s-%s-%s}, $year, $month, $day);
+        my Str:D $s = $.make.Str;
     }
 }
 
@@ -329,7 +326,7 @@ role TOMLTime
         my Str:D $hour = $.make.hour;
         my Str:D $minute = $.make.minute;
         my Str:D $second = $.make.second;
-        my Str:D $s = sprintf(Q{%s:%s:%s}, $hour, $minute, $second);
+        my Str:D $s = sprintf(Q{%02s:%02s:%02s}, $hour, $minute, $second);
     }
 }
 
