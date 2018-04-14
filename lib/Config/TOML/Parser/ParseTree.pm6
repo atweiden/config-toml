@@ -341,9 +341,9 @@ role TOMLArrayElements['Strings']
     also does Made;
     also does Make[Array[TOMLString:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Str:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my Str:D @made = $.make.hyper.map({ .made });
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -357,9 +357,9 @@ role TOMLArrayElements['Integers']
     also does Made;
     also does Make[Array[TOMLInteger:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Int:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my Int:D @made = $.make.hyper.map({ .made });
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -373,9 +373,9 @@ role TOMLArrayElements['Floats']
     also does Made;
     also does Make[Array[TOMLFloat:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Numeric:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my Numeric:D @made = $.make.hyper.map({ .made });
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -389,9 +389,9 @@ role TOMLArrayElements['Booleans']
     also does Made;
     also does Make[Array[TOMLBoolean:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Bool:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my Bool:D @made = $.make.hyper.map({ .made });
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -405,9 +405,9 @@ role TOMLArrayElements['Dates']
     also does Made;
     also does Make[Array[TOMLDate:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Dateish:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my Dateish:D @made = $.make.hyper.map({ .made });
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -421,9 +421,9 @@ role TOMLArrayElements['Times']
     also does Made;
     also does Make[Array[TOMLTime:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Hash:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my Hash:D @made = $.make.hyper.map({ .made });
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -437,9 +437,9 @@ role TOMLArrayElements['Arrays']
     also does Made;
     also does Make[Array[TOMLArray:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[TOMLArray:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my TOMLArray:D @made = $.make;
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -453,9 +453,9 @@ role TOMLArrayElements['TableInlines']
     also does Made;
     also does Make[Array[TOMLTableInline:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[TOMLTableInline:D])
+    method made(::?CLASS:D: --> Array:D)
     {
-        my TOMLTableInline:D @made = $.make;
+        my @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -698,9 +698,9 @@ role TOMLKeypairValue['TableInline']
     also does Made;
     also does Make[TOMLTableInline:D];
     also does ToStr;
-    method made(::?CLASS:D: --> TOMLTableInline:D)
+    method made(::?CLASS:D: --> Array:D)
     {
-        my TOMLTableInline:D $made = $.make;
+        my @made = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
