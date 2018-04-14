@@ -663,19 +663,11 @@ multi method table-inline($/ where $<table-inline-keypairs>.so --> Nil)
         $<table-inline-keypairs>.made;
 
     # check for duplicate keys
-    my @table-inline-keypair =
-        Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(|$make.made);
-    my TOMLKeypairKey:D @table-inline-key =
-        @table-inline-keypair.hyper.map({ .keys.first });
-    my Bool:D $is-without-duplicate-keys =
-        is-without-duplicate-keys(@table-inline-key);
-    $is-without-duplicate-keys or do {
-        my Exception:U $exception-type =
-            X::Config::TOML::InlineTable::DuplicateKeys;
-        my Str:D $subject = 'inline table';
-        my Str:D $text = ~$/;
-        die($exception-type.new(:$subject, :$text));
-    }
+    my Exception:U $exception-type =
+        X::Config::TOML::InlineTable::DuplicateKeys;
+    my Str:D $subject = 'inline table';
+    my Str:D $text = ~$/;
+    verify-no-duplicate-keys($make, $exception-type, $subject, $text);
 
     make(TOMLTableInline.new(:$make));
 }
@@ -714,6 +706,13 @@ multi method table:hoh ($/ where @<keypair-line>.so --> Nil)
     my TOMLHOHHeader:D $key = $<hoh-header>.made;
     my TOMLKeypairLine:D @make = @<keypair-line>.hyper.map({ .made });
     my TOMLKeypairLines['Populated'] $value .= new(:@make);
+
+    # check for duplicate keys
+    my Exception:U $exception-type = X::Config::TOML::HOH::DuplicateKeys;
+    my Str:D $subject = 'table';
+    my Str:D $text = ~$/;
+    verify-no-duplicate-keys($value, $exception-type, $subject, $text);
+
     my TOMLKeypairLines:D %make{TOMLHOHHeader:D} = $key => $value;
     make(TOMLTable['HOH'].new(:%make));
 }
@@ -737,6 +736,13 @@ multi method table:aoh ($/ where @<keypair-line>.so --> Nil)
     my TOMLAOHHeader:D $key = $<aoh-header>.made;
     my TOMLKeypairLine:D @make = @<keypair-line>.hyper.map({ .made });
     my TOMLKeypairLines['Populated'] $value .= new(:@make);
+
+    # check for duplicate keys
+    my Exception:U $exception-type = X::Config::TOML::AOH::DuplicateKeys;
+    my Str:D $subject = 'array table';
+    my Str:D $text = ~$/;
+    verify-no-duplicate-keys($value, $exception-type, $subject, $text);
+
     my TOMLKeypairLines:D %make{TOMLAOHHeader:D} = $key => $value;
     make(TOMLTable['AOH'].new(:%make));
 }
@@ -765,6 +771,10 @@ method segment:table ($/ --> Nil)
 multi method document($/ where @<segment>.so --> Nil)
 {
     my TOMLSegment:D @make = @<segment>.hyper.map({ .made }).grep(*.so);
+    # findall Segment['KeypairLine']
+    # findall Segment['Table']
+    # - grep Table['AOH'], take unique paths, because repeat is ok
+    # combine all of the above
     make(TOMLDocument['Populated'].new(:@make));
 }
 
@@ -848,6 +858,46 @@ multi sub set-true(
 }
 
 # --- end sub is-path-clear }}}
+# --- sub verify-no-duplicate-keys {{{
+
+multi sub verify-no-duplicate-keys(
+    TOMLTableInlineKeypairs['Populated'] $k,
+    Exception:U $exception-type,
+    Str:D $subject,
+    Str:D $text
+    --> Nil
+)
+{
+    my @keypair = Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new($k.made);
+    verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
+}
+
+multi sub verify-no-duplicate-keys(
+    TOMLKeypairLines['Populated'] $k,
+    Exception:U $exception-type,
+    Str:D $subject,
+    Str:D $text
+    --> Nil
+)
+{
+    my @keypair = Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new($k.made);
+    verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
+}
+
+multi sub verify-no-duplicate-keys(
+    @keypair,
+    Exception:U $exception-type,
+    Str:D $subject,
+    Str:D $text
+    --> Nil
+)
+{
+    my TOMLKeypairKey:D @key = @keypair.hyper.map({ .keys.first });
+    my Bool:D $is-without-duplicate-keys = is-without-duplicate-keys(@key);
+    $is-without-duplicate-keys or die($exception-type.new(:$subject, :$text));
+}
+
+# --- end sub verify-no-duplicate-keys }}}
 
 # end helper }}}
 
