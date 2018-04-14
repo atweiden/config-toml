@@ -517,9 +517,9 @@ role TOMLKeypairKeySingle['Bare']
     also does Made;
     also does Make[TOMLKeypairKeySingleBare:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Str:D)
+    method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D $made = $.make.made;
+        my Str:D @made = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -562,9 +562,9 @@ role TOMLKeypairKeySingle['Quoted']
     also does Made;
     also does Make[TOMLKeypairKeySingleString:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Str:D)
+    method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D $made = $.make.made;
+        my Str:D @made = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -577,9 +577,9 @@ role TOMLKeypairKey['Single']
     also does Made;
     also does Make[TOMLKeypairKeySingle:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Str:D)
+    method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D $made = $.make.made;
+        my Str:D @made = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -594,7 +594,7 @@ role TOMLKeypairKeyDotted
     also does ToStr;
     method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D @made = $.make.hyper.map({ .made });
+        my Str:D @made = $.make.hyper.map({ .made }).flat;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -829,7 +829,7 @@ role TOMLTableHeaderText
     also does ToStr;
     method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D @made = $.make.hyper.map({ .made });
+        my Str:D @made = $.make.hyper.map({ .made }).flat;
     }
     method Str(::?CLASS:D: --> Str:D)
     {

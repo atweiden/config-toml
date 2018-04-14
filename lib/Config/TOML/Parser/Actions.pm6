@@ -859,7 +859,6 @@ multi sub is-without-duplicate-keys(%key --> Bool:D)
 {
     my Array[Str:D] @dotted =
         %key{TOMLKeypairKey['Dotted']}.hyper.map({ Array[Str:D].new(.made) });
-    # transform single.made into Array[Str:D] from Str:D for comparison
     my Array[Str:D] @single =
         %key{TOMLKeypairKey['Single']}.hyper.map({ Array[Str:D].new(.made) });
     my Array[Str:D] @combined = |@dotted, |@single;
