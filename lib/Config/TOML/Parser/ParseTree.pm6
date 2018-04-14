@@ -713,9 +713,11 @@ role TOMLKeypair
     also does Made;
     also does Make[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Hash[TOMLKeypairValue:D,TOMLKeypairKey:D])
+    method made(::?CLASS:D: --> Hash[Any:D,Array[Str:D]])
     {
-        my TOMLKeypairValue:D %made{TOMLKeypairKey:D} = $.make;
+        my Str:D @k = $.make.keys.first.made;
+        my $v = $.make.values.first.made;
+        my Any:D %made{Array[Str:D]} = @k => $v;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -730,10 +732,9 @@ role TOMLTableInlineKeypairs['Populated']
     also does Made;
     also does Make[Array[TOMLKeypair:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
+    method made(::?CLASS:D: --> Array[Hash[Any:D,Array[Str:D]]])
     {
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made =
-            $.make.hyper.map({ .made });
+        my Hash[Any:D,Array[Str:D]] @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -747,9 +748,9 @@ role TOMLTableInlineKeypairs['Empty']
     also does Made;
     also does Make[Array:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
+    method made(::?CLASS:D: --> Array[Hash[Any:D,Array[Str:D]]])
     {
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made;
+        my Hash[Any:D,Array[Str:D]] @made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -762,9 +763,9 @@ role TOMLTableInline
     also does Made;
     also does Make[TOMLTableInlineKeypairs:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
+    method made(::?CLASS:D: --> Array[Hash[Any:D,Array[Str:D]]])
     {
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made = $.make.made;
+        my Hash[Any:D,Array[Str:D]] @made = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -780,9 +781,9 @@ role TOMLKeypairLine
     also does Made;
     also does Make[TOMLKeypair:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Hash[TOMLKeypairValue:D,TOMLKeypairKey:D])
+    method made(::?CLASS:D: --> Hash[Any:D,Array[Str:D]])
     {
-        my TOMLKeypairValue:D %made{TOMLKeypairKey:D} = $.make.made;
+        my Any:D %made{Array[Str:D]} = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -795,10 +796,9 @@ role TOMLKeypairLines['Populated']
     also does Made;
     also does Make[Array[TOMLKeypairLine:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
+    method made(::?CLASS:D: --> Array[Hash[Any:D,Array[Str:D]]])
     {
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made =
-            $.make.hyper.map({ .made });
+        my Hash[Any:D,Array[Str:D]] @made = $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -812,9 +812,9 @@ role TOMLKeypairLines['Empty']
     also does Made;
     also does Make[Array:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
+    method made(::?CLASS:D: --> Array[Hash[Any:D,Array[Str:D]]])
     {
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made;
+        my Hash[Any:D,Array[Str:D]] @made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -860,14 +860,12 @@ role TOMLTable['HOH']
     also does ToStr;
     method made(
         ::?CLASS:D:
-        --> Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]
+        --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
         my Str:D @key = $.make.keys.first.made;
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @value =
-            $.make.values.first.made;
-        my Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]] %made{Array[Str:D]} =
-            @key => @value;
+        my Hash[Any:D,Array[Str:D]] @value = $.make.values.first.made;
+        my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -899,14 +897,12 @@ role TOMLTable['AOH']
     also does ToStr;
     method made(
         ::?CLASS:D:
-        --> Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]
+        --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
         my Str:D @key = $.make.keys.first.made;
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @value =
-            $.make.values.first.made;
-        my Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]] %made{Array[Str:D]} =
-            @key => @value;
+        my Hash[Any:D,Array[Str:D]] @value = $.make.values.first.made;
+        my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -923,14 +919,13 @@ role TOMLSegment['KeypairLine']
     also does ToStr;
     method made(
         ::?CLASS:D:
-        --> Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]
+        --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
         my Str:D @k;
-        my TOMLKeypairValue:D %k{TOMLKeypairKey:D} = $.make.made;
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @v = %k,;
-        my Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]] %made{Array[Str:D]} =
-            @k => @v;
+        my Any:D %k{Array[Str:D]} = $.make.made;
+        my Hash[Any:D,Array[Str:D]] @v = %k,;
+        my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @k => @v;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -945,14 +940,12 @@ role TOMLSegment['Table']
     also does ToStr;
     method made(
         ::?CLASS:D:
-        --> Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]
+        --> Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]
     )
     {
         my Str:D @key = $.make.made.keys.first;
-        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @value =
-            |$.make.made.values.first;
-        my Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]] %made{Array[Str:D]} =
-            @key => @value;
+        my Hash[Any:D,Array[Str:D]] @value = |$.make.made.values.first;
+        my Array[Hash[Any:D,Array[Str:D]]] %made{Array[Str:D]} = @key => @value;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -965,9 +958,13 @@ role TOMLDocument['Populated']
     also does Made;
     also does Make[Array[TOMLSegment:D]];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[TOMLSegment:D])
+    method made(
+        ::?CLASS:D:
+        --> Array[Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]]
+    )
     {
-        my TOMLSegment:D @made = |$.make;
+        my Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]] @made =
+            $.make.hyper.map({ .made });
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -981,9 +978,12 @@ role TOMLDocument['Empty']
     also does Made;
     also does Make[Array:D];
     also does ToStr;
-    method made(::?CLASS:D: --> Array[TOMLSegment:D])
+    method made(
+        ::?CLASS:D:
+        --> Array[Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]]
+    )
     {
-        my TOMLSegment:D @made;
+        my Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]] @made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {
@@ -998,12 +998,10 @@ role TOML
     also does ToStr;
     method made(
         ::?CLASS:D:
-        --> Array[Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]]
+        --> Array[Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]]]
     )
     {
-        my TOMLSegment:D @a = $.make.made;
-        my Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]] @b =
-            @a.map(-> TOMLSegment:D $s { $s.made });
+        my Hash[Array[Hash[Any:D,Array[Str:D]]],Array[Str:D]] @b = $.make.made;
     }
     method Str(::?CLASS:D: --> Str:D)
     {

@@ -886,7 +886,7 @@ multi sub verify-no-duplicate-keys(
     --> Nil
 )
 {
-    my @keypair = Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new($k.made);
+    my @keypair = $k.make.hyper.map({ .make });
     verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
 }
 
@@ -899,7 +899,7 @@ multi sub verify-no-duplicate-keys(
     --> Nil
 )
 {
-    my @keypair = Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new($k.made);
+    my @keypair = $k.make.hyper.map({ .make.make });
     verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
 }
 
@@ -912,10 +912,7 @@ multi sub verify-no-duplicate-keys(
     --> Nil
 )
 {
-    my @keypair =
-        Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(
-            @k.hyper.map({ .make.made })
-        );
+    my @keypair = @k.hyper.map({ .make.make.make });
     verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
 }
 
