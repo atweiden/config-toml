@@ -770,8 +770,17 @@ method segment:table ($/ --> Nil)
 
 multi method document($/ where @<segment>.so --> Nil)
 {
-    my TOMLSegment:D @make = @<segment>.hyper.map({ .made }).grep(*.so);
-    # findall Segment['KeypairLine']
+    my TOMLSegment:D @make = @<segment>.hyper.map({ .made }).grep({ .so });
+
+    # check for duplicate KeypairLine keys
+    my TOMLSegment['KeypairLine'] @k =
+        @make.hyper.grep(TOMLSegment['KeypairLine']);
+    my Str:D $subject = 'independent keypair line section';
+    my Str:D $text = to-string(@k);
+    my Exception:U $exception-type =
+        X::Config::TOML::KeypairLine::DuplicateKeys;
+    verify-no-duplicate-keys(@k, $exception-type, $subject, $text);
+
     # findall Segment['Table']
     # - grep Table['AOH'], take unique paths, because repeat is ok
     # combine all of the above
@@ -793,30 +802,6 @@ method TOP($/ --> Nil)
 
 # helper {{{
 
-# --- sub is-without-duplicate-keys {{{
-
-multi sub is-without-duplicate-keys(TOMLKeypairKey:D @key --> Bool:D)
-{
-    my TOMLKeypairKey['Dotted'] @dotted = @key.grep(TOMLKeypairKey['Dotted']);
-    my TOMLKeypairKey['Single'] @single = @key.grep(TOMLKeypairKey['Single']);
-    my Array[TOMLKeypairKey:D] %key{TOMLKeypairKey:U} =
-        TOMLKeypairKey['Dotted'] => Array[TOMLKeypairKey:D].new(@dotted),
-        TOMLKeypairKey['Single'] => Array[TOMLKeypairKey:D].new(@single);
-    my Bool:D $is-without-duplicate-keys = is-without-duplicate-keys(%key);
-}
-
-multi sub is-without-duplicate-keys(%key --> Bool:D)
-{
-    my Array[Str:D] @dotted =
-        %key{TOMLKeypairKey['Dotted']}.hyper.map({ Array[Str:D].new(.made) });
-    # transform single.made into Array[Str:D] from Str:D for comparison
-    my Array[Str:D] @single =
-        %key{TOMLKeypairKey['Single']}.hyper.map({ Array[Str:D].new(.made) });
-    my Array[Str:D] @combined = |@dotted, |@single;
-    my Bool:D $is-without-duplicate-keys = is-path-clear(@combined);
-}
-
-# --- end sub is-without-duplicate-keys }}}
 # --- sub is-path-clear {{{
 
 multi sub is-path-clear(
@@ -858,8 +843,42 @@ multi sub set-true(
 }
 
 # --- end sub is-path-clear }}}
+# --- sub is-without-duplicate-keys {{{
+
+multi sub is-without-duplicate-keys(TOMLKeypairKey:D @key --> Bool:D)
+{
+    my TOMLKeypairKey['Dotted'] @dotted = @key.grep(TOMLKeypairKey['Dotted']);
+    my TOMLKeypairKey['Single'] @single = @key.grep(TOMLKeypairKey['Single']);
+    my Array[TOMLKeypairKey:D] %key{TOMLKeypairKey:U} =
+        TOMLKeypairKey['Dotted'] => Array[TOMLKeypairKey:D].new(@dotted),
+        TOMLKeypairKey['Single'] => Array[TOMLKeypairKey:D].new(@single);
+    my Bool:D $is-without-duplicate-keys = is-without-duplicate-keys(%key);
+}
+
+multi sub is-without-duplicate-keys(%key --> Bool:D)
+{
+    my Array[Str:D] @dotted =
+        %key{TOMLKeypairKey['Dotted']}.hyper.map({ Array[Str:D].new(.made) });
+    # transform single.made into Array[Str:D] from Str:D for comparison
+    my Array[Str:D] @single =
+        %key{TOMLKeypairKey['Single']}.hyper.map({ Array[Str:D].new(.made) });
+    my Array[Str:D] @combined = |@dotted, |@single;
+    my Bool:D $is-without-duplicate-keys = is-path-clear(@combined);
+}
+
+# --- end sub is-without-duplicate-keys }}}
+# --- sub to-string {{{
+
+multi sub to-string(TOMLSegment['KeypairLine'] @k --> Str:D)
+{
+    my Str:D @s = @k.hyper.map({ .Str });
+    my Str:D $s = @s.join("\n");
+}
+
+# --- end sub to-string }}}
 # --- sub verify-no-duplicate-keys {{{
 
+# inline table handling
 multi sub verify-no-duplicate-keys(
     TOMLTableInlineKeypairs['Populated'] $k,
     Exception:U $exception-type,
@@ -872,6 +891,7 @@ multi sub verify-no-duplicate-keys(
     verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
 }
 
+# table and arraytable handling
 multi sub verify-no-duplicate-keys(
     TOMLKeypairLines['Populated'] $k,
     Exception:U $exception-type,
@@ -881,6 +901,22 @@ multi sub verify-no-duplicate-keys(
 )
 {
     my @keypair = Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new($k.made);
+    verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
+}
+
+# independent keypairline handling
+multi sub verify-no-duplicate-keys(
+    TOMLSegment['KeypairLine'] @k,
+    Exception:U $exception-type,
+    Str:D $subject,
+    Str:D $text
+    --> Nil
+)
+{
+    my @keypair =
+        Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(
+            @k.hyper.map({ .make.made })
+        );
     verify-no-duplicate-keys(@keypair, $exception-type, $subject, $text);
 }
 
@@ -894,7 +930,8 @@ multi sub verify-no-duplicate-keys(
 {
     my TOMLKeypairKey:D @key = @keypair.hyper.map({ .keys.first });
     my Bool:D $is-without-duplicate-keys = is-without-duplicate-keys(@key);
-    $is-without-duplicate-keys or die($exception-type.new(:$subject, :$text));
+    $is-without-duplicate-keys
+        or die($exception-type.new(:$subject, :$text));
 }
 
 # --- end sub verify-no-duplicate-keys }}}

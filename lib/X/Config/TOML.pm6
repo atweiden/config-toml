@@ -38,23 +38,7 @@ class InlineTable::DuplicateKeys is DuplicateKeys {*}
 # end X::Config::TOML::InlineTable::DuplicateKeys }}}
 # X::Config::TOML::KeypairLine::DuplicateKeys {{{
 
-class KeypairLine::DuplicateKeys is Exception
-{
-    has Str:D $.keypair-line-text is required;
-    has @.path is required;
-
-    method message(::?CLASS:D: --> Str:D)
-    {
-        my Str:D $message = qq:to/EOF/.trim;
-        Sorry, keypair line contains duplicate key.
-        {'-' x 72}
-        Keypair line:
-        $.keypair-line-text
-        {'-' x 72}
-        The key at path「{@.path.join(', ')}」 has already been seen
-        EOF
-    }
-}
+class KeypairLine::DuplicateKeys is DuplicateKeys {*}
 
 # end X::Config::TOML::KeypairLine::DuplicateKeys }}}
 # X::Config::TOML::AOH {{{
