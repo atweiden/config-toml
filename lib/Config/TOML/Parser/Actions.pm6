@@ -490,57 +490,49 @@ method time($/ --> Nil)
 
 method array-elements:strings ($/ --> Nil)
 {
-    my TOMLString:D @make =
-        Array[TOMLString:D].new(@<string>.hyper.map({ .made }));
+    my TOMLString:D @make = @<string>.hyper.map({ .made });
     make(TOMLArrayElements['Strings'].new(:@make));
 }
 
 method array-elements:integers ($/ --> Nil)
 {
-    my TOMLInteger:D @make =
-        Array[TOMLInteger:D].new(@<integer>.hyper.map({ .made }));
+    my TOMLInteger:D @make = @<integer>.hyper.map({ .made });
     make(TOMLArrayElements['Integers'].new(:@make));
 }
 
 method array-elements:floats ($/ --> Nil)
 {
-    my TOMLFloat:D @make =
-        Array[TOMLFloat:D].new(@<float>.hyper.map({ .made }));
+    my TOMLFloat:D @make = @<float>.hyper.map({ .made });
     make(TOMLArrayElements['Floats'].new(:@make));
 }
 
 method array-elements:booleans ($/ --> Nil)
 {
-    my TOMLBoolean:D @make =
-        Array[TOMLBoolean:D].new(@<boolean>.hyper.map({ .made }));
+    my TOMLBoolean:D @make = @<boolean>.hyper.map({ .made });
     make(TOMLArrayElements['Booleans'].new(:@make));
 }
 
 method array-elements:dates ($/ --> Nil)
 {
-    my TOMLDate:D @make =
-        Array[TOMLDate:D].new(@<date>.hyper.map({ .made }));
+    my TOMLDate:D @make = @<date>.hyper.map({ .made });
     make(TOMLArrayElements['Dates'].new(:@make));
 }
 
 method array-elements:times ($/ --> Nil)
 {
-    my TOMLDate:D @make =
-        Array[TOMLDate:D].new(@<time>.hyper.map({ .made }));
+    my TOMLDate:D @make = @<time>.hyper.map({ .made });
     make(TOMLArrayElements['Times'].new(:@make));
 }
 
 method array-elements:arrays ($/ --> Nil)
 {
-    my TOMLArray:D @make =
-        Array[TOMLArray:D].new(@<array>.hyper.map({ .made }));
+    my TOMLArray:D @make = @<array>.hyper.map({ .made });
     make(TOMLArrayElements['Arrays'].new(:@make));
 }
 
 method array-elements:table-inlines ($/ --> Nil)
 {
-    my TOMLTableInline:D @make =
-        Array[TOMLTableInline:D].new(@<table-inline>.hyper.map({ .made }));
+    my TOMLTableInline:D @make = @<table-inline>.hyper.map({ .made });
     make(TOMLArrayElements['TableInlines'].new(:@make));
 }
 
@@ -562,9 +554,7 @@ multi method array($/ --> Nil)
 method keypair-key-dotted($/ --> Nil)
 {
     my TOMLKeypairKeySingle:D @make =
-        Array[TOMLKeypairKeySingle:D].new(
-            @<keypair-key-single>.hyper.map({ .made })
-        );
+        @<keypair-key-single>.hyper.map({ .made });
     make(TOMLKeypairKeyDotted.new(:@make));
 }
 
@@ -662,8 +652,7 @@ method keypair($/ --> Nil)
 
 method table-inline-keypairs($/ --> Nil)
 {
-    my TOMLKeypair:D @make =
-        Array[TOMLKeypair:D].new(@<keypair>.hyper.map({ .made }));
+    my TOMLKeypair:D @make = @<keypair>.hyper.map({ .made });
     make(TOMLTableInlineKeypairs['Populated'].new(:@make));
 }
 
@@ -677,11 +666,7 @@ multi method table-inline($/ where $<table-inline-keypairs>.so --> Nil)
     my @table-inline-keypair =
         Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(|$make.made);
     my TOMLKeypairKey:D @table-inline-key =
-        Array[TOMLKeypairKey:D].new(
-            @table-inline-keypair.hyper.map({
-                my TOMLKeypairKey:D $key = .keys.first;
-            })
-        );
+        @table-inline-keypair.hyper.map({ .keys.first });
     my Bool:D $is-without-duplicate-keys =
         is-without-duplicate-keys(@table-inline-key);
     $is-without-duplicate-keys or do {
@@ -714,9 +699,7 @@ method keypair-line($/ --> Nil)
 method table-header-text($/ --> Nil)
 {
     my TOMLKeypairKeySingle:D @make =
-        Array[TOMLKeypairKeySingle:D].new(
-            @<keypair-key-single>.hyper.map({ .made })
-        );
+        @<keypair-key-single>.hyper.map({ .made });
     make(TOMLTableHeaderText.new(:@make));
 }
 
@@ -781,8 +764,7 @@ method segment:table ($/ --> Nil)
 
 multi method document($/ where @<segment>.so --> Nil)
 {
-    my TOMLSegment:D @make =
-        Array[TOMLSegment:D].new(@<segment>.hyper.map({ .made }).grep(*.so));
+    my TOMLSegment:D @make = @<segment>.hyper.map({ .made }).grep(*.so);
     make(TOMLDocument['Populated'].new(:@make));
 }
 
@@ -816,20 +798,10 @@ multi sub is-without-duplicate-keys(TOMLKeypairKey:D @key --> Bool:D)
 multi sub is-without-duplicate-keys(%key --> Bool:D)
 {
     my Array[Str:D] @dotted =
-        Array[Array[Str:D]].new(
-            %key{TOMLKeypairKey['Dotted']}.hyper.map({
-                Array[Str:D].new(.made)
-            })
-        );
-
+        %key{TOMLKeypairKey['Dotted']}.hyper.map({ Array[Str:D].new(.made) });
     # transform single.made into Array[Str:D] from Str:D for comparison
     my Array[Str:D] @single =
-        Array[Array[Str:D]].new(
-            %key{TOMLKeypairKey['Single']}.hyper.map({
-                Array[Str:D].new(.made)
-            })
-        );
-
+        %key{TOMLKeypairKey['Single']}.hyper.map({ Array[Str:D].new(.made) });
     my Array[Str:D] @combined = |@dotted, |@single;
     my Bool:D $is-without-duplicate-keys = is-path-clear(@combined);
 }

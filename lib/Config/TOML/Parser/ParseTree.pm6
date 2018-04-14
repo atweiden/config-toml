@@ -220,7 +220,7 @@ role TOMLArrayElements['Strings']
     also does Make[Array[TOMLString:D]];
     method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D @made = Array[Str:D].new($.make.hyper.map({ .made }));
+        my Str:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -230,7 +230,7 @@ role TOMLArrayElements['Integers']
     also does Make[Array[TOMLInteger:D]];
     method made(::?CLASS:D: --> Array[Int:D])
     {
-        my Int:D @made = Array[Int:D].new($.make.hyper.map({ .made }));
+        my Int:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -240,7 +240,7 @@ role TOMLArrayElements['Floats']
     also does Make[Array[TOMLFloat:D]];
     method made(::?CLASS:D: --> Array[Numeric:D])
     {
-        my Numeric:D @made = Array[Numeric:D].new($.make.hyper.map({ .made }));
+        my Numeric:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -250,7 +250,7 @@ role TOMLArrayElements['Booleans']
     also does Make[Array[TOMLBoolean:D]];
     method made(::?CLASS:D: --> Array[Bool:D])
     {
-        my Bool:D @made = Array[Bool:D].new($.make.hyper.map({ .made }));
+        my Bool:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -260,7 +260,7 @@ role TOMLArrayElements['Dates']
     also does Make[Array[TOMLDate:D]];
     method made(::?CLASS:D: --> Array[Dateish:D])
     {
-        my Dateish:D @made = Array[Dateish:D].new($.make.hyper.map({ .made }));
+        my Dateish:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -270,7 +270,7 @@ role TOMLArrayElements['Times']
     also does Make[Array[TOMLTime:D]];
     method made(::?CLASS:D: --> Array[Hash:D])
     {
-        my Hash:D @made = Array[Hash:D].new($.make.hyper.map({ .made }));
+        my Hash:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -383,7 +383,7 @@ role TOMLKeypairKeyDotted
     also does Make[Array[TOMLKeypairKeySingle:D]];
     method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D @made = Array[Str:D].new($.make.hyper.map({ .made }));
+        my Str:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -474,9 +474,7 @@ role TOMLTableInlineKeypairs['Populated']
     method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
     {
         my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made =
-            Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(
-                $.make.hyper.map({ .made })
-            );
+            $.make.hyper.map({ .made });
     }
 }
 
@@ -520,9 +518,7 @@ role TOMLKeypairLines['Populated']
     method made(::?CLASS:D: --> Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]])
     {
         my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @made =
-            Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]].new(
-                $.make.hyper.map({ .made })
-            );
+            $.make.hyper.map({ .made });
     }
 }
 
@@ -542,7 +538,7 @@ role TOMLTableHeaderText
     also does Make[Array[TOMLKeypairKeySingle:D]];
     method made(::?CLASS:D: --> Array[Str:D])
     {
-        my Str:D @made = Array[Str:D].new($.make.hyper.map({ .made }));
+        my Str:D @made = $.make.hyper.map({ .made });
     }
 }
 
@@ -604,9 +600,16 @@ role TOMLSegment['KeypairLine']
 {
     also does Made;
     also does Make[TOMLKeypairLine:D];
-    method made(::?CLASS:D: --> Hash[TOMLKeypairValue:D,TOMLKeypairKey:D])
+    method made(
+        ::?CLASS:D:
+        --> Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]
+    )
     {
-        my TOMLKeypairValue:D %made{TOMLKeypairKey:D} = $.make.made;
+        my Str:D @k;
+        my TOMLKeypairValue:D %k{TOMLKeypairKey:D} = $.make.made;
+        my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @v = %k,;
+        my Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]] %made{Array[Str:D]} =
+            @k => @v;
     }
 }
 
@@ -621,7 +624,7 @@ role TOMLSegment['Table']
     {
         my Str:D @key = $.make.made.keys.first;
         my Hash[TOMLKeypairValue:D,TOMLKeypairKey:D] @value =
-            $.make.made.values.first;
+            |$.make.made.values.first;
         my Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]] %made{Array[Str:D]} =
             @key => @value;
     }
@@ -651,9 +654,14 @@ role TOML
 {
     also does Made;
     also does Make[TOMLDocument:D];
-    method made(::?CLASS:D: --> Array[TOMLSegment:D])
+    method made(
+        ::?CLASS:D:
+        --> Array[Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]]]
+    )
     {
-        my TOMLSegment:D @made = $.make.made;
+        my TOMLSegment:D @a = $.make.made;
+        my Hash[Array[Hash[TOMLKeypairValue:D,TOMLKeypairKey:D]],Array[Str:D]] @b =
+            @a.map(-> TOMLSegment:D $s { $s.made });
     }
 }
 
