@@ -469,7 +469,7 @@ method date:full-date ($/ --> Nil)
 
 method date:date-time-omit-local-offset ($/ --> Nil)
 {
-    my Date:D $make = DateTime.new(|$<date-time-omit-local-offset>.made);
+    my DateTime:D $make = DateTime.new(|$<date-time-omit-local-offset>.made);
     make(TOMLDate['DateTime', 'OmitLocalOffset'].new(:$make));
 }
 
