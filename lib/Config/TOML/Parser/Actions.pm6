@@ -1,5 +1,6 @@
 use v6;
 use Config::TOML::Parser::ParseTree;
+use Crane;
 use X::Config::TOML;
 unit class Config::TOML::Parser::Actions;
 
@@ -841,96 +842,37 @@ multi sub is-path-clear(
     --> Bool:D
 )
 {
-    my Array[Str:D] @carry;
-    my Bool:D $clear = True;
-    my Bool:D $is-path-clear = is-path-clear($clear, @k, @carry);
+    my %k;
+    my Bool:D $is-path-clear = is-path-clear(%k, @k);
 }
 
-# path not clear
 multi sub is-path-clear(
-    Bool:D $ where *.not,
-    Array[Str:D] @,
-    Array[Str:D] @
+    %k,
+    Array[Str:D] @k
     --> Bool:D
 )
 {
-    my Bool:D $is-path-clear = False;
+    my Bool:D @set-true = @k.map(-> Str:D @l { set-true(%k, @l) });
+    my Bool:D $is-path-clear = [&&] @set-true;
 }
 
-# paths remain to be analyzed, and we've analyzed at least one
-multi sub is-path-clear(
-    Bool:D $ where *.so,
-    Array[Str:D] @ (Str:D @k, *@rest),
-    Array[Str:D] @seen (Str:D @, *@)
+multi sub set-true(
+    %k,
+    Str:D @path where { Crane.exists(%k, :@path) }
     --> Bool:D
 )
 {
-    my Array[Str:D] @carry = @seen;
-    my Bool:D $clear = is-path-clear(@k, @seen);
-    push(@carry, @k);
-    my Array[Str:D] @r = @rest.hyper.map(-> Str:D @s { @s });
-    my Bool:D $is-path-clear = is-path-clear($clear, @r, @carry);
+    my Bool:D $set-true = False;
 }
 
-# paths remain to be analyzed, and we haven't analyzed any paths
-multi sub is-path-clear(
-    Bool:D $ where *.so,
-    Array[Str:D] @ (Str:D @k, *@rest),
-    Array[Str:D] @seen
+multi sub set-true(
+    %k,
+    Str:D @path
     --> Bool:D
 )
 {
-    my Array[Str:D] @carry = @seen;
-    my Bool:D $clear = True;
-    push(@carry, @k);
-    my Array[Str:D] @r = @rest.hyper.map(-> Str:D @s { @s });
-    my Bool:D $is-path-clear = is-path-clear($clear, @r, @carry);
-}
-
-# no more paths remain to be analyzed
-multi sub is-path-clear(
-    Bool:D $ where *.so,
-    Array[Str:D] @,
-    Array[Str:D] @
-    --> Bool:D
-)
-{
-    my Bool:D $is-path-clear = True;
-}
-
-# direct comparison of Array[Str:D] for each elem of Array[Array[Str:D]]
-multi sub is-path-clear(
-    Str:D @a,
-    Array[Str:D] @seen
-    --> Bool:D
-)
-{
-    my Array[Str:D] @b = gen-length-permutations(@a);
-    my Bool:D @is-path-clear =
-        @b.map(-> Str:D @c {
-            @seen.map(-> Str:D @d {
-                my Bool:D $is-path-clear = is-path-clear(@c, @d);
-            })
-        }).flat;
-    my Bool:D $is-path-clear = [&&] @is-path-clear;
-}
-
-# direct comparison of Array[Str:D] with Array[Str:D]
-multi sub is-path-clear(
-    Str:D @a,
-    Str:D @b
-    --> Bool:D
-)
-{
-    my Bool:D $is-path-clear = (@a eqv @b).not;
-}
-
-sub gen-length-permutations(Str:D @a --> Array[Array[Str:D]])
-{
-    my UInt:D $n = @a.end;
-    my Range $r = 0..$n;
-    my Array[Str:D] @permutation =
-        $r.hyper.map(-> UInt:D $n { my Str:D @p = @a[0..$n] });
+    try Crane.set(%k, :@path, :value(True));
+    my Bool:D $set-true = Crane.exists(%k, :@path);
 }
 
 # --- end sub is-path-clear }}}
