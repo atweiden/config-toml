@@ -868,7 +868,7 @@ multi sub is-without-duplicate-keys(%key --> Bool:D)
 # --- end sub is-without-duplicate-keys }}}
 # --- sub to-string {{{
 
-multi sub to-string(TOMLSegment['KeypairLine'] @k --> Str:D)
+sub to-string(TOMLSegment['KeypairLine'] @k --> Str:D)
 {
     my Str:D @s = @k.hyper.map({ .Str });
     my Str:D $s = @s.join("\n");
