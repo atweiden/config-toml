@@ -688,7 +688,7 @@ method hoh-header($/ --> Nil)
 
 method table:hoh ($/ --> Nil)
 {
-    my @base-path = pwd(%!toml, :steps($<hoh-header>.made));
+    my @base-path = pwd(%!toml, $<hoh-header>.made);
     my Str:D $hoh-text = ~$/;
     my Str:D $hoh-header-text = ~$<hoh-header>;
     my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
@@ -772,7 +772,7 @@ method aoh-header($/ --> Nil)
 
 method table:aoh ($/ --> Nil)
 {
-    my @path = pwd(%!toml, :steps($<aoh-header>.made));
+    my @path = pwd(%!toml, $<aoh-header>.made);
     my Str:D $aoh-header-text = ~$<aoh-header>;
     my Str:D $aoh-text = ~$/;
     my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
@@ -889,47 +889,47 @@ multi sub set-true(
 
 # given TOML hash and keypath, print working directory including
 # arraytable indices
-multi sub pwd(Associative:D $container, :@steps where *.elems > 0 --> Array:D)
+multi sub pwd(Associative:D $container, @ ($step, *@rest) --> Array:D)
 {
-    my @steps-taken;
+    my @step-taken;
     my $root := $container;
-    $root := $root{@steps[0]};
-    push(@steps-taken, @steps[0], |pwd($root, :steps(@steps[1..*])));
-    @steps-taken;
+    $root := $root{$step};
+    push(@step-taken, $step, |pwd($root, @rest));
+    @step-taken;
 }
 
-multi sub pwd(Associative:D $container, :@steps where *.elems == 0 --> Array:D)
+multi sub pwd(Associative:D $, @ --> Array:D)
 {
-    my @steps-taken;
+    my @step-taken;
 }
 
-multi sub pwd(Positional:D $container, :@steps where *.elems > 0 --> Array:D)
+multi sub pwd(Positional:D $container, @step where *.elems > 0 --> Array:D)
 {
-    my @steps-taken;
+    my @step-taken;
     my $root := $container;
     my Int:D $index = $container.end;
     $root := $root[$index];
-    push(@steps-taken, $index, |pwd($root, :@steps));
-    @steps-taken;
+    push(@step-taken, $index, |pwd($root, @step));
+    @step-taken;
 }
 
-multi sub pwd(Positional:D $container, :@steps where *.elems == 0 --> Array:D)
+multi sub pwd(Positional:D $, @ --> Array:D)
 {
-    my @steps-taken;
+    my @step-taken;
 }
 
-multi sub pwd($container, :@steps where *.elems > 0 --> Array:D)
+multi sub pwd($container, @ ($step, *@rest) --> Array:D)
 {
-    my @steps-taken;
+    my @step-taken;
     my $root := $container;
-    $root := try $root{@steps[0]};
-    push(@steps-taken, @steps[0], |pwd($root, :steps(@steps[1..*])));
-    @steps-taken;
+    $root := try $root{$step};
+    push(@step-taken, $step, |pwd($root, @rest));
+    @step-taken;
 }
 
-multi sub pwd($container, :@steps where *.elems == 0 --> Array:D)
+multi sub pwd($, @ --> Array:D)
 {
-    my @steps-taken;
+    my @step-taken;
 }
 
 # --- end sub pwd }}}
