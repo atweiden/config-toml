@@ -466,7 +466,7 @@ method date:date-time ($/ --> Nil)
     make(DateTime.new(|$<date-time>.made));
 }
 
-method date:partial-time ($/ --> Nil)
+method time($/ --> Nil)
 {
     make($<partial-time>.made);
 }
@@ -504,6 +504,12 @@ method array-elements:dates ($/ --> Nil)
     make(@made);
 }
 
+method array-elements:times ($/ --> Nil)
+{
+    my @made = @<time>.hyper.map({ .made });
+    make(@made);
+}
+
 method array-elements:arrays ($/ --> Nil)
 {
     my @made = @<array>.hyper.map({ .made });
@@ -529,24 +535,42 @@ multi method array($/ --> Nil)
 # end array grammar-actions }}}
 # table grammar-actions {{{
 
-method keypair-key:bare ($/ --> Nil)
+method keypair-key-dotted($/ --> Nil)
 {
-    make(~$/);
+    my Str:D @made = @<keypair-key-single>.hyper.map({ .made }).flat;
+    make(@made);
 }
 
-method keypair-key-string:basic ($/ --> Nil)
+method keypair-key-single:bare ($/ --> Nil)
+{
+    my Str:D @made = ~$/;
+    make(@made);
+}
+
+method keypair-key-single-string:basic ($/ --> Nil)
 {
     make($<string-basic>.made);
 }
 
-method keypair-key-string:literal ($/ --> Nil)
+method keypair-key-single-string:literal ($/ --> Nil)
 {
     make($<string-literal>.made);
 }
 
-method keypair-key:quoted ($/ --> Nil)
+method keypair-key-single:quoted ($/ --> Nil)
 {
-    make($<keypair-key-string>.made);
+    my Str:D @made = $<keypair-key-single-string>.made;
+    make(@made);
+}
+
+method keypair-key:dotted ($/ --> Nil)
+{
+    make($<keypair-key-dotted>.made);
+}
+
+method keypair-key:single ($/ --> Nil)
+{
+    make($<keypair-key-single>.made);
 }
 
 method keypair-value:string ($/ --> Nil)
@@ -569,6 +593,11 @@ method keypair-value:date ($/ --> Nil)
     make($<date>.made);
 }
 
+method keypair-value:time ($/ --> Nil)
+{
+    make($<time>.made);
+}
+
 method keypair-value:array ($/ --> Nil)
 {
     make($<array>.made);
@@ -581,18 +610,16 @@ method keypair-value:table-inline ($/ --> Nil)
 
 method keypair($/ --> Nil)
 {
-    make(Str($<keypair-key>.made) => $<keypair-value>.made);
+    my Str:D @keypair-key = $<keypair-key>.made;
+    my $keypair-value = $<keypair-value>.made;
+    make(%(:@keypair-key, :$keypair-value));
 }
 
 method table-inline-keypairs($/ --> Nil)
 {
-    my @keypair = @<keypair>.hyper.map({ .made });
+    my Hash:D @keypair = @<keypair>.hyper.map({ .made });
 
     # verify inline table does not contain duplicate keys
-    #
-    # this is necessary to do early since keys are subsequently in this
-    # method being assigned in a hash and are at risk of being overwritten
-    # by duplicate keys
     verify-no-duplicate-keys(
         @keypair,
         'inline table',
@@ -600,7 +627,12 @@ method table-inline-keypairs($/ --> Nil)
         X::Config::TOML::InlineTable::DuplicateKeys
     );
 
-    my %h = @keypair.map({ .keys.first => .values.first });
+    my %h;
+    @keypair.hyper.map(-> %keypair {
+        my @path = %keypair<keypair-key>.flat;
+        my $value = %keypair<keypair-value>;
+        Crane.set(%h, :@path, :$value);
+    });
     make(%h);
 }
 
@@ -627,8 +659,8 @@ method keypair-line($/ --> Nil)
 # this segment represents keypairs not belonging to any table
 method segment:keypair-line ($/ --> Nil)
 {
-    my @path = $<keypair-line>.made.keys.first;
-    my $value = $<keypair-line>.made.values.first;
+    my @path = $<keypair-line>.made<keypair-key>.flat;
+    my $value = $<keypair-line>.made<keypair-value>;
 
     my Str:D $keypair-line-text = ~$/;
     my X::Config::TOML::KeypairLine::DuplicateKeys $exception .=
@@ -645,7 +677,7 @@ method segment:keypair-line ($/ --> Nil)
 
 method table-header-text($/ --> Nil)
 {
-    my @made = @<keypair-key>.hyper.map({ .made });
+    my Str:D @made = @<keypair-key-single>.hyper.map({ .made }).flat;
     make(@made);
 }
 
@@ -659,7 +691,7 @@ method table:hoh ($/ --> Nil)
     my @base-path = pwd(%!toml, :steps($<hoh-header>.made));
     my Str:D $hoh-text = ~$/;
     my Str:D $hoh-header-text = ~$<hoh-header>;
-    my @keypairs = @<keypair-line>.hyper.map({ .made }).flat;
+    my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
 
     my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
         new(:$hoh-text, :path(@base-path));
@@ -686,22 +718,27 @@ method table:hoh ($/ --> Nil)
                 or die($exception-hoh-seen-key);
         }
     }
-    self.mktable-hoh(@base-path, $hoh-text, :@keypairs);
+    self.mktable-hoh(@base-path, $hoh-text, :@keypair);
 }
 
-multi method mktable-hoh(@base-path, $hoh-text, :@keypairs! where *.so --> Nil)
+multi method mktable-hoh(
+    @base-path,
+    $hoh-text,
+    Hash:D :@keypair! where *.so
+    --> Nil
+)
 {
     # verify keypairs do not contain duplicate keys
     verify-no-duplicate-keys(
-        @keypairs,
+        @keypair,
         'table',
         $hoh-text,
         X::Config::TOML::HOH::DuplicateKeys
     );
 
-    @keypairs.map(-> %keypair {
-        my @path = |@base-path, %keypair.keys.first;
-        my $value = %keypair.values.first;
+    @keypair.map(-> %keypair {
+        my @path = |@base-path, |%keypair<keypair-key>;
+        my $value = %keypair<keypair-value>;
         my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
             new(:$hoh-text, :@path);
         !Crane.exists(%!toml, :@path)
@@ -713,7 +750,12 @@ multi method mktable-hoh(@base-path, $hoh-text, :@keypairs! where *.so --> Nil)
     %!hoh-seen{$@base-path}++;
 }
 
-multi method mktable-hoh(@path, $hoh-text, :@keypairs --> Nil)
+multi method mktable-hoh(
+    @path,
+    $hoh-text,
+    :keypair(@)
+    --> Nil
+)
 {
     my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
         new(:$hoh-text, :@path);
@@ -733,7 +775,7 @@ method table:aoh ($/ --> Nil)
     my @path = pwd(%!toml, :steps($<aoh-header>.made));
     my Str:D $aoh-header-text = ~$<aoh-header>;
     my Str:D $aoh-text = ~$/;
-    my @keypairs = @<keypair-line>.hyper.map({ .made }).flat;
+    my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
 
     my X::Config::TOML::AOH::OverwritesKey $exception-aoh-overwrites-key .=
         new(:$aoh-header-text, :$aoh-text, :@path);
@@ -745,10 +787,10 @@ method table:aoh ($/ --> Nil)
     %!hoh-seen.grep({ .keys.first eqv $@path }).elems == 0
         or die($exception-aoh-overwrites-hoh);
 
-    self.mktable-aoh(@path, $aoh-text, :@keypairs);
+    self.mktable-aoh(@path, $aoh-text, :@keypair);
 }
 
-multi method mktable-aoh(@path, $aoh-text, :@keypairs! where *.so --> Nil)
+multi method mktable-aoh(@path, $aoh-text, Hash:D :@keypair! where *.so --> Nil)
 {
     # initialize empty array if array does not yet exist
     %!aoh-seen.grep({ .keys.first eqv $@path }).elems > 0
@@ -756,18 +798,23 @@ multi method mktable-aoh(@path, $aoh-text, :@keypairs! where *.so --> Nil)
 
     # verify keypair lines do not contain duplicate keys
     verify-no-duplicate-keys(
-        @keypairs,
+        @keypair,
         'array table',
         $aoh-text,
         X::Config::TOML::AOH::DuplicateKeys
     );
 
     # create hash table with keypairs
-    my %value = @keypairs.map({ .keys.first => .values.first });
+    my %value;
+    @keypair.map(-> %keypair {
+        my @k = %keypair<keypair-key>.flat;
+        my $v = %keypair<keypair-value>;
+        Crane.set(%value, :path(@k), :value($v));
+    });
     Crane.set(%!toml, :path(|@path, *-0), :%value);
 }
 
-multi method mktable-aoh(@path, $aoh-text, :@keypairs --> Nil)
+multi method mktable-aoh(@path, $aoh-text, :keypair(@) --> Nil)
 {
     # initialize empty array if array does not yet exist
     %!aoh-seen.grep({ .keys.first eqv $@path }).elems > 0
@@ -796,6 +843,48 @@ method TOP($/ --> Nil)
 
 # helper functions {{{
 
+# --- sub is-path-clear {{{
+
+multi sub is-path-clear(
+    Array[Str:D] @k
+    --> Bool:D
+)
+{
+    my %k;
+    my Bool:D $is-path-clear = is-path-clear(%k, @k);
+}
+
+multi sub is-path-clear(
+    %k,
+    Array[Str:D] @k
+    --> Bool:D
+)
+{
+    my Bool:D @set-true = @k.map(-> Str:D @l { set-true(%k, @l) });
+    my Bool:D $is-path-clear = [&&] @set-true;
+}
+
+multi sub set-true(
+    %k,
+    Str:D @path where { Crane.exists(%k, :@path) }
+    --> Bool:D
+)
+{
+    my Bool:D $set-true = False;
+}
+
+multi sub set-true(
+    %k,
+    Str:D @path
+    --> Bool:D
+)
+{
+    my Bool:D $value = True;
+    try Crane.set(%k, :@path, :$value);
+    my Bool:D $set-true = Crane.exists(%k, :@path);
+}
+
+# --- end sub is-path-clear }}}
 # --- sub pwd {{{
 
 # given TOML hash and keypath, print working directory including
@@ -866,17 +955,17 @@ multi sub seen(Bool:D %h, :@path! where *.elems == 0 --> Bool:D)
 # --- sub verify-no-duplicate-keys {{{
 
 sub verify-no-duplicate-keys(
-    @keypairs,
+    Hash:D @keypair,
     $subject,
     $text,
     Exception:U $exception-type
     --> Nil
 )
 {
-    my Str:D @keys-seen = |@keypairs.map({ .keys }).flat;
-    my $exception = $exception-type.new(:@keys-seen, :$subject, :$text);
-    @keys-seen.elems == @keys-seen.unique.elems
-        or die($exception);
+    my Array[Str:D] @key =
+        @keypair.hyper.map(-> %keypair { %keypair<keypair-key> });
+    is-path-clear(@key)
+        or die($exception-type.new(:$subject, :$text));
 }
 
 # --- end sub verify-no-duplicate-keys }}}
