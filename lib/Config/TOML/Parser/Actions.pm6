@@ -666,9 +666,9 @@ method segment:keypair-line ($/ --> Nil)
     my X::Config::TOML::KeypairLine::DuplicateKeys $exception .=
         new(:$keypair-line-text, :@path);
 
-    !seen(%!keys-seen, :@path)
+    seen(%!keys-seen, :@path).not
         or die($exception);
-    !Crane.exists(%!toml, :@path)
+    Crane.exists(%!toml, :@path).not
         or die($exception);
     Crane.set(%!toml, :@path, :$value);
 
@@ -695,7 +695,7 @@ method table:hoh ($/ --> Nil)
 
     my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
         new(:$hoh-text, :path(@base-path));
-    !seen(%!keys-seen, :path(@base-path))
+    seen(%!keys-seen, :path(@base-path)).not
         or die($exception-hoh-seen-key);
 
     my X::Config::TOML::HOH::Seen::AOH $exception-hoh-seen-aoh .=
@@ -741,7 +741,7 @@ multi method mktable-hoh(
         my $value = %keypair<keypair-value>;
         my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
             new(:$hoh-text, :@path);
-        !Crane.exists(%!toml, :@path)
+        Crane.exists(%!toml, :@path).not
             or die($exception-hoh-seen-key);
         Crane.set(%!toml, :@path, :$value);
         %!keys-seen{$@path}++;
@@ -759,7 +759,7 @@ multi method mktable-hoh(
 {
     my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
         new(:$hoh-text, :@path);
-    !Crane.exists(%!toml, :@path)
+    Crane.exists(%!toml, :@path).not
         or die($exception-hoh-seen-key);
     Crane.set(%!toml, :@path, :value({}));
     %!hoh-seen{$@path}++;
@@ -779,7 +779,7 @@ method table:aoh ($/ --> Nil)
 
     my X::Config::TOML::AOH::OverwritesKey $exception-aoh-overwrites-key .=
         new(:$aoh-header-text, :$aoh-text, :@path);
-    !seen(%!keys-seen, :@path)
+    seen(%!keys-seen, :@path).not
         or die($exception-aoh-overwrites-key);
 
     my X::Config::TOML::AOH::OverwritesHOH $exception-aoh-overwrites-hoh .=
@@ -828,7 +828,7 @@ method !mktable-aoh-init(@path, $aoh-text --> Nil)
 {
     my X::Config::TOML::Keypath::AOH $exception-keypath-aoh .=
         new(:$aoh-text, :@path);
-    !Crane.exists(%!toml, :@path)
+    Crane.exists(%!toml, :@path).not
         or die($exception-keypath-aoh);
     Crane.set(%!toml, :@path, :value([]));
     %!aoh-seen{$@path}++;
