@@ -845,24 +845,10 @@ multi sub set-true(
 # --- end sub is-path-clear }}}
 # --- sub is-without-duplicate-keys {{{
 
-multi sub is-without-duplicate-keys(TOMLKeypairKey:D @key --> Bool:D)
+sub is-without-duplicate-keys(TOMLKeypairKey:D @key --> Bool:D)
 {
-    my TOMLKeypairKey['Dotted'] @dotted = @key.grep(TOMLKeypairKey['Dotted']);
-    my TOMLKeypairKey['Single'] @single = @key.grep(TOMLKeypairKey['Single']);
-    my Array[TOMLKeypairKey:D] %key{TOMLKeypairKey:U} =
-        TOMLKeypairKey['Dotted'] => Array[TOMLKeypairKey:D].new(@dotted),
-        TOMLKeypairKey['Single'] => Array[TOMLKeypairKey:D].new(@single);
-    my Bool:D $is-without-duplicate-keys = is-without-duplicate-keys(%key);
-}
-
-multi sub is-without-duplicate-keys(%key --> Bool:D)
-{
-    my Array[Str:D] @dotted =
-        %key{TOMLKeypairKey['Dotted']}.hyper.map({ Array[Str:D].new(.made) });
-    my Array[Str:D] @single =
-        %key{TOMLKeypairKey['Single']}.hyper.map({ Array[Str:D].new(.made) });
-    my Array[Str:D] @combined = |@dotted, |@single;
-    my Bool:D $is-without-duplicate-keys = is-path-clear(@combined);
+    my Array[Str:D] @k = @key.hyper.map({ Array[Str:D].new(.made) });
+    my Bool:D $is-without-duplicate-keys = is-path-clear(@k);
 }
 
 # --- end sub is-without-duplicate-keys }}}
