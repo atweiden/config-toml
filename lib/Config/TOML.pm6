@@ -10,7 +10,7 @@ multi sub from-toml(
     --> Hash:D
 ) is export
 {
-    Config::TOML::Parser.parse($content, |%opts).made
+    Config::TOML::Parser.parse($content, |%opts).made.tree
         or die(X::Config::TOML::ParseFailed.new(:$content));
 }
 
@@ -20,7 +20,7 @@ multi sub from-toml(
     --> Hash
 ) is export
 {
-    Config::TOML::Parser.parsefile($file, |%opts).made
+    Config::TOML::Parser.parsefile($file, |%opts).made.tree
         or die(X::Config::TOML::ParsefileFailed.new(:$file));
 }
 
