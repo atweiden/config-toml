@@ -41,7 +41,7 @@ subtest({
         $match-toml-a.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-a, :$actions)] - 1 of 14
+        ♪ [Grammar.parse($toml-a, :$actions)] - 1 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -53,7 +53,7 @@ subtest({
         $match-toml-b.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-b, :$actions)] - 2 of 14
+        ♪ [Grammar.parse($toml-b, :$actions)] - 2 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -65,7 +65,7 @@ subtest({
         $match-toml-c.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-c, :$actions)] - 3 of 14
+        ♪ [Grammar.parse($toml-c, :$actions)] - 3 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -77,7 +77,7 @@ subtest({
         $match-toml-d.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-d, :$actions)] - 4 of 14
+        ♪ [Grammar.parse($toml-d, :$actions)] - 4 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -89,7 +89,7 @@ subtest({
         $match-toml-e.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-e, :$actions)] - 5 of 14
+        ♪ [Grammar.parse($toml-e, :$actions)] - 5 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -101,7 +101,7 @@ subtest({
         $match-toml-a.made<a><b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 6 of 14
+        ♪ [Is expected value?] - 6 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-a.made<a><b><c><d> == 123
         ┃   Success   ┃
@@ -113,7 +113,7 @@ subtest({
         $match-toml-b.made<a><b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 7 of 14
+        ♪ [Is expected value?] - 7 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-b.made<a><b><c><d> == 123
         ┃   Success   ┃
@@ -125,7 +125,7 @@ subtest({
         $match-toml-c.made<a><b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 8 of 14
+        ♪ [Is expected value?] - 8 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-c.made<a><b><c><d> == 123
         ┃   Success   ┃
@@ -137,7 +137,7 @@ subtest({
         $match-toml-d.made<a><b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 9 of 14
+        ♪ [Is expected value?] - 9 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-d.made<a><b><c><d> == 123
         ┃   Success   ┃
@@ -149,7 +149,7 @@ subtest({
         $match-toml-e.made<a><b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 10 of 14
+        ♪ [Is expected value?] - 10 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-e.made<a><b><c><d> == 123
         ┃   Success   ┃
@@ -214,7 +214,7 @@ subtest({
         $match-toml-a.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-a, :$actions)] - 1 of 14
+        ♪ [Grammar.parse($toml-a, :$actions)] - 11 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -226,7 +226,7 @@ subtest({
         $match-toml-b.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-b, :$actions)] - 2 of 14
+        ♪ [Grammar.parse($toml-b, :$actions)] - 12 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -238,7 +238,7 @@ subtest({
         $match-toml-c.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-c, :$actions)] - 3 of 14
+        ♪ [Grammar.parse($toml-c, :$actions)] - 13 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -250,7 +250,7 @@ subtest({
         $match-toml-d.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-d, :$actions)] - 4 of 14
+        ♪ [Grammar.parse($toml-d, :$actions)] - 14 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -262,7 +262,7 @@ subtest({
         $match-toml-e.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-e, :$actions)] - 5 of 14
+        ♪ [Grammar.parse($toml-e, :$actions)] - 15 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -274,7 +274,7 @@ subtest({
         $match-toml-f.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-f, :$actions)] - 6 of 14
+        ♪ [Grammar.parse($toml-f, :$actions)] - 16 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -286,7 +286,7 @@ subtest({
         $match-toml-g.WHAT,
         Config::TOML::Parser::Grammar,
         q:to/EOF/
-        ♪ [Grammar.parse($toml-g, :$actions)] - 7 of 14
+        ♪ [Grammar.parse($toml-g, :$actions)] - 17 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ Parses TOML with dotted keys successfully
         ┃   Success   ┃
@@ -298,7 +298,7 @@ subtest({
         $match-toml-a.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 8 of 14
+        ♪ [Is expected value?] - 18 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-a.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
@@ -310,7 +310,7 @@ subtest({
         $match-toml-b.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 9 of 14
+        ♪ [Is expected value?] - 19 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-b.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
@@ -322,7 +322,7 @@ subtest({
         $match-toml-c.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 10 of 14
+        ♪ [Is expected value?] - 20 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-c.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
@@ -334,7 +334,7 @@ subtest({
         $match-toml-d.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 11 of 14
+        ♪ [Is expected value?] - 21 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-d.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
@@ -346,7 +346,7 @@ subtest({
         $match-toml-e.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 12 of 14
+        ♪ [Is expected value?] - 22 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-e.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
@@ -358,7 +358,7 @@ subtest({
         $match-toml-f.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 13 of 14
+        ♪ [Is expected value?] - 23 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-f.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
@@ -370,7 +370,7 @@ subtest({
         $match-toml-g.made<a>[0]<b><c><d>,
         123,
         q:to/EOF/
-        ♪ [Is expected value?] - 14 of 14
+        ♪ [Is expected value?] - 24 of 24
         ┏━━━━━━━━━━━━━┓
         ┃             ┃  ∙ $match-toml-g.made<a>[0]<b><c><d> == 123
         ┃   Success   ┃
