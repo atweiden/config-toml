@@ -838,7 +838,8 @@ multi sub set-true(
     --> Bool:D
 )
 {
-    try Crane.set(%k, :@path, :value(True));
+    my Bool:D $value = True;
+    try Crane.set(%k, :@path, :$value);
     my Bool:D $set-true = Crane.exists(%k, :@path);
 }
 
