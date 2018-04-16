@@ -688,24 +688,24 @@ method hoh-header($/ --> Nil)
 
 method table:hoh ($/ --> Nil)
 {
-    my @base-path = pwd(%!toml, $<hoh-header>.made);
+    my @path = pwd(%!toml, $<hoh-header>.made);
     my Str:D $hoh-text = ~$/;
     my Str:D $hoh-header-text = ~$<hoh-header>;
     my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
 
     my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
-        new(:$hoh-text, :path(@base-path));
-    seen(%!key, :path(@base-path), :recursive).not
+        new(:$hoh-text, :@path);
+    seen(%!key, :@path, :recursive).not
         or die($exception-hoh-seen-key);
 
     my X::Config::TOML::HOH::Seen::AOH $exception-hoh-seen-aoh .=
-        new(:$hoh-header-text, :$hoh-text, :path(@base-path));
-    seen(%!aoh, :path(@base-path)).not
+        new(:$hoh-header-text, :$hoh-text, :@path);
+    seen(%!aoh, :@path).not
         or die($exception-hoh-seen-aoh);
 
     my X::Config::TOML::HOH::Seen $exception-hoh-seen .=
-        new(:$hoh-header-text, :$hoh-text, :path(@base-path));
-    seen(%!hoh, :path(@base-path)).not
+        new(:$hoh-header-text, :$hoh-text, :@path);
+    seen(%!hoh, :@path).not
         or die($exception-hoh-seen);
 
     CATCH
@@ -718,7 +718,7 @@ method table:hoh ($/ --> Nil)
                 or die($exception-hoh-seen-key);
         }
     }
-    self.mktable-hoh(@base-path, $hoh-text, :@keypair);
+    self.mktable-hoh(@path, $hoh-text, :@keypair);
 }
 
 multi method mktable-hoh(
