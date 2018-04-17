@@ -943,38 +943,17 @@ multi sub seen(
 )
 {
     my Bool:D $seen =
-        %h.grep({ .keys.first eqv $@path }).so
-            || seen(%h, :path(@path[0..^*-1].Array), :recursive);
+        seen(%h, :@path) || seen(%h, :path[@path[0..^*-1]], :recursive);
 }
 
 multi sub seen(
     Bool:D %h,
-    :@path! where *.elems > 1,
+    :@path!,
     Bool :recursive($)
     --> Bool:D
 )
 {
     my Bool:D $seen = %h.grep({ .keys.first eqv $@path }).so;
-}
-
-multi sub seen(
-    Bool:D %h,
-    :@path! where *.elems > 0,
-    Bool :recursive($)
-    --> Bool:D
-)
-{
-    my Bool:D $seen = %h.grep({ .keys.first eqv $@path }).so;
-}
-
-multi sub seen(
-    Bool:D %h,
-    :@path! where *.elems == 0,
-    Bool :recursive($)
-    --> Bool:D
-)
-{
-    my Bool:D $seen = False;
 }
 
 # --- end sub seen }}}
