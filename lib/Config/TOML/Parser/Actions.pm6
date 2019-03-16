@@ -87,7 +87,7 @@ method string-basic-char:escape-sequence ($/ --> Nil)
 
 method string-basic-text($/ --> Nil)
 {
-    make(@<string-basic-char>.hyper.map({ .made }).join);
+    make(@<string-basic-char>.map({ .made }).join);
 }
 
 multi method string-basic($/ where $<string-basic-text>.so --> Nil)
@@ -133,7 +133,7 @@ multi method string-basic-multiline-char:escape-sequence (
 
 method string-basic-multiline-text($/ --> Nil)
 {
-    make(@<string-basic-multiline-char>.hyper.map({ .made }).join);
+    make(@<string-basic-multiline-char>.map({ .made }).join);
 }
 
 multi method string-basic-multiline(
@@ -164,7 +164,7 @@ method string-literal-char:backslash ($/ --> Nil)
 
 method string-literal-text($/ --> Nil)
 {
-    make(@<string-literal-char>.hyper.map({ .made }).join);
+    make(@<string-literal-char>.map({ .made }).join);
 }
 
 multi method string-literal($/ where $<string-literal-text>.so --> Nil)
@@ -189,7 +189,7 @@ method string-literal-multiline-char:backslash ($/ --> Nil)
 
 method string-literal-multiline-text($/ --> Nil)
 {
-    make(@<string-literal-multiline-char>.hyper.map({ .made }).join);
+    make(@<string-literal-multiline-char>.map({ .made }).join);
 }
 
 multi method string-literal-multiline(
@@ -476,49 +476,49 @@ method time($/ --> Nil)
 
 method array-elements:strings ($/ --> Nil)
 {
-    my @made = @<string>.hyper.map({ .made });
+    my @made = @<string>.map({ .made });
     make(@made);
 }
 
 method array-elements:integers ($/ --> Nil)
 {
-    my @made = @<integer>.hyper.map({ .made });
+    my @made = @<integer>.map({ .made });
     make(@made);
 }
 
 method array-elements:floats ($/ --> Nil)
 {
-    my @made = @<float>.hyper.map({ .made });
+    my @made = @<float>.map({ .made });
     make(@made);
 }
 
 method array-elements:booleans ($/ --> Nil)
 {
-    my @made = @<boolean>.hyper.map({ .made });
+    my @made = @<boolean>.map({ .made });
     make(@made);
 }
 
 method array-elements:dates ($/ --> Nil)
 {
-    my @made = @<date>.hyper.map({ .made });
+    my @made = @<date>.map({ .made });
     make(@made);
 }
 
 method array-elements:times ($/ --> Nil)
 {
-    my @made = @<time>.hyper.map({ .made });
+    my @made = @<time>.map({ .made });
     make(@made);
 }
 
 method array-elements:arrays ($/ --> Nil)
 {
-    my @made = @<array>.hyper.map({ .made });
+    my @made = @<array>.map({ .made });
     make(@made);
 }
 
 method array-elements:table-inlines ($/ --> Nil)
 {
-    my @made = @<table-inline>.hyper.map({ .made });
+    my @made = @<table-inline>.map({ .made });
     make(@made);
 }
 
@@ -537,7 +537,7 @@ multi method array($/ --> Nil)
 
 method keypair-key-dotted($/ --> Nil)
 {
-    my Str:D @made = @<keypair-key-single>.hyper.map({ .made }).flat;
+    my Str:D @made = @<keypair-key-single>.map({ .made }).flat;
     make(@made);
 }
 
@@ -617,7 +617,7 @@ method keypair($/ --> Nil)
 
 method table-inline-keypairs($/ --> Nil)
 {
-    my Hash:D @keypair = @<keypair>.hyper.map({ .made });
+    my Hash:D @keypair = @<keypair>.map({ .made });
 
     # verify inline table does not contain duplicate keys
     verify-no-duplicate-keys(
@@ -628,7 +628,7 @@ method table-inline-keypairs($/ --> Nil)
     );
 
     my %h;
-    @keypair.hyper.map(-> %keypair {
+    @keypair.map(-> %keypair {
         my @path = %keypair<keypair-key>.flat;
         my $value = %keypair<keypair-value>;
         Crane.set(%h, :@path, :$value);
@@ -677,7 +677,7 @@ method segment:keypair-line ($/ --> Nil)
 
 method table-header-text($/ --> Nil)
 {
-    my Str:D @made = @<keypair-key-single>.hyper.map({ .made }).flat;
+    my Str:D @made = @<keypair-key-single>.map({ .made }).flat;
     make(@made);
 }
 
@@ -691,7 +691,7 @@ method table:hoh ($/ --> Nil)
     my @path = pwd(%!toml, $<hoh-header>.made);
     my Str:D $hoh-text = ~$/;
     my Str:D $hoh-header-text = ~$<hoh-header>;
-    my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
+    my Hash:D @keypair = @<keypair-line>.map({ .made });
 
     my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
         new(:$hoh-text, :@path);
@@ -736,7 +736,7 @@ multi method mktable-hoh(
         X::Config::TOML::HOH::DuplicateKeys
     );
 
-    @keypair.hyper.map(-> %keypair {
+    @keypair.map(-> %keypair {
         my @path = |@base-path, |%keypair<keypair-key>;
         my $value = %keypair<keypair-value>;
         my X::Config::TOML::HOH::Seen::Key $exception-hoh-seen-key .=
@@ -775,7 +775,7 @@ method table:aoh ($/ --> Nil)
     my @path = pwd(%!toml, $<aoh-header>.made);
     my Str:D $aoh-header-text = ~$<aoh-header>;
     my Str:D $aoh-text = ~$/;
-    my Hash:D @keypair = @<keypair-line>.hyper.map({ .made });
+    my Hash:D @keypair = @<keypair-line>.map({ .made });
 
     my X::Config::TOML::AOH::OverwritesKey $exception-aoh-overwrites-key .=
         new(:$aoh-header-text, :$aoh-text, :@path);
@@ -806,7 +806,7 @@ multi method mktable-aoh(@path, $aoh-text, Hash:D :@keypair! where .so --> Nil)
 
     # create hash table with keypairs
     my %value;
-    @keypair.hyper.map(-> %keypair {
+    @keypair.map(-> %keypair {
         my @k = %keypair<keypair-key>.flat;
         my $v = %keypair<keypair-value>;
         Crane.set(%value, :path(@k), :value($v));
@@ -968,7 +968,7 @@ sub verify-no-duplicate-keys(
 )
 {
     my Array[Str:D] @key =
-        @keypair.hyper.map(-> %keypair { %keypair<keypair-key> });
+        @keypair.map(-> %keypair { %keypair<keypair-key> });
     is-path-clear(@key)
         or die($exception-type.new(:$subject, :$text));
 }
