@@ -5,7 +5,7 @@ TOML file parser and writer.
 
 ## Usage
 
-TOML to Perl 6:
+TOML to Raku:
 
 ```perl6
 use Config::TOML;
@@ -23,7 +23,7 @@ my $file = 'config.toml';
 my %toml = from-toml(:$file);
 ```
 
-Perl 6 to TOML:
+Raku to TOML:
 
 ```perl6
 use Config::TOML;
@@ -44,9 +44,9 @@ TOML date values can take three different forms:
    (`YYYY-MM-ddThh:mm:ss.ffff`)
 3. Standard calendar dates (`YYYY-MM-dd`)
 
-Config::TOML builds Perl 6 `Date`s from standard calendar dates.
+Config::TOML builds Raku `Date`s from standard calendar dates.
 
-By default, Config::TOML builds Perl 6 `DateTime`s from TOML datetime
+By default, Config::TOML builds Raku `DateTime`s from TOML datetime
 values that do not include a local offset using the host machine's local
 offset. To override the default behavior of using the host machine's
 local offset for date values where the offset is omitted, pass the
@@ -73,7 +73,7 @@ Australia/Sydney    | UTC+10:00  | `((10 * 60) + 0) * 60 = 36000`
 Europe/Berlin       | UTC+01:00  | `((1 * 60) + 0) * 60 = 3600`
 UTC                 | UTC±00:00  | `((0 * 60) + 0) * 60 = 0`
 
-To more easily ascertain your host machine's local offset, open a perl6
+To more easily ascertain your host machine's local offset, open a Raku
 repl and print the value of `$*TZ`.
 
 
@@ -81,7 +81,7 @@ repl and print the value of `$*TZ`.
 
 ### Dependencies
 
-- Rakudo Perl 6
+- Raku
 - [Crane](https://github.com/atweiden/crane)
 
 

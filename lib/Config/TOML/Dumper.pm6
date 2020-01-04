@@ -157,7 +157,7 @@ multi sub is-valid-array(@ where {.grep(Int:D).elems == .elems} --> Bool:D)
     True;
 }
 
-# if the above Int-only signature test fails, Perl6 will test each array
+# if the above Int-only signature test fails, Raku will test each array
 # element against Real. Int ~~ Real, so we grep for Ints
 multi sub is-valid-array(
     @ where { .grep(Int).not && .grep(Real:D).elems == .elems }
@@ -283,4 +283,4 @@ multi sub to-toml($value)
     die(X::Config::TOML::Dumper::BadValue.new(:$value));
 }
 
-# vim: set filetype=perl6 foldmethod=marker foldlevel=0:
+# vim: set filetype=raku foldmethod=marker foldlevel=0:

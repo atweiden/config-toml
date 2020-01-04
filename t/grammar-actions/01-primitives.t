@@ -211,7 +211,7 @@ subtest({
 
 subtest({
     # t/data/openssl.pem
-    my Str $openssl-pem-perl = slurp('t/data/openssl.pem').trim;
+    my Str $openssl-pem-raku = slurp('t/data/openssl.pem').trim;
     my Str $openssl-pem-toml = Q:to/EOF/.trim;
     '''
     -----BEGIN RSA PRIVATE KEY-----
@@ -244,7 +244,7 @@ subtest({
     EOF
 
     # t/data/ssh-ed25519
-    my Str $ssh-ed25519-perl = slurp('t/data/ssh-ed25519').trim;
+    my Str $ssh-ed25519-raku = slurp('t/data/ssh-ed25519').trim;
     my Str $ssh-ed25519-toml = Q:to/EOF/.trim;
     '''
     -----BEGIN OPENSSH PRIVATE KEY-----
@@ -257,7 +257,7 @@ subtest({
     EOF
 
     # t/data/ssh-ed25519.pub
-    my Str $ssh-ed25519-pub-perl = slurp('t/data/ssh-ed25519.pub').trim;
+    my Str $ssh-ed25519-pub-raku = slurp('t/data/ssh-ed25519.pub').trim;
     my Str $ssh-ed25519-pub-toml = Q:to/EOF/.trim;
     '''
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZFvfg/A7kwROAKeTlhkkwhYgKaJqNTnQRgV+Ii0xPa hello@toml'''
@@ -323,12 +323,12 @@ subtest({
     );
 
     is(
-        $openssl-pem-perl ~~ $match-openssl-pem-toml.made,
+        $openssl-pem-raku ~~ $match-openssl-pem-toml.made,
         True,
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 13 of 142
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $openssl-pem-perl ~~ $match-openssl-pem-toml.made
+        ┃             ┃  ∙ $openssl-pem-raku ~~ $match-openssl-pem-toml.made
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -336,12 +336,12 @@ subtest({
     );
 
     is(
-        $ssh-ed25519-perl ~~ $match-ssh-ed25519-toml.made,
+        $ssh-ed25519-raku ~~ $match-ssh-ed25519-toml.made,
         True,
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 14 of 142
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $ssh-ed25519-perl ~~ $match-ssh-ed25519-toml.made
+        ┃             ┃  ∙ $ssh-ed25519-raku ~~ $match-ssh-ed25519-toml.made
         ┃   Success   ┃
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -349,12 +349,12 @@ subtest({
     );
 
     is(
-        $ssh-ed25519-pub-perl ~~ $match-ssh-ed25519-pub-toml.made,
+        $ssh-ed25519-pub-raku ~~ $match-ssh-ed25519-pub-toml.made,
         True,
         q:to/EOF/
         ♪ [Byte-for-byte string equivalency] - 15 of 142
         ┏━━━━━━━━━━━━━┓
-        ┃             ┃  ∙ $ssh-ed25519-pub-perl ~~
+        ┃             ┃  ∙ $ssh-ed25519-pub-raku ~~
         ┃   Success   ┃        $match-ssh-ed25519-pub-toml.made
         ┃             ┃
         ┗━━━━━━━━━━━━━┛
@@ -2268,4 +2268,4 @@ subtest({
 
 # end datetime grammar-actions tests }}}
 
-# vim: set filetype=perl6 foldmethod=marker foldlevel=0 nowrap:
+# vim: set filetype=raku foldmethod=marker foldlevel=0 nowrap:

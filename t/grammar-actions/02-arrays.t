@@ -1020,7 +1020,7 @@ subtest({
         EOF
     );
     # leading whitespace in this array is because TOML parser does not
-    # parse heredocs like Perl6, leading spaces on the outside edges of
+    # parse heredocs like Raku, leading spaces on the outside edges of
     # multiline string delimiters are preserved
     is(
         $match-array-of-basic-multiline-strings-newlines.made,
@@ -2280,4 +2280,4 @@ subtest({
 
 # end commented array grammar-actions tests }}}
 
-# vim: set filetype=perl6 foldmethod=marker foldlevel=0:
+# vim: set filetype=raku foldmethod=marker foldlevel=0:
