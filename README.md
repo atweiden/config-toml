@@ -7,7 +7,7 @@ TOML file parser and writer.
 
 TOML to Raku:
 
-```perl6
+```raku
 use Config::TOML;
 
 # parse toml from string
@@ -25,7 +25,7 @@ my %toml = from-toml(:$file);
 
 Raku to TOML:
 
-```perl6
+```raku
 use Config::TOML;
 my %h = :a<alpha>, :b<bravo>, :c<charlie>;
 to-toml(%h);
@@ -52,7 +52,7 @@ offset. To override the default behavior of using the host machine's
 local offset for date values where the offset is omitted, pass the
 `date-local-offset` parameter (with an integer value) to `from-toml`:
 
-```perl6
+```raku
 my $cfg = slurp 'config.toml';
 
 # assume UTC when local offset unspecified in TOML dates
