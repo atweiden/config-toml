@@ -260,8 +260,8 @@ subtest({
     lives-ok({ to-toml(%valid) }, 'Valid array is valid');
     throws-like(
         { to-toml(%invalid) },
-        X::Config::TOML::Dumper::BadValue,
-        :message('Sorry, undefined Bool types cannot be represented as TOML keypair value'),
+        X::Config::TOML::Dumper::BadArray,
+        :message(/^ 'Sorry, invalid TOML array.'/),
         'Raise exception when array contains undefined values'
     );
     (%valid, %invalid) = Empty;
